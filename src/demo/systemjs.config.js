@@ -39,7 +39,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'quickstart-lib': {
+      'ng-app-state': {
         main: 'index.js',
         defaultExtension: 'js',
         meta: {

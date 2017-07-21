@@ -26,7 +26,7 @@
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'quickstart-lib': 'npm:quickstart-lib/bundles/quickstart-lib.umd.js'
+      'ng-app-state': 'npm:ng-app-state/bundles/ng-app-state.umd.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
