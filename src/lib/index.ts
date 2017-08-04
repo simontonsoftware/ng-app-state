@@ -1,3 +1,2 @@
-export { LibComponent } from './src/component/lib.component';
-export { LibService } from './src/service/lib.service';
-export { LibModule } from './src/module';
+export {AppStore} from './src/app-store';
+export {StateObject} from './src/state-object';
