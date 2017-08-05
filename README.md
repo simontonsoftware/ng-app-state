@@ -19,20 +19,34 @@ export class User {
 } 
 ```
 
+`state/my-store.service.ts`
+```ts
+import {Injectable} from "@angular/core";
+import {Store} from "@ngrx/store";
+import {AppStore} from "ng-app-state";
+import {SdState} from "./my-state";
+
+@Injectable()
+export class MyStore extends AppStore<MyState> {
+	constructor(store: Store<any>) {
+		super(store, "myState", new MyState());
+	}
+}
+```
+
 `app.module.ts`
 ```ts
 import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {AppState, reducer} from "ng-app-state";
-import {MyState} from "./state/my-state";
+import {MyStore} from "./state/my-store";
 
 @NgModule({
   imports: [
-    StoreModule.provideStore(reducer, new MyState()),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(), // after provideStore()
+    StoreModule.forRoot(),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
-    AppState,
+    MyStore,
   ],
 })
 export class AppModule {}

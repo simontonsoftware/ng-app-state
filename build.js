@@ -66,6 +66,9 @@ return Promise.resolve()
         // See https://github.com/rollup/rollup/wiki/JavaScript-API#external for more.
         '@angular/core'
       ],
+      paths: {
+        'micro-dash/index': 'micro-dash'
+      },
       plugins: [
         commonjs({
           include: ['node_modules/rxjs/**']

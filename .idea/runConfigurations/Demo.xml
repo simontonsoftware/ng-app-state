@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Demo - Watch" type="js.build_tools.npm" factoryName="npm">
-    <package-json value="$PROJECT_DIR$/package.json" />
+  <configuration default="false" name="Demo" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/demo/package.json" />
     <command value="run" />
     <scripts>
-      <script value="start-demo" />
+      <script value="start" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

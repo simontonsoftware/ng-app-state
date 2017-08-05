@@ -6,28 +6,33 @@ import {SetAction} from './actions/set-action';
 import {Observable} from 'rxjs';
 import {ExtensibleFunction} from './utils/extensible-function';
 
-export interface StateObject<T> {
-  <K extends keyof T, C extends T[K] = T[K]>(attr: K): StateObject<C>;
+export interface StoreObject<T> {
+  <K extends keyof T, C extends T[K] = T[K]>(attr: K): StoreObject<C>;
 }
 
-export class StateObject<T> extends ExtensibleFunction {
+export class StoreObject<T> extends ExtensibleFunction {
+  private _$: Observable<T>;
+
   protected constructor(
     private store: Store<T>,
     private path: string[],
     private dispatcher: { dispatch(action: Action): void; },
   ) {
     super(
-      (prop: string) => new StateObject(store, [...path, prop], dispatcher),
+      (prop: string) => new StoreObject(store, [...path, prop], dispatcher),
     );
   }
 
   public get $(): Observable<T> {
-    return (this.store.select as any)(...this.path);
+    if (!this._$) {
+      this._$ = (this.store.select as any)(...this.path);
+    }
+    return this._$;
   }
 
-  public batch(func: (state: StateObject<T>) => void) {
+  public batch(func: (state: StoreObject<T>) => void) {
     const batch = new BatchAction();
-    func(new StateObject(this.store, this.path, batch));
+    func(new StoreObject(this.store, this.path, batch));
     this.dispatcher.dispatch(batch);
   }
 
