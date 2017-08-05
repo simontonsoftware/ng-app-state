@@ -6,11 +6,11 @@ export class DeleteAction extends AppStateAction {
     super('delete', path);
   }
 
-  protected getNewState<T extends object>(path: string[], oldState: T) {
+  protected getNewState<T extends object>(path: string[], oldState: T): T {
     if (path.length > 1) {
       return super.getNewState(path, oldState);
     } else {
-      return omit(oldState, path[0] as keyof T);
+      return omit(oldState, path[0] as keyof T) as T;
     }
   }
 }

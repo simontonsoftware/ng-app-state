@@ -1,6 +1,6 @@
 module.exports = function (config) {
 
-  var libBase = 'src/lib/';       // transpiled app JS and map files
+  var libBase = 'lib/';       // transpiled app JS and map files
 
   config.set({
     basePath: '',
@@ -51,7 +51,7 @@ module.exports = function (config) {
       { pattern: 'node_modules/@angular/**/*.js', included: false, watched: false },
       { pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false },
 
-      { pattern: 'src/demo/systemjs-angular-loader.js', included: false, watched: false },
+      { pattern: 'demo/systemjs-angular-loader.js', included: false, watched: false },
 
       'karma-test-shim.js', // optionally extend SystemJS mapping e.g., with barrels
 

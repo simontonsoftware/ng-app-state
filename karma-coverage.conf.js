@@ -13,7 +13,7 @@ module.exports = function (config) {
       require('karma-remap-coverage')
     ],
     preprocessors: {
-      './src/lib/**/!(*spec).js': 'coverage'
+      './lib/**/!(*spec).js': 'coverage'
     },
     reporters: ['progress', 'kjhtml', 'coverage', 'remap-coverage'],
 

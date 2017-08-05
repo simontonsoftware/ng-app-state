@@ -3,7 +3,7 @@
     "baseDir": "src/demo",
     "routes": {
       "/node_modules": "node_modules",
-      "/ng-app-state": "src/lib"
+      "/ng-app-state": "lib"
     }
   }
 }
