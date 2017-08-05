@@ -48,9 +48,16 @@ export class StoreObject<T> extends ExtensibleFunction {
     this.dispatcher.dispatch(new DeleteAction(this.path));
   }
 
-  public value() {
+  public state() {
     let value: T;
     this.$.take(1).subscribe((v) => value = v);
     return value!;
+  }
+
+  /**
+   * A convenience method to dispatch non- app store actions (e.g. for `@ngrx/effects`) without needing to additionally inject `Store`.
+   */
+  public dispatch(action: Action) {
+    this.store.dispatch(action);
   }
 }
