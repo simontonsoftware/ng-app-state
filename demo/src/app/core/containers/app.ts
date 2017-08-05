@@ -4,8 +4,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StoreObject } from 'ng-app-state';
 
-import * as fromRoot from '../../reducers';
-import * as fromAuth from '../../auth/reducers';
+import { AuthStore } from '../../auth/state/auth-store';
 import { LayoutStore } from '../state/layout-store.service';
 import * as Auth from '../../auth/actions/auth';
 
@@ -40,12 +39,12 @@ export class AppComponent {
   showSidenav: StoreObject<boolean>;
   loggedIn$: Observable<boolean>;
 
-  constructor(private store: Store<fromRoot.State>, layoutStore: LayoutStore) {
+  constructor(layoutStore: LayoutStore, private authStore: AuthStore) {
     /**
      * Select a subtree of any `StoreObject` by calling it as a function.
      */
     this.showSidenav = layoutStore('showSidenav');
-    this.loggedIn$ = this.store.select(fromAuth.getLoggedIn);
+    this.loggedIn$ = authStore('status')('loggedIn').$;
   }
 
   closeSidenav() {
@@ -62,6 +61,6 @@ export class AppComponent {
   logout() {
     this.closeSidenav();
 
-    this.store.dispatch(new Auth.Logout());
+    this.authStore.dispatch(new Auth.Logout());
   }
 }

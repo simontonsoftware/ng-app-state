@@ -2,19 +2,18 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import * as Auth from '../actions/auth';
-import * as fromAuth from '../reducers';
+import { AuthStore } from '../state/auth-store';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private store: Store<fromAuth.State>) {}
+  constructor(private authStore: AuthStore) {}
 
   canActivate(): Observable<boolean> {
-    return this.store.select(fromAuth.getLoggedIn).take(1).map(authed => {
+    return this.authStore('status')('loggedIn').$.take(1).map(authed => {
       if (!authed) {
-        this.store.dispatch(new Auth.LoginRedirect());
+        this.authStore.dispatch(new Auth.LoginRedirect());
         return false;
       }
 
