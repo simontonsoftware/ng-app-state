@@ -11,6 +11,7 @@ import { SidenavComponent } from './components/sidenav';
 import { ToolbarComponent } from './components/toolbar';
 
 import { GoogleBooksService } from './services/google-books';
+import { LayoutStore } from './state/layout-store.service';
 
 export const COMPONENTS = [
   AppComponent,
@@ -30,7 +31,7 @@ export class CoreModule {
   static forRoot() {
     return {
       ngModule: CoreModule,
-      providers: [GoogleBooksService],
+      providers: [GoogleBooksService, LayoutStore],
     };
   }
 }

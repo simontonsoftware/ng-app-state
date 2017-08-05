@@ -2,10 +2,11 @@ import 'rxjs/add/operator/let';
 import { Observable } from 'rxjs/Observable';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { StoreObject } from 'ng-app-state';
 
 import * as fromRoot from '../../reducers';
 import * as fromAuth from '../../auth/reducers';
-import * as layout from '../actions/layout';
+import { LayoutStore } from '../state/layout-store.service';
 import * as Auth from '../../auth/actions/auth';
 
 @Component({
@@ -13,7 +14,7 @@ import * as Auth from '../../auth/actions/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <bc-layout>
-      <bc-sidenav [open]="showSidenav$ | async">
+      <bc-sidenav [open]="showSidenav.$ | async">
         <bc-nav-item (activate)="closeSidenav()" *ngIf="loggedIn$ | async" routerLink="/" icon="book" hint="View your book collection">
           My Collection
         </bc-nav-item>
@@ -36,30 +37,26 @@ import * as Auth from '../../auth/actions/auth';
   `,
 })
 export class AppComponent {
-  showSidenav$: Observable<boolean>;
+  showSidenav: StoreObject<boolean>;
   loggedIn$: Observable<boolean>;
 
-  constructor(private store: Store<fromRoot.State>) {
+  constructor(private store: Store<fromRoot.State>, layoutStore: LayoutStore) {
     /**
-     * Selectors can be applied with the `select` operator which passes the state
-     * tree to the provided selector
+     * Select a subtree of any `StoreObject` by calling it as a function.
      */
-    this.showSidenav$ = this.store.select(fromRoot.getShowSidenav);
+    this.showSidenav = layoutStore('showSidenav');
     this.loggedIn$ = this.store.select(fromAuth.getLoggedIn);
   }
 
   closeSidenav() {
     /**
-     * All state updates are handled through dispatched actions in 'container'
-     * components. This provides a clear, reproducible history of state
-     * updates and user interaction through the life of our
-     * application.
+     * All state updates are handled through `AppStore` subclasses.
      */
-    this.store.dispatch(new layout.CloseSidenavAction());
+    this.showSidenav.set(false);
   }
 
   openSidenav() {
-    this.store.dispatch(new layout.OpenSidenavAction());
+    this.showSidenav.set(true);
   }
 
   logout() {
