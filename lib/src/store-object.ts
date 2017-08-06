@@ -1,5 +1,5 @@
 import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/take';
 import {BatchAction} from './actions/batch-action';
 import {DeleteAction} from './actions/delete-action';

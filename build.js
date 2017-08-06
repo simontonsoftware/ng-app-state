@@ -64,7 +64,10 @@ return Promise.resolve()
       external: [
         // List of dependencies
         // See https://github.com/rollup/rollup/wiki/JavaScript-API#external for more.
-        '@angular/core'
+        '@angular/core',
+        'rxjs',
+        'rxjs/Observable',
+        'rxjs/add/operator/take'
       ],
       paths: {
         'micro-dash/index': 'micro-dash'
