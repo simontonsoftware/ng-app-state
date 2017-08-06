@@ -42,7 +42,7 @@ import {MyStore} from "./state/my-store";
 
 @NgModule({
   imports: [
-    StoreModule.forRoot(),
+    StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [

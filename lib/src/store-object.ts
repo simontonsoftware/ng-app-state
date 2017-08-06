@@ -1,5 +1,6 @@
 import {Action, Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import 'rxjs/add/operator/take';
 import {BatchAction} from './actions/batch-action';
 import {DeleteAction} from './actions/delete-action';
 import {MergeAction} from './actions/merge-action';
