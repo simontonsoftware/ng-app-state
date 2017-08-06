@@ -1,9 +1,9 @@
 import {Action, Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 import {BatchAction} from './actions/batch-action';
 import {DeleteAction} from './actions/delete-action';
 import {MergeAction} from './actions/merge-action';
 import {SetAction} from './actions/set-action';
-import {Observable} from 'rxjs';
 import {ExtensibleFunction} from './utils/extensible-function';
 
 export interface StoreObject<T> {
@@ -25,7 +25,11 @@ export class StoreObject<T> extends ExtensibleFunction {
 
   public get $(): Observable<T> {
     if (!this._$) {
-      this._$ = (this.store.select as any)(...this.path);
+      if (this.path.length) {
+        this._$ = (this.store.select as any)(...this.path);
+      } else {
+        this._$ = this.store;
+      }
     }
     return this._$;
   }
@@ -36,7 +40,7 @@ export class StoreObject<T> extends ExtensibleFunction {
     this.dispatcher.dispatch(batch);
   }
 
-  public set(value: T) {
+  public set (value: T) {
     this.dispatcher.dispatch(new SetAction(this.path, value));
   }
 
