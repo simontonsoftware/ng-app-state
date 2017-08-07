@@ -1,4 +1,5 @@
 import {AppStateAction} from '../app-state-action';
+import {merge} from 'micro-dash';
 
 export class MergeAction extends AppStateAction {
   constructor(path: string[], value: any) {
@@ -6,6 +7,6 @@ export class MergeAction extends AppStateAction {
   }
 
   protected getNewValue<T>(oldState: T) {
-    return Object.assign({}, oldState, this.value);
+    return merge(oldState as any, this.value) as T;
   }
 }
