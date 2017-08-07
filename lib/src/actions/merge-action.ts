@@ -7,6 +7,6 @@ export class MergeAction extends AppStateAction {
   }
 
   protected getNewValue<T>(oldState: T) {
-    return merge(oldState as any, this.value) as T;
+    return merge({}, oldState, this.value) as T;
   }
 }
