@@ -6,6 +6,7 @@ import {DeleteAction} from './actions/delete-action';
 import {MergeAction} from './actions/merge-action';
 import {SetAction} from './actions/set-action';
 import {ExtensibleFunction} from './utils/extensible-function';
+import {AssignAction} from './actions/assign-action';
 
 export interface StoreObject<T> {
   <K extends keyof T, C extends T[K] = T[K]>(attr: K): StoreObject<C>;
@@ -43,6 +44,10 @@ export class StoreObject<T> extends ExtensibleFunction {
 
   public set (value: T) {
     this.dispatcher.dispatch(new SetAction(this.path, value));
+  }
+
+  public assign(value: Partial<T>) {
+    this.dispatcher.dispatch(new AssignAction(this.path, value));
   }
 
   public merge(value: Partial<T>) {
