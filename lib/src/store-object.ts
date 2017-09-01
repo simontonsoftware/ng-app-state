@@ -9,7 +9,7 @@ import {ExtensibleFunction} from './utils/extensible-function';
 import {AssignAction} from './actions/assign-action';
 
 export interface StoreObject<T> {
-  <K extends keyof T, C extends T[K] = T[K]>(attr: K): StoreObject<C>;
+  <K extends keyof T>(attr: K): StoreObject<T[K]>;
 }
 
 export class StoreObject<T> extends ExtensibleFunction {
