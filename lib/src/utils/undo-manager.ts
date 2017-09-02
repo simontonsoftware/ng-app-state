@@ -4,7 +4,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
   private currentStateIndex: number;
 
-  constructor(private store: StoreObject<StateType>) {
+  constructor(private store: StoreObject<StateType>, private maxDepth = 0) {
     this.reset();
   }
 
@@ -18,6 +18,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.stack[this.currentStateIndex] =
       this.extractUndoState(this.store.state());
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
+    while (this.isOverSize()) { this.stack.pop(); }
   }
 
   canUndo() {
@@ -47,6 +48,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
   protected abstract applyUndoState(
     undoState: UndoStateType, batch: StoreObject<StateType>,
   ): void;
+
+  protected isOverSize() {
+    return this.maxDepth > 0 && this.stack.length > this.maxDepth;
+  }
 
   private applyCurrentState() {
     this.store.batch((batch) => {
