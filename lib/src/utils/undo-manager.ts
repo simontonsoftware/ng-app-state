@@ -21,7 +21,11 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.stack[this.currentStateIndex] =
       this.extractUndoState(this.store.state());
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
-    while (this.isOverSize()) { this.stack.pop(); }
+
+    while (this.isOverSize()) {
+      this.stack.pop();
+      --this.currentStateIndex;
+    }
   }
 
   canUndo() {
