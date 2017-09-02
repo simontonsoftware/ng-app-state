@@ -1,6 +1,6 @@
 {
   "name": "ng-app-state",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "",
   "main": "./bundles/ng-app-state.umd.js",
   "module": "./ng-app-state.es5.js",
