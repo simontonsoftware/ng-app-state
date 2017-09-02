@@ -4,7 +4,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
   private currentStateIndex: number;
 
-  constructor(private store: StoreObject<StateType>, private maxDepth = 0) {
+  constructor(
+    protected readonly store: StoreObject<StateType>,
+    protected maxDepth = 0
+  ) {
     this.reset();
   }
 
