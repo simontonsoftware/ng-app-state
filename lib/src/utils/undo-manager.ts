@@ -22,8 +22,8 @@ export abstract class UndoManager<StateType, UndoStateType> {
       this.extractUndoState(this.store.state());
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
 
-    while (this.isOverSize()) {
-      this.stack.pop();
+    while (this.isOverSize(this.stack.length)) {
+      this.stack.shift();
       --this.currentStateIndex;
     }
   }
@@ -56,8 +56,8 @@ export abstract class UndoManager<StateType, UndoStateType> {
     undoState: UndoStateType, batch: StoreObject<StateType>,
   ): void;
 
-  protected isOverSize() {
-    return this.maxDepth > 0 && this.stack.length > this.maxDepth;
+  protected isOverSize(size: number) {
+    return this.maxDepth > 0 && size > this.maxDepth;
   }
 
   private applyCurrentState() {
