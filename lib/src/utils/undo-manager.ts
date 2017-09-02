@@ -2,15 +2,22 @@ import { StoreObject } from '../store-object';
 
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
-  private currentStateIndex = -1;
+  private currentStateIndex: number;
 
-  constructor(private store: StoreObject<StateType>) { }
+  constructor(private store: StoreObject<StateType>) {
+    this.reset();
+  }
+
+  reset() {
+    this.currentStateIndex = -1;
+    this.pushCurrentState();
+  }
 
   pushCurrentState() {
-    const state = this.store.state();
     ++this.currentStateIndex;
-    this.stack[this.currentStateIndex] = this.extractUndoState(state);
-    this.stack.splice(this.currentStateIndex + 1, 9999999);
+    this.stack[this.currentStateIndex] =
+      this.extractUndoState(this.store.state());
+    this.stack.splice(this.currentStateIndex + 1, this.stack.length);
   }
 
   canUndo() {
