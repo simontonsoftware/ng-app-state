@@ -2163,9 +2163,9 @@ meow@^3.3.0:
     redent "^1.0.0"
     trim-newlines "^1.0.0"
 
-micro-dash@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-0.0.3.tgz#8dda819da13f883c02b7a6180ed2010b05dc25a7"
+micro-dash@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-1.0.0.tgz#195e80388c5544b14266d09bd13ca19041b713d0"
 
 micromatch@2.3.11, micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"
