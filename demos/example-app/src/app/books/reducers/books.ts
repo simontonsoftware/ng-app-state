@@ -42,30 +42,6 @@ export function reducer(
       };
     }
 
-    case book.LOAD: {
-      const book = action.payload;
-
-      if (state.ids.indexOf(book.id) > -1) {
-        return state;
-      }
-
-      return {
-        ids: [...state.ids, book.id],
-        entities: Object.assign({}, state.entities, {
-          [book.id]: book,
-        }),
-        selectedBookId: state.selectedBookId,
-      };
-    }
-
-    case book.SELECT: {
-      return {
-        ids: state.ids,
-        entities: state.entities,
-        selectedBookId: action.payload,
-      };
-    }
-
     default: {
       return state;
     }

@@ -1,4 +1,3 @@
-import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/debounceTime';
@@ -6,16 +5,16 @@ import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/takeUntil';
 import { Injectable, InjectionToken, Optional, Inject } from '@angular/core';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 import { Scheduler } from 'rxjs/Scheduler';
 import { async } from 'rxjs/scheduler/async';
 import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
 
 import { GoogleBooksService } from '../../core/services/google-books';
 import * as book from '../actions/book';
 import { Book } from '../models/book';
+import { BooksStore } from '../state/books-store.service';
+import { BooksState } from '../state/books-state';
+import { StoreObject } from 'ng-app-state';
 
 export const SEARCH_DEBOUNCE = new InjectionToken<number>('Search Debounce');
 export const SEARCH_SCHEDULER = new InjectionToken<Scheduler>(
@@ -41,11 +40,12 @@ export const SEARCH_SCHEDULER = new InjectionToken<Scheduler>(
 
 @Injectable()
 export class BookEffects {
-  @Effect()
-  search$: Observable<Action> = this.actions$
+  @Effect({ dispatch: false })
+  search$ = this.actions$
     .ofType(book.SEARCH)
-    .debounceTime(this.debounce, this.scheduler || async)
     .map(toPayload)
+    .do((query) => this.onSearchStarted(query))
+    .debounceTime(this.debounce, this.scheduler || async)
     .switchMap(query => {
       if (query === '') {
         return empty();
@@ -56,9 +56,17 @@ export class BookEffects {
       return this.googleBooks
         .searchBooks(query)
         .takeUntil(nextSearch$)
-        .map((books: Book[]) => new book.SearchCompleteAction(books))
-        .catch(() => of(new book.SearchCompleteAction([])));
+        .do(
+          books => this.onSearchComplete(books),
+          () => this.onSearchComplete([]),
+        );
     });
+
+  @Effect({ dispatch: false })
+  load$ = this.actions$
+    .ofType(book.LOAD)
+    .map(toPayload)
+    .do(book => this.onBookLoad(book));
 
   constructor(
     private actions$: Actions,
@@ -73,6 +81,48 @@ export class BookEffects {
        */
     @Optional()
     @Inject(SEARCH_SCHEDULER)
-    private scheduler: Scheduler
+    private scheduler: Scheduler,
+    private booksStore: BooksStore,
   ) {}
+
+  private onSearchStarted(query: string) {
+    this.
+    this.booksStore('search')
+  }
+
+  private onSearchComplete(books: Book[]) {
+    const state = this.booksStore('books').state();
+    const newBooks = books.filter(book => !state.entities[book.id]);
+
+    const newBookIds = newBooks.map(book => book.id);
+    const newBookEntities = newBooks.reduce(
+      (entities, book) => {
+        return Object.assign(entities, {
+          [book.id]: book,
+        });
+      },
+      {} as Book,
+    );
+
+    this.booksStore('books').set({
+      ids: [...state.ids, ...newBookIds],
+      entities: Object.assign({}, state.entities, newBookEntities),
+      selectedBookId: state.selectedBookId,
+    });
+  }
+
+  private onBookLoad(book: Book) {
+    const state = this.booksStore('books').state();
+    if (state.ids.indexOf(book.id) > -1) {
+      return;
+    }
+
+    this.booksStore('books').set({
+      ids: [...state.ids, book.id],
+      entities: Object.assign({}, state.entities, {
+        [book.id]: book,
+      }),
+      selectedBookId: state.selectedBookId,
+    });
+  }
 }
