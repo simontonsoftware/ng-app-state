@@ -8,7 +8,7 @@
   "typings": "./ng-app-state.d.ts",
   "author": "Simonton Software",
   "license": "MIT",
-  "repository": {},
+  "repository": "simontonsoftware/ng-app-state",
   "engines": {
     "node": ">= 6.9.0",
     "npm": ">= 3.0.0"
@@ -35,7 +35,7 @@
   "peerDependencies": {
     "@angular/core": ">=4.0.0 <5.0.0 || >=4.0.0-beta <5.0.0",
     "@ngrx/store": ">=4.0.0 <5.0.0",
-    "micro-dash": "<1.0.0",
+    "micro-dash": ">=1.0.0",
     "rxjs": ">=5.0.0 <6.0.0"
   },
   "devDependencies": {
@@ -62,7 +62,6 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-remap-coverage": "^0.1.4",
     "lite-server": "^2.2.2",
-    "micro-dash": "^1.0.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.45.2",
     "rollup-plugin-commonjs": "^8.0.2",
