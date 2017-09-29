@@ -1,4 +1,18 @@
-`ng-app-state` is built on top of `ngrx/store`, bringing you the same help writing performant, consistent applications for Angular in a format more familiar for those not accustomed to functional programming. 
+`ng-app-state` is built on top of [`ngrx/store`](https://github.com/ngrx/platform), bringing you the same help writing performant, consistent applications for Angular in a format more familiar for those not accustomed to functional programming. 
+
+## Introduction
+A basic idea behind this library, the underlying `ngrx/store`, and `Redux` on which it is modeled is to keep all the state of your app in one place, accessible for any component to access, modify and subscribe to changes on. This has several benefits:
+
+- Components no longer need multiples inputs and outputs to route state and mutations to the proper components. Instead they can obtain the store via dependency injection.
+- During debugging you can look in one place to see the state of your entire app. Moreover, development tools can be used to see this information at a glance along with a full history of changes leading up to the current state, e.g. the [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) or [ngrx-store-logger](https://github.com/btroncone/ngrx-store-logger).
+- The objects in the store are immutable (as long as you only modify the state via the store, as you should), which enables more benefits:
+  - Immutable objects all you to use Angular's on-push change detection, which can be a huge performance gain for apps with a large state.
+  - Undo/redo features become very simple. This library even includes a helper for it (more info below).
+- Every piece of state is observable. You can subscribe to the root of the store to get notified of every state change anywhere in the app, for a specific boolean buried deep within your state, or anywhere in between.
+
+2 terms are worth defining immediately. As they are used in this library, they mean the following:
+- **State**: a javascript object (or primitive) kept within the store. A subset of the entire aplication state is still considered state on its own.
+- **Store**: the keeper of state. You will always interact with the state via the store, whether to access it, observe it or modify it. You can obtain store objects to represent a subset of your state as well, which are also store objects on their own.
 
 ## Installation
 With npm:
@@ -124,13 +138,16 @@ export class MyAppComponent {
 }
 ```
 
+## Compatibility with `ngrx/store`
+`ng-app-state` is entirely compatible with all features of `ngrx/store`, `ngrx/store-devtools`, `ngrx/effects`, and any other libraries in the ecosystem. Both can even manage and access the same parts of the store.
+
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
 - View the [full diff](https://github.com/simontonsoftware/ng-app-state/commit/724bc5443d7488581eef9544fd8291b96dc28d51) of the Counter app between `ngrx/store` and `ng-app-state`.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
-- When possible, only use plain object in your state. State classes can have a constructor to assist when creating a new object, but avoid any other methods. This allows you to use `set()` and the other mutation methods on store object freely (because mutating causes that object and all its ancestors to be recreated as plain objects or arrays, losing any methods defined by its prototype).
+- When possible, only use plain object in your state. State classes can have a constructor to assist when creating a new object, but avoid any other methods. This allows you to use `set()` and the other mutation methods on store objects freely (because mutating causes that object and all its ancestors to be recreated as plain objects or arrays, losing any methods defined by its prototype).
 - When obtaining the current state of a nested property, prefer calling `state()` early. E.g.:
   ```ts
   store.state().currentUser.name // do this
@@ -141,6 +158,15 @@ The main difference you'll see with `ng-app-state` is that you do not define red
   store.state().currentUser!.name // do this
   store<'currentUser', User>('currentUser')('name').state() // not this
   ```
+
+## Gotchas
+- Mutations are asynchronous. They do not modify the state directly, but dispatch actions to the store which will do the mutation on the next tick. This is the same as actions within `ngrx/store`. So if `counter` is currently 1:
+  ```ts
+  store('counter').set(2);
+  console.log(store.state().counter); // prints "1"
+  Promise.resolve().then(() => console.log(store.state().counter)); // prints "2"
+  ```
+  One technique to avoid this gotcha is to ban the use of `state()` in your code, but instead always access the state via observers. This would move you a step closer to more traditional reactive programming, in the style recommended when using `ngrx/store` directly.
 
 ## UndoManager
 This package includes an abstract class, `UndoManager` to assist you in creating undo/redo functionality. For example, a simple subclass that captures every state change into the undo history:
@@ -178,3 +204,5 @@ Consult the documentation in the source of `UndoState` for more options and info
 
 ## Credits
 This project's configuration came from the excellent [Angular QuickStart Lib](https://github.com/filipesilva/angular-quickstart-lib) (on [Jul 21, 2017](https://github.com/filipesilva/angular-quickstart-lib/commit/c687d9a3c00c8db5c290f0dfb243172f8dbfdf40)).
+
+The examples, and of course underlying technology, come from [@ngrx/store](https://github.com/ngrx/platform).
