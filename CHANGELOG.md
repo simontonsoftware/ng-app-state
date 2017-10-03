@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/simontonsoftware/ng-app-state/compare/v1.0.0...v1.0.1) (2017-10-03)
+
+
+### Bug Fixes
+
+* possible bugfix when using multiples stores ([002205e](https://github.com/simontonsoftware/ng-app-state/commit/002205e))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v0.4.3...v1.0.0) (2017-09-09)
 
