@@ -10,8 +10,8 @@ A basic idea behind this library, the underlying `ngrx/store`, and `Redux` on wh
   - Undo/redo features become very simple. This library even includes a helper for it (more info below).
 - Every piece of state is observable. You can subscribe to the root of the store to get notified of every state change anywhere in the app, for a specific boolean buried deep within your state, or anywhere in between.
 
-2 terms are worth defining immediately. As they are used in this library, they mean the following:
-- **State**: a javascript object (or primitive) kept within the store. A subset of the entire aplication state is still considered state on its own.
+2 terms are worth defining immediately. As they are used in this library, they mean:
+- **State**: a javascript object (or primitive) kept within the store. A subset of the entire application state is still considered state on its own.
 - **Store**: the keeper of state. You will always interact with the state via the store, whether to access it, observe it or modify it. You can obtain store objects to represent a subset of your state as well, which are also store objects on their own.
 
 ## Installation

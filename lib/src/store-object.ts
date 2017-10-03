@@ -1,18 +1,19 @@
-import {Action, Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import { Action, Store } from '@ngrx/store';
 import 'rxjs/add/operator/take';
-import {BatchAction} from './actions/batch-action';
-import {DeleteAction} from './actions/delete-action';
-import {MergeAction} from './actions/merge-action';
-import {SetAction} from './actions/set-action';
-import {ExtensibleFunction} from './utils/extensible-function';
-import {AssignAction} from './actions/assign-action';
+import { Observable } from 'rxjs/Observable';
+import { AssignAction } from './actions/assign-action';
+import { BatchAction } from './actions/batch-action';
+import { DeleteAction } from './actions/delete-action';
+import { MergeAction } from './actions/merge-action';
+import { SetAction } from './actions/set-action';
+import { Dispatcher } from './dispatcher';
+import { ExtensibleFunction } from './utils/extensible-function';
 
 export interface StoreObject<T> {
   /**
    * Select a slice of the store to operate on. For example `store('currentUser')` will return a new `StoreObject` that represents the `currentUser` property.
    */
-  <K extends keyof T>(attr: K): StoreObject<T[K]>;
+    <K extends keyof T>(attr: K): StoreObject<T[K]>;
 }
 
 export class StoreObject<T> extends ExtensibleFunction {
@@ -21,7 +22,7 @@ export class StoreObject<T> extends ExtensibleFunction {
   protected constructor(
     private store: Store<T>,
     private path: string[],
-    private dispatcher: { dispatch(action: Action): void; },
+    private dispatcher: Dispatcher,
   ) {
     super(
       (prop: string) => new StoreObject(store, [...path, prop], dispatcher),
@@ -53,30 +54,30 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public batch(func: (state: StoreObject<T>) => void) {
-    const batch = new BatchAction();
+    const batch = new BatchAction(this.dispatcher);
     func(new StoreObject(this.store, this.path, batch));
-    this.dispatcher.dispatch(batch);
+    batch.dispatch();
   }
 
   /**
    * Replace the state represented by this store object with the given value.
    */
   public set(value: T) {
-    this.dispatcher.dispatch(new SetAction(this.path, value));
+    new SetAction(this.dispatcher, this.path, value).dispatch();
   }
 
   /**
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
   public assign(value: Partial<T>) {
-    this.dispatcher.dispatch(new AssignAction(this.path, value));
+    new AssignAction(this.dispatcher, this.path, value).dispatch();
   }
 
   /**
    * Does a deep merge of the gives value into the current state. The result will be like a [lodash merge](https://lodash.com/docs/4.17.4#merge).
    */
   public merge(value: Partial<T>) {
-    this.dispatcher.dispatch(new MergeAction(this.path, value));
+    new MergeAction(this.dispatcher, this.path, value).dispatch();
   }
 
   /**
@@ -86,7 +87,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    this.dispatcher.dispatch(new DeleteAction(this.path));
+    new DeleteAction(this.dispatcher, this.path).dispatch();
   }
 
   /**

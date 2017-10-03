@@ -1,14 +1,19 @@
 import {AppStateAction} from '../app-state-action';
+import { Dispatcher } from '../dispatcher';
 
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 
-  constructor() {
-    super('batch', []);
+  constructor(dispatcher: Dispatcher) {
+    super(dispatcher, 'batch', []);
   }
 
-  public dispatch(action: AppStateAction) {
-    this.children.push(action);
+  public dispatch(action?: AppStateAction) {
+    if (action) {
+      this.children.push(action);
+    } else {
+      super.dispatch();
+    }
   }
 
   public execute<T extends object>(state: T) {

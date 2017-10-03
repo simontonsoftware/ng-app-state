@@ -1,7 +1,8 @@
-import {AppStateAction} from '../app-state-action';
+import { AppStateAction } from '../app-state-action';
+import { Dispatcher } from '../dispatcher';
 
 export class SetAction extends AppStateAction {
-  constructor(path: string[], value: any) {
-    super('set', path, value);
+  constructor(dispatcher: Dispatcher, path: string[], value: any) {
+    super(dispatcher, 'set', path, value);
   }
 }
