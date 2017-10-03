@@ -1,21 +1,16 @@
 import { Action } from '@ngrx/store';
 import { clone } from 'micro-dash';
-import { Dispatcher } from './dispatcher';
 
 export abstract class AppStateAction implements Action {
   public type: string;
 
   constructor(
-    public dispatcher: Dispatcher,
     name: string,
+    public rootKey: string,
     protected path: string[],
     protected value?: any,
   ) {
     this.type = `[${name}] ${path.join('.')}`;
-  }
-
-  public dispatch() {
-    this.dispatcher.dispatch(this);
   }
 
   public execute<T extends object>(state: T) {

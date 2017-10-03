@@ -1,10 +1,9 @@
 import { merge } from 'micro-dash';
 import { AppStateAction } from '../app-state-action';
-import { Dispatcher } from '../dispatcher';
 
 export class MergeAction extends AppStateAction {
-  constructor(dispatcher: Dispatcher, path: string[], value: any) {
-    super(dispatcher, 'merge', path, value);
+  constructor(rootKey: string, path: string[], value: any) {
+    super('merge', rootKey, path, value);
   }
 
   protected getNewValue<T>(oldState: T) {
