@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v1.0.2...v2.0.0) (2017-10-05)
+
+
+### Features
+
+* allow `delete()` called directly on a store ([01849d1](https://github.com/simontonsoftware/ng-app-state/commit/01849d1))
+
+
+### BREAKING CHANGES
+
+* `StoreModule` must now be given `ngAppStateReducer` in its list of meta reducers
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/simontonsoftware/ng-app-state/compare/v1.0.1...v1.0.2) (2017-10-03)
 
