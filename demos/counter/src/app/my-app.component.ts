@@ -1,33 +1,38 @@
 import { Component } from '@angular/core';
-import { StoreObject } from 'ng-app-state';
-import { CounterStore } from './counter-store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { DECREMENT, INCREMENT, RESET } from './counter';
+
+interface AppState {
+  counter: number;
+}
 
 @Component({
   selector: 'my-app',
   template: `
     <button (click)="increment()">Increment</button>
-    <div>Current Count: {{ counterStore.$ | async }}</div>
+    <div>Current Count: {{ counter$ | async }}</div>
     <button (click)="decrement()">Decrement</button>
 
     <button (click)="reset()">Reset Counter</button>
   `,
 })
 export class MyAppComponent {
-  counterStore: StoreObject<number>;
+  counter$: Observable<number>;
 
-  constructor(store: CounterStore) {
-    this.counterStore = store('counter');
+  constructor(private store: Store<AppState>) {
+    this.counter$ = store.select('counter');
   }
 
   increment() {
-    this.counterStore.set(this.counterStore.state() + 1);
+    this.store.dispatch({type: INCREMENT});
   }
 
   decrement() {
-    this.counterStore.set(this.counterStore.state() - 1);
+    this.store.dispatch({type: DECREMENT});
   }
 
   reset() {
-    this.counterStore.set(0);
+    this.store.dispatch({type: RESET});
   }
 }
