@@ -19,14 +19,12 @@ export class StoreObject<T> extends ExtensibleFunction {
   private _$: Observable<T>;
 
   protected constructor(
-    private store: Store<T>,
-    protected rootKey: string,
+    protected store: Store<any>,
     private path: string[],
     private dispatcher: { dispatch(action?: Action): void },
   ) {
     super(
-      (prop: string) =>
-        new StoreObject(store, rootKey, [...path, prop], dispatcher),
+      (prop: string) => new StoreObject(store, [...path, prop], dispatcher),
     );
   }
 
@@ -55,8 +53,8 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public batch(func: (state: StoreObject<T>) => void) {
-    const batch = new BatchAction(this.rootKey);
-    func(new StoreObject(this.store, this.rootKey, this.path, batch));
+    const batch = new BatchAction();
+    func(new StoreObject(this.store, this.path, batch));
     this.dispatcher.dispatch(batch);
   }
 
@@ -64,21 +62,21 @@ export class StoreObject<T> extends ExtensibleFunction {
    * Replace the state represented by this store object with the given value.
    */
   public set(value: T) {
-    this.dispatcher.dispatch(new SetAction(this.rootKey, this.path, value));
+    this.dispatcher.dispatch(new SetAction(this.path, value));
   }
 
   /**
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
   public assign(value: Partial<T>) {
-    this.dispatcher.dispatch(new AssignAction(this.rootKey, this.path, value));
+    this.dispatcher.dispatch(new AssignAction(this.path, value));
   }
 
   /**
    * Does a deep merge of the gives value into the current state. The result will be like a [lodash merge](https://lodash.com/docs/4.17.4#merge).
    */
   public merge(value: Partial<T>) {
-    this.dispatcher.dispatch(new MergeAction(this.rootKey, this.path, value));
+    this.dispatcher.dispatch(new MergeAction(this.path, value));
   }
 
   /**
@@ -88,7 +86,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    this.dispatcher.dispatch(new DeleteAction(this.rootKey, this.path));
+    this.dispatcher.dispatch(new DeleteAction(this.path));
   }
 
   /**
@@ -96,7 +94,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public state() {
     let value: T;
-    this.$.take(1).subscribe((v) => value = v);
+    this.$.take(1).subscribe((v) => { value = v; });
     return value!;
   }
 
