@@ -68,18 +68,19 @@ export class MyStore extends AppStore<MyState> {
 
 The second argument to the constructor above, `"myState"`, must be unique for each store object you create. It becomes the top-level key of this store within the global `ngrx/store`. You can create multiple `AppStore` objects as long as each has a different key.
 
-Below is a common setup for your root module. Note that the only required part is importing `StoreModule.forRoot()` to initialize `ngrx/store`.
+Below is a common setup for your root module. Note that the only required part is importing `StoreModule.forRoot()` to initialize `ngrx/store`, and passing it `ngAppStateReducer` in the list of meta reducers.
 
 ```ts
 // app.module.ts
 
-import {StoreModule} from "@ngrx/store";
-import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {MyStore} from "./state/my-store";
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { ngAppStateReducer } from 'ng-app-state';
+import { MyStore } from "./state/my-store";
 
 @NgModule({
   imports: [
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
@@ -143,7 +144,7 @@ export class MyAppComponent {
 
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
-- View the [full diff](https://github.com/simontonsoftware/ng-app-state/commit/724bc5443d7488581eef9544fd8291b96dc28d51) of the Counter app between `ngrx/store` and `ng-app-state`.
+- View the [full diff](https://github.com/simontonsoftware/ng-app-state/commit/df4ac04ae684d7e884accfae1a71f20672cbd0c5) of the Counter app between `ngrx/store` and `ng-app-state`.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
@@ -158,15 +159,6 @@ The main difference you'll see with `ng-app-state` is that you do not define red
   store.state().currentUser!.name // do this
   store<'currentUser', User>('currentUser')('name').state() // not this
   ```
-
-## Gotchas
-- Mutations are asynchronous. They do not modify the state directly, but dispatch actions to the store which will do the mutation on the next tick. This is the same as actions within `ngrx/store`. So if `counter` is currently 1:
-  ```ts
-  store('counter').set(2);
-  console.log(store.state().counter); // prints "1"
-  Promise.resolve().then(() => console.log(store.state().counter)); // prints "2"
-  ```
-  One technique to avoid this gotcha is to ban the use of `state()` in your code, but instead always access the state via observers. This would move you a step closer to more traditional reactive programming, in the style recommended when using `ngrx/store` directly.
 
 ## UndoManager
 This package includes an abstract class, `UndoManager` to assist you in creating undo/redo functionality. For example, a simple subclass that captures every state change into the undo history:
