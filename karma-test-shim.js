@@ -64,6 +64,7 @@ System.config({
     '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
     '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
     '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
+    '@ngrx/store': 'npm:@ngrx/store/bundles/store.umd.js',
     // Testing bundles
     '@angular/core/testing': 'npm:@angular/core/bundles/core-testing.umd.js',
     '@angular/common/testing': 'npm:@angular/common/bundles/common-testing.umd.js',
@@ -73,7 +74,9 @@ System.config({
     '@angular/http/testing': 'npm:@angular/http/bundles/http-testing.umd.js',
     '@angular/router/testing': 'npm:@angular/router/bundles/router-testing.umd.js',
     '@angular/forms/testing': 'npm:@angular/forms/bundles/forms-testing.umd.js',
+    'micro-dash': 'npm:micro-dash/bundles/micro-dash.umd.js',
     'rxjs': 'npm:rxjs',
+    'tslib': 'npm:tslib/tslib.js',
     'src': 'src'
   }
 });

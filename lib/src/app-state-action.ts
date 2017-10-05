@@ -6,7 +6,6 @@ export abstract class AppStateAction implements Action {
 
   constructor(
     name: string,
-    public rootKey: string,
     protected path: string[],
     protected value?: any,
   ) {

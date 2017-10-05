@@ -6,28 +6,28 @@ import { CounterStore } from './counter-store';
   selector: 'my-app',
   template: `
     <button (click)="increment()">Increment</button>
-    <div>Current Count: {{ counterStore.$ | async }}</div>
+    <div>Current Count: {{ valueStore.$ | async }}</div>
     <button (click)="decrement()">Decrement</button>
 
     <button (click)="reset()">Reset Counter</button>
   `,
 })
 export class MyAppComponent {
-  counterStore: StoreObject<number>;
+  valueStore: StoreObject<number>;
 
   constructor(store: CounterStore) {
-    this.counterStore = store('counter');
+    this.valueStore = store('value');
   }
 
   increment() {
-    this.counterStore.set(this.counterStore.state() + 1);
+    this.valueStore.set(this.valueStore.state() + 1);
   }
 
   decrement() {
-    this.counterStore.set(this.counterStore.state() - 1);
+    this.valueStore.set(this.valueStore.state() - 1);
   }
 
   reset() {
-    this.counterStore.set(0);
+    this.valueStore.set(0);
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
+import { ngAppStateReducer } from 'ng-app-state';
 import { CounterStore } from './counter-store';
 import { MyAppComponent } from './my-app.component';
 
@@ -10,7 +11,7 @@ import { MyAppComponent } from './my-app.component';
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]}),
   ],
   providers: [
     CounterStore,

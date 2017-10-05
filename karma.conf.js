@@ -51,6 +51,14 @@ module.exports = function (config) {
       { pattern: 'node_modules/@angular/**/*.js', included: false, watched: false },
       { pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false },
 
+      { pattern: 'node_modules/tslib/**/*.js', included: false, watched: false },
+
+      { pattern: 'node_modules/@ngrx/**/*.js', included: false, watched: false },
+      { pattern: 'node_modules/@ngrx/**/*.js.map', included: false, watched: false },
+
+      { pattern: 'node_modules/micro-dash/**/*.js', included: false, watched: false },
+      { pattern: 'node_modules/micro-dash/**/*.js.map', included: false, watched: false },
+
       { pattern: 'demo/systemjs-angular-loader.js', included: false, watched: false },
 
       'karma-test-shim.js', // optionally extend SystemJS mapping e.g., with barrels

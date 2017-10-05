@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Counter - Copy Lib" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/demos/counter/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="copy-lib" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method />
+  </configuration>
+</component>

@@ -1,8 +1,8 @@
 import {AppStateAction} from '../app-state-action';
 
 export class AssignAction extends AppStateAction {
-  constructor(rootKey: string, path: string[], value: any) {
-    super('assign', rootKey, path, value);
+  constructor(path: string[], value: any) {
+    super('assign', path, value);
   }
 
   protected getNewValue<T>(oldState: T) {

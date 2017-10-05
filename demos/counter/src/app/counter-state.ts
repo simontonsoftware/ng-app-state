@@ -1,3 +1,3 @@
 export class CounterState {
-  counter = 0;
+  value = 0;
 }

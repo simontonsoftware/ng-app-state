@@ -2,8 +2,8 @@ import { omit } from 'micro-dash';
 import { AppStateAction } from '../app-state-action';
 
 export class DeleteAction extends AppStateAction {
-  constructor(rootKey: string, path: string[]) {
-    super('delete', rootKey, path);
+  constructor(path: string[]) {
+    super('delete', path);
   }
 
   protected getNewState<T extends object>(path: string[], oldState: T): T {
