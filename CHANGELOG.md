@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v2.0.0...v3.0.0) (2017-11-03)
+
+
+### Features
+
+* Support Angular 5 ([6629273](https://github.com/simontonsoftware/ng-app-state/commit/6629273))
+
+
+### BREAKING CHANGES
+
+* requires rxjs >= 5.5 and angular >= 5.0
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v1.0.2...v2.0.0) (2017-10-05)
 
