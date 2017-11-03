@@ -91,7 +91,8 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false
+    browsers: [],
+    singleRun: false,
+    browserNoActivityTimeout: 30000 // it takes > 20 seconds to load all the JS
   })
-}
+};

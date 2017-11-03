@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
+import { take } from 'rxjs/operators/take';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
 
@@ -8,7 +9,7 @@ describe('AppStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]})]
+      imports: [StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]})],
     });
     inject([Store], (s: Store<any>) => { backingStore = s; })();
   });
@@ -38,7 +39,7 @@ describe('AppStore', () => {
 
   function getState() {
     let value: any;
-    backingStore.take(1).subscribe((v) => { value = v; });
+    backingStore.pipe(take(1)).subscribe((v) => { value = v; });
     return value!;
   }
 });

@@ -195,6 +195,6 @@ You may also want to tailor which pieces of state are included in undo/redo oper
 Consult the documentation in the source of `UndoState` for more options and information.
 
 ## Credits
-This project's configuration came from the excellent [Angular QuickStart Lib](https://github.com/filipesilva/angular-quickstart-lib) (on [Jul 21, 2017](https://github.com/filipesilva/angular-quickstart-lib/commit/c687d9a3c00c8db5c290f0dfb243172f8dbfdf40)).
+This project's configuration came from [Angular QuickStart Lib](https://github.com/filipesilva/angular-quickstart-lib) (on [Jul 21, 2017](https://github.com/filipesilva/angular-quickstart-lib/commit/c687d9a3c00c8db5c290f0dfb243172f8dbfdf40)).
 
 The examples, and of course underlying technology, come from [@ngrx/store](https://github.com/ngrx/platform).

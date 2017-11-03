@@ -1,6 +1,6 @@
 import { Action, Store } from '@ngrx/store';
-import 'rxjs/add/operator/take';
 import { Observable } from 'rxjs/Observable';
+import { take } from 'rxjs/operators/take';
 import { AssignAction } from './actions/assign-action';
 import { BatchAction } from './actions/batch-action';
 import { DeleteAction } from './actions/delete-action';
@@ -94,7 +94,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public state() {
     let value: T;
-    this.$.take(1).subscribe((v) => { value = v; });
+    this.$.pipe(take(1)).subscribe((v) => { value = v; });
     return value!;
   }
 
