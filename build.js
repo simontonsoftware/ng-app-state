@@ -59,15 +59,13 @@ return Promise.resolve()
         // See https://github.com/rollup/rollup/wiki/JavaScript-API#globals for more.
         '@angular/core': 'ng.core'
       },
-      external: [
+      external: function(id) {
         // List of dependencies
         // See https://github.com/rollup/rollup/wiki/JavaScript-API#external for more.
-        '@angular/core',
-        'rxjs',
-        'rxjs/Observable',
-        'rxjs/operators/take',
-        'micro-dash'
-      ],
+        return id.startsWith('@angular')
+          || id.startsWith('rxjs')
+          || id.startsWith('micro-dash')
+      },
       paths: {
         'micro-dash/index': 'micro-dash'
       },

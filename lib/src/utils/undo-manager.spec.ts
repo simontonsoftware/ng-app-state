@@ -28,9 +28,7 @@ class TestImpl extends UndoManager<State, State> {
     return state;
   }
 
-  protected applyUndoState(
-    undoState: State, batch: StoreObject<State>,
-  ) {
+  protected applyUndoState(undoState: State, batch: StoreObject<State>) {
     this.skipNextChange = true;
     batch.set(undoState);
   }
@@ -110,6 +108,89 @@ describe('UndoManager', () => {
 
       undoManager.reset();
       expect(undoManager.canRedo()).toBe(false);
+    });
+  });
+
+  describe('.canUndo$', () => {
+    it('fires (only) when undoability changes', () => {
+      let callCount = 0;
+      let lastValue = false;
+      undoManager.canUndo$.subscribe((value) => {
+        ++callCount;
+        lastValue = value;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toBe(false);
+
+      store('counter').set(1);
+      expect(callCount).toBe(2);
+      expect(lastValue).toBe(true);
+
+      undoManager.undo();
+      expect(callCount).toBe(3);
+      expect(lastValue).toBe(false);
+
+      undoManager.redo();
+      expect(callCount).toBe(4);
+      expect(lastValue).toBe(true);
+
+      store('counter').set(2);
+      undoManager.undo();
+      expect(callCount).toBe(4);
+
+      undoManager.undo();
+      expect(callCount).toBe(5);
+      expect(lastValue).toBe(false);
+
+      undoManager.redo();
+      expect(callCount).toBe(6);
+      expect(lastValue).toBe(true);
+
+      undoManager.reset();
+      expect(callCount).toBe(7);
+      expect(lastValue).toBe(false);
+    });
+  });
+
+  describe('.canRedo$', () => {
+    it('fires (only) when redoability changes', () => {
+      let callCount = 0;
+      let lastValue = false;
+      undoManager.canRedo$.subscribe((value) => {
+        ++callCount;
+        lastValue = value;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toBe(false);
+
+      store('counter').set(1);
+      expect(callCount).toBe(1);
+
+      undoManager.undo();
+      expect(callCount).toBe(2);
+      expect(lastValue).toBe(true);
+
+      undoManager.redo();
+      expect(callCount).toBe(3);
+      expect(lastValue).toBe(false);
+
+      store('counter').set(2);
+      expect(callCount).toBe(3);
+
+      undoManager.undo();
+      expect(callCount).toBe(4);
+      expect(lastValue).toBe(true);
+
+      undoManager.undo();
+      undoManager.redo();
+      expect(callCount).toBe(4);
+
+      undoManager.redo();
+      expect(callCount).toBe(5);
+      expect(lastValue).toBe(false);
+
+      undoManager.reset();
+      expect(callCount).toBe(5);
     });
   });
 
