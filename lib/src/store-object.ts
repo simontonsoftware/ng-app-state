@@ -12,7 +12,7 @@ export interface StoreObject<T> {
   /**
    * Select a slice of the store to operate on. For example `store('currentUser')` will return a new `StoreObject` that represents the `currentUser` property.
    */
-    <K extends keyof T>(attr: K): StoreObject<T[K]>;
+  <K extends keyof T, V extends T[K]>(attr: K): StoreObject<V>;
 }
 
 export class StoreObject<T> extends ExtensibleFunction {

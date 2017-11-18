@@ -21,9 +21,9 @@ export abstract class AppStateAction implements Action {
   protected getNewState<T extends object>(path: string[], oldState: T) {
     if (path.length) {
       if (oldState == null) {
-        const parentPath = this.path.slice(0, path.length);
         throw new Error(
-          `${this.type} failed: ${parentPath} is null or undefined`,
+          this.path.slice(0, -path.length).join('.')
+          + ` is null or undefined (during ${this.type})`,
         );
       }
 

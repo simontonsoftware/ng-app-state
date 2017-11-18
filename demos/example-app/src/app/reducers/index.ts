@@ -1,4 +1,5 @@
 import { ActionReducer } from '@ngrx/store';
+import { ngAppStateReducer } from 'ng-app-state';
 import { environment } from '../../environments/environment';
 
 /**
@@ -23,5 +24,5 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<any, any> {
  * that will be composed to form the root meta-reducer.
  */
 export const metaReducers: ActionReducer<any, any>[] = !environment.production
-  ? [logger]
-  : [];
+  ? [ngAppStateReducer, logger]
+  : [ngAppStateReducer];

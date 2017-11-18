@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test Once" type="js.build_tools.npm" factoryName="npm">
-    <package-json value="$PROJECT_DIR$/package.json" />
+  <configuration default="false" name="Counter - Start" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/demos/counter/package.json" />
     <command value="run" />
     <scripts>
-      <script value="test:once" />
+      <script value="start" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

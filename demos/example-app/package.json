@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prestart": "rimraf node_modules/ng-app-state/* && copyfiles -u 2 ../dist/**/* node_modules/ng-app-state",
+    "prestart": "rimraf node_modules/ng-app-state/* && copyfiles -u 3 ../../dist/**/* node_modules/ng-app-state",
     "start": "ng serve"
   },
   "private": true,

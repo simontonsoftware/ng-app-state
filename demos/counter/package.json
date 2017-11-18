@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "copy-lib": "rimraf node_modules/ng-app-state && copyfiles -u 3 ../../dist/**/* node_modules/ng-app-state",
+    "copy-lib": "rimraf node_modules/ng-app-state/* && copyfiles -u 3 ../../dist/**/* node_modules/ng-app-state",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build"
