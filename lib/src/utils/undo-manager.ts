@@ -1,15 +1,30 @@
+import 'rxjs/add/operator/distinctUntilChanged';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import { StoreObject } from '../store-object';
 
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
   private currentStateIndex: number;
 
+  private canUndoSubject = new BehaviorSubject(false);
+  private canRedoSubject = new BehaviorSubject(false);
+
+  /**
+   * An observable that emits the result of `canUndo()` every time that value changes.
+   */
+  canUndo$: Observable<boolean> = this.canUndoSubject.distinctUntilChanged();
+
+  /**
+   * An observable that emits the result of `canRedo()` every time that value changes.
+   */
+  canRedo$: Observable<boolean> = this.canRedoSubject.distinctUntilChanged();
+
   /**
    * @param maxDepth The maximum size of the history before discarding the oldest state. `0` means no limit.
    */
   constructor(
-    protected readonly store: StoreObject<StateType>,
-    protected maxDepth = 0
+    protected readonly store: StoreObject<StateType>, protected maxDepth = 0,
   ) {
     this.reset();
   }
@@ -32,10 +47,12 @@ export abstract class UndoManager<StateType, UndoStateType> {
       this.extractUndoState(this.store.state());
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
 
-    while (this.isOverSize(this.stack.length)) {
+    while (this.stack.length > 1 && this.isOverSize(this.stack.length)) {
       this.stack.shift();
       --this.currentStateIndex;
     }
+
+    this.fireUndoChanges();
   }
 
   /**
@@ -62,6 +79,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
 
     --this.currentStateIndex;
     this.applyCurrentState();
+    this.fireUndoChanges();
   }
 
   /**
@@ -74,6 +92,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
 
     ++this.currentStateIndex;
     this.applyCurrentState();
+    this.fireUndoChanges();
   }
 
   /**
@@ -99,5 +118,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.store.batch((batch) => {
       this.applyUndoState(this.stack[this.currentStateIndex], batch);
     });
+  }
+
+  private fireUndoChanges() {
+    this.canUndoSubject.next(this.canUndo());
+    this.canRedoSubject.next(this.canRedo());
   }
 }
