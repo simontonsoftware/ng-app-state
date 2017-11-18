@@ -130,7 +130,7 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.batch', () => {
+  describe('.batch()', () => {
     it('causes a single update after multiple actions', () => {
       let fires = 0;
       store.$.subscribe(() => { ++fires; });
@@ -147,7 +147,7 @@ describe('StoreObject', () => {
     })
   });
 
-  describe('.set', () => {
+  describe('.set()', () => {
     it('stores the exact object given', () => {
       const before = store.state().nested;
       const set = new InnerState();
@@ -184,7 +184,7 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.assign', () => {
+  describe('.assign()', () => {
     it('assigns the exact objects given', () => {
       const before = store.state().nested;
       const left = new InnerState();
@@ -200,19 +200,19 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.merge', () => {
+  describe('.merge()', () => {
     it('')
   });
 
-  describe('.delete', () => {
+  describe('.delete()', () => {
     it('')
   });
 
-  describe('.state', () => {
+  describe('.state()', () => {
     it('')
   });
 
-  describe('.dispatch', () => {
+  describe('.dispatch()', () => {
     it('')
   });
 });

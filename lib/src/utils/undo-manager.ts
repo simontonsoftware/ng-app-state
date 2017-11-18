@@ -8,8 +8,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * @param maxDepth The maximum size of the history before discarding the oldest state. `0` means no limit.
    */
   constructor(
-    protected readonly store: StoreObject<StateType>,
-    protected maxDepth = 0
+    protected readonly store: StoreObject<StateType>, protected maxDepth = 0,
   ) {
     this.reset();
   }
@@ -32,7 +31,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
       this.extractUndoState(this.store.state());
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
 
-    while (this.isOverSize(this.stack.length)) {
+    while (this.stack.length > 1 && this.isOverSize(this.stack.length)) {
       this.stack.shift();
       --this.currentStateIndex;
     }
