@@ -50,8 +50,6 @@ describe('UndoManager', () => {
     })();
   });
 
-  it('');
-
   describe('.canUndo()', () => {
     it('is false (only) when at the beginning of the stack', () => {
       expect(undoManager.canUndo()).toBe(false);
