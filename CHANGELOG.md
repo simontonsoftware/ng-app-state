@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v2.0.0...v2.1.0) (2017-11-18)
+
+
+### Features
+
+* backport features and fixes up to 3.1.0 ([eba15fc](https://github.com/simontonsoftware/ng-app-state/commit/eba15fc))
+  * **UndoManager:** `.canUndo$` and `.canRedo$` observables ([a049b5c](https://github.com/simontonsoftware/ng-app-state/commit/a049b5c))
+  * **UndoManager:** don't test for `isOverSize` when nothing to drop ([e094279](https://github.com/simontonsoftware/ng-app-state/commit/e094279))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v1.0.2...v2.0.0) (2017-10-05)
 
