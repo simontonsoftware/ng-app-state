@@ -23,7 +23,8 @@ module.exports = function (config) {
     remapCoverageReporter: {
       'text-summary': null,
       html: './coverage/html',
-      cobertura: './coverage/coverage.xml'
+      cobertura: './coverage/coverage.xml',
+      lcovonly: './coverage/lcov.info'
     }
   })
-}
+};

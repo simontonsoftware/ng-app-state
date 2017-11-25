@@ -12,9 +12,8 @@ before_install:
   # Install latest chrome.
   - export CHROME_BIN=chromium-browser
 install:
-  - npm install
+  - yarn
 script:
-  - npm run lint
-  - npm run test:once
-  - npm run integration
-  - npm run coverage
+  - yarn coverage
+after_success:
+  - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
