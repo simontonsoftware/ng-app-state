@@ -1,5 +1,7 @@
 `ng-app-state` is built on top of [`ngrx/store`](https://github.com/ngrx/platform), bringing you the same help writing performant, consistent applications for Angular in a format more familiar for those not accustomed to functional programming. 
 
+[![Build Status](https://travis-ci.org/simontonsoftware/ng-app-state.svg?branch=master)](https://travis-ci.org/simontonsoftware/ng-app-state) [![Coverage Status](https://coveralls.io/repos/github/simontonsoftware/ng-app-state/badge.svg?branch=master)](https://coveralls.io/github/simontonsoftware/ng-app-state?branch=master)
+
 ## Introduction
 A basic idea behind this library, the underlying `ngrx/store`, and `Redux` on which it is modeled is to keep all the state of your app in one place, accessible for any component to access, modify and subscribe to changes on. This has several benefits:
 
