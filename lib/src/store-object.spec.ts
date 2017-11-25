@@ -2,6 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
+import { take } from 'rxjs/operators/take';
 
 class State {
   counter = 0;
@@ -232,7 +233,22 @@ describe('StoreObject', () => {
   });
 
   describe('.delete()', () => {
-    it('')
+    it('removes sub-trees from the store', () => {
+      store('optional').set(new InnerState());
+      store<'optional', InnerState>('optional')('left').set(new InnerState());
+      expect(store.state().optional!.left).toEqual(new InnerState());
+
+      store<'optional', InnerState>('optional')('left').delete();
+      expect(store.state().optional).not.toBe(undefined);
+      expect(store.state().optional!.left).toBe(undefined);
+
+      store('optional').delete();
+      expect(getGlobalState().testKey).not.toBe(undefined);
+      expect(store.state().optional).toBe(undefined);
+
+      store.delete();
+      expect(getGlobalState().testKey).toBe(undefined);
+    });
   });
 
   describe('.state()', () => {
@@ -242,4 +258,10 @@ describe('StoreObject', () => {
   describe('.dispatch()', () => {
     it('')
   });
+
+  function getGlobalState() {
+    let value: any;
+    backingStore.pipe(take(1)).subscribe((v) => { value = v; });
+    return value!;
+  }
 });
