@@ -128,6 +128,15 @@ describe('StoreObject', () => {
       expect(counterFires).toBe(3);
       expect(optionalFires).toBe(2);
     });
+
+    // This is important for use in angular templates, so each change detection cycle it gets the same object, so OnPush can work
+    it('returns the same observable on successive calls', () => {
+      const observable = store.$;
+      expect(store.$).toBe(observable);
+
+      store('counter').set(2);
+      expect(store.$).toBe(observable);
+    })
   });
 
   describe('.batch()', () => {
@@ -201,7 +210,25 @@ describe('StoreObject', () => {
   });
 
   describe('.merge()', () => {
-    it('')
+    it('merges in the objects given', () => {
+      const o1 = new State();
+      o1.counter = 1;
+      o1.nested.left = new InnerState(2);
+      store.merge(o1);
+      expect(store.state()).toEqual({
+        counter: 1,
+        nested: {state: 0, left: new InnerState(2)},
+      });
+
+      const o2 = new State();
+      o2.counter = 3;
+      o2.nested.right = new InnerState(4);
+      store.merge(o2);
+      expect(store.state()).toEqual({
+        counter: 3,
+        nested: {state: 0, left: new InnerState(2), right: new InnerState(4)},
+      });
+    });
   });
 
   describe('.delete()', () => {
