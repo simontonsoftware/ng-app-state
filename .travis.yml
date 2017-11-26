@@ -17,3 +17,5 @@ script:
   - yarn coverage
 after_success:
   - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
+notifications:
+ email: false
