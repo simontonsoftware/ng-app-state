@@ -146,7 +146,7 @@ export class MyAppComponent {
 
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
-- View the [full diff](https://github.com/simontonsoftware/ng-app-state/commit/df4ac04ae684d7e884accfae1a71f20672cbd0c5) of the Counter app between `ngrx/store` and `ng-app-state`.
+- View the [full diff](https://github.com/simontonsoftware/ng-app-state/compare/unmodified-counter-demo...b9c72c04767cc5b9bbcc90921d80230227ffae4c) of the Counter app between `ngrx/store` and `ng-app-state`.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
