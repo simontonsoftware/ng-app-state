@@ -2899,6 +2899,10 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
+micro-dash@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-1.0.0.tgz#195e80388c5544b14266d09bd13ca19041b713d0"
+
 micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-2.3.11.tgz#86677c97d1720b363431d04d0d15293bd38c1565"
@@ -3039,6 +3043,10 @@ ncname@1.0.x:
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
+
+ng-app-state@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/ng-app-state/-/ng-app-state-3.1.1.tgz#ad5eb84b4c4b46879fef5748f34b782c2c3e413c"
 
 no-case@^2.2.0:
   version "2.3.1"
