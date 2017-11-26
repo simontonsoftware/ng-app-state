@@ -251,12 +251,25 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.state()', () => {
-    it('')
-  });
-
   describe('.dispatch()', () => {
-    it('')
+    it('forwards actions on to ngrx', () => {
+      let callCount = 0;
+      backingStore.addReducer('testKey', (state = {}, action) => {
+        if (action.type === 'the action') { ++callCount; }
+        return state;
+      });
+      store.dispatch({type: 'the action'});
+      expect(callCount).toBe(1);
+
+      store('nested').dispatch({type: 'the action'});
+      expect(callCount).toBe(2);
+
+      store('counter').batch((batch) => {
+        batch.dispatch({type: 'the action'});
+        expect(callCount).toBe(3);
+      });
+      expect(callCount).toBe(3);
+    });
   });
 
   function getGlobalState() {
