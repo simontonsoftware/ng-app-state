@@ -2,6 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
+import { take } from 'rxjs/operators/take';
 
 class State {
   counter = 0;
@@ -128,6 +129,15 @@ describe('StoreObject', () => {
       expect(counterFires).toBe(3);
       expect(optionalFires).toBe(2);
     });
+
+    // This is important for use in angular templates, so each change detection cycle it gets the same object, so OnPush can work
+    it('returns the same observable on successive calls', () => {
+      const observable = store.$;
+      expect(store.$).toBe(observable);
+
+      store('counter').set(2);
+      expect(store.$).toBe(observable);
+    })
   });
 
   describe('.batch()', () => {
@@ -201,18 +211,70 @@ describe('StoreObject', () => {
   });
 
   describe('.merge()', () => {
-    it('')
+    it('merges in the objects given', () => {
+      const o1 = new State();
+      o1.counter = 1;
+      o1.nested.left = new InnerState(2);
+      store.merge(o1);
+      expect(store.state()).toEqual({
+        counter: 1,
+        nested: {state: 0, left: new InnerState(2)},
+      });
+
+      const o2 = new State();
+      o2.counter = 3;
+      o2.nested.right = new InnerState(4);
+      store.merge(o2);
+      expect(store.state()).toEqual({
+        counter: 3,
+        nested: {state: 0, left: new InnerState(2), right: new InnerState(4)},
+      });
+    });
   });
 
   describe('.delete()', () => {
-    it('')
-  });
+    it('removes sub-trees from the store', () => {
+      store('optional').set(new InnerState());
+      store<'optional', InnerState>('optional')('left').set(new InnerState());
+      expect(store.state().optional!.left).toEqual(new InnerState());
 
-  describe('.state()', () => {
-    it('')
+      store<'optional', InnerState>('optional')('left').delete();
+      expect(store.state().optional).not.toBe(undefined);
+      expect(store.state().optional!.left).toBe(undefined);
+
+      store('optional').delete();
+      expect(getGlobalState().testKey).not.toBe(undefined);
+      expect(store.state().optional).toBe(undefined);
+
+      store.delete();
+      expect(getGlobalState().testKey).toBe(undefined);
+    });
   });
 
   describe('.dispatch()', () => {
-    it('')
+    it('forwards actions on to ngrx', () => {
+      let callCount = 0;
+      backingStore.addReducer('testKey', (state = {}, action) => {
+        if (action.type === 'the action') { ++callCount; }
+        return state;
+      });
+      store.dispatch({type: 'the action'});
+      expect(callCount).toBe(1);
+
+      store('nested').dispatch({type: 'the action'});
+      expect(callCount).toBe(2);
+
+      store('counter').batch((batch) => {
+        batch.dispatch({type: 'the action'});
+        expect(callCount).toBe(3);
+      });
+      expect(callCount).toBe(3);
+    });
   });
+
+  function getGlobalState() {
+    let value: any;
+    backingStore.pipe(take(1)).subscribe((v) => { value = v; });
+    return value!;
+  }
 });

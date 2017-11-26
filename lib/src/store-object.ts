@@ -32,13 +32,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * An `Observable` of the state of this store object.
    */
   public get $(): Observable<T> {
-    if (!this._$) {
-      if (this.path.length) {
-        this._$ = (this.store.select as any)(...this.path);
-      } else {
-        this._$ = this.store;
-      }
-    }
+    if (!this._$) { this._$ = (this.store.select as any)(...this.path); }
     return this._$;
   }
 
