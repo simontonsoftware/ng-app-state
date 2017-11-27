@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v3.1.1...v4.0.0) (2017-11-27)
+
+
+### Features
+
+* Added `StoreObject.mutateUsing` ([f3fee7f](https://github.com/simontonsoftware/ng-app-state/commit/f3fee7f))
+* Added `StoreObject.setUsing` ([8d8e5ce](https://github.com/simontonsoftware/ng-app-state/commit/8d8e5ce))
+
+
+### BREAKING CHANGES
+
+* Removed `StoreObject.merge(value)`. Instead use `StoreObject.mutateUsing(merge, value)`, where `merge` comes from [lodash](https://github.com/lodash/lodash) or [micro-dash](https://github.com/simontonsoftware/micro-dash) (the previous implementation was using `micro-dash` under the hood). ([313f628](https://github.com/simontonsoftware/ng-app-state/commit/313f628))
+
+
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/simontonsoftware/ng-app-state/compare/v3.1.0...v3.1.1) (2017-11-19)
 
