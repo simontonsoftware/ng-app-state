@@ -1,12 +1,11 @@
 import { Action, Store } from '@ngrx/store';
-import { Function1, Function2, Function3, Function4, } from 'micro-dash';
+import { Function1, Function2, Function3, Function4, omit } from 'micro-dash';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators/take';
 import { BatchAction } from './actions/batch-action';
-import { DeleteAction } from './actions/delete-action';
 import { MergeAction } from './actions/merge-action';
 import { MutateUsingAction } from './actions/mutate-using-action';
-import { SetAction } from './actions/set-action';
+import { SetUsingAction } from './actions/set-using-action';
 import { ExtensibleFunction } from './utils/extensible-function';
 
 export interface StoreObject<T> {
@@ -57,7 +56,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * Replace the state represented by this store object with the given value.
    */
   public set(value: T) {
-    this.dispatcher.dispatch(new SetAction(this.path, value));
+    this.setUsing(() => value);
   }
 
   /**
@@ -81,7 +80,23 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    this.dispatcher.dispatch(new DeleteAction(this.path));
+    new StoreObject(this.store, this.path.slice(0, -1), this.dispatcher)
+      .setUsing(omit, this.path[this.path.length - 1]);
+  }
+
+  /**
+   * Runs `func` on the state and replaces it with the return value. The first argument to `func` will be the state, followed by the arguments in `args`.
+   *
+   * WARNING: You SHOULD NOT use a function that will mutate the state.
+   */
+  public setUsing(func: Function1<T, T>): void;
+  public setUsing<A>(func: Function2<T, A, T>, a: A): void;
+  public setUsing<A, B>(func: Function3<T, A, B, T>, a: A, b: B): void;
+  public setUsing<A, B, C>(
+    func: Function4<T, A, B, C, T>, a: A, b: B, c: C,
+  ): void;
+  public setUsing(func: Function, ...args: any[]) {
+    this.dispatcher.dispatch(new SetUsingAction(this.path, func, args));
   }
 
   /**

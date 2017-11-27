@@ -3,7 +3,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { take } from 'rxjs/operators/take';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
-import { noop } from 'micro-dash';
+import { identity, noop } from 'micro-dash';
 
 class State {
   counter = 0;
@@ -36,7 +36,7 @@ describe('StoreObject', () => {
       expect(() => {
         store<'optional', InnerState>('optional')('state').set(2);
       }).toThrowError(
-        'testKey.optional is null or undefined (during [set] testKey.optional.state)',
+        'testKey.optional is null or undefined (during [set:] testKey.optional.state)',
       );
     });
 
@@ -45,7 +45,7 @@ describe('StoreObject', () => {
       expect(() => {
         store<'optional', InnerState>('optional')('state').set(2);
       }).toThrowError(
-        'testKey is null or undefined (during [set] testKey.optional.state)',
+        'testKey is null or undefined (during [set:] testKey.optional.state)',
       );
     });
   });
@@ -249,6 +249,47 @@ describe('StoreObject', () => {
 
       store.delete();
       expect(getGlobalState().testKey).toBe(undefined);
+    });
+  });
+
+  describe('.setUsing()', () => {
+    it('set the state to the exact object returned', () => {
+      const object = new InnerState();
+      store('optional').setUsing(() => object);
+      expect(store.state().optional).toBe(object);
+    });
+
+    it('uses the passed-in arguments', () => {
+      store('nested').setUsing(() => new InnerState(1));
+      expect(store.state().nested.state).toBe(1);
+
+      store('nested').setUsing(
+        (state, left, right) => {
+          const newState = new InnerState(2);
+          newState.left = left;
+          newState.right = right;
+          return newState;
+        },
+        new InnerState(3),
+        new InnerState(4),
+      );
+      expect(store.state().nested.state).toBe(2);
+      expect(store.state().nested.left!.state).toBe(3);
+      expect(store.state().nested.right!.state).toBe(4);
+    });
+
+    it('is OK having `undefined` returned', () => {
+      store('optional').set(new InnerState());
+
+      expect(store.state().optional).not.toBe(undefined);
+      store('optional').setUsing(() => undefined);
+      expect(store.state().optional).toBe(undefined);
+    });
+
+    it('is OK having the same object returned', () => {
+      const origState = store.state();
+      store.setUsing(identity);
+      expect(store.state()).toBe(origState);
     });
   });
 
