@@ -1,14 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
+import { take } from 'rxjs/operators/take';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
-import { take } from 'rxjs/operators/take';
+import { noop } from 'micro-dash';
 
 class State {
   counter = 0;
   nested = new InnerState();
   optional?: InnerState;
-  array?: InnerState[];
+  array?: number[];
 }
 
 class InnerState {
@@ -46,7 +47,7 @@ describe('StoreObject', () => {
       }).toThrowError(
         'testKey is null or undefined (during [set] testKey.optional.state)',
       );
-    })
+    });
   });
 
   describe('.$', () => {
@@ -137,7 +138,7 @@ describe('StoreObject', () => {
 
       store('counter').set(2);
       expect(store.$).toBe(observable);
-    })
+    });
   });
 
   describe('.batch()', () => {
@@ -154,7 +155,7 @@ describe('StoreObject', () => {
 
       expect(fires).toBe(2);
       expect(store.state()).toEqual({counter: 3, nested: {state: 6}});
-    })
+    });
   });
 
   describe('.set()', () => {
@@ -248,6 +249,32 @@ describe('StoreObject', () => {
 
       store.delete();
       expect(getGlobalState().testKey).toBe(undefined);
+    });
+  });
+
+  describe('.mutateUsing()', () => {
+    it('uses the passed-in arguments', () => {
+      store('array').set([]);
+
+      store('array').mutateUsing((array) => { array!.push(1); });
+      expect(store.state().array).toEqual([1]);
+
+      store('array').mutateUsing((array, a, b) => { array!.push(a, b); }, 2, 3);
+      expect(store.state().array).toEqual([1, 2, 3]);
+    });
+
+    it('works when the state is undefined', () => {
+      store('optional').mutateUsing((value) => {
+        expect(value).toBe(undefined);
+      });
+    });
+
+    it('fails when the state is missing', () => {
+      expect(() => {
+        store<'optional', InnerState>('optional')('left').mutateUsing(noop);
+      }).toThrowError(
+        'testKey.optional is null or undefined (during [mutate:noop] testKey.optional.left)',
+      );
     });
   });
 

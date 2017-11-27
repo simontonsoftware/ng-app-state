@@ -1,10 +1,11 @@
 import { Action, Store } from '@ngrx/store';
+import { Function1, Function2, Function3, Function4, } from 'micro-dash';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators/take';
-import { AssignAction } from './actions/assign-action';
 import { BatchAction } from './actions/batch-action';
 import { DeleteAction } from './actions/delete-action';
 import { MergeAction } from './actions/merge-action';
+import { MutateUsingAction } from './actions/mutate-using-action';
 import { SetAction } from './actions/set-action';
 import { ExtensibleFunction } from './utils/extensible-function';
 
@@ -63,7 +64,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
   public assign(value: Partial<T>) {
-    this.dispatcher.dispatch(new AssignAction(this.path, value));
+    this.mutateUsing(Object.assign, value);
   }
 
   /**
@@ -81,6 +82,21 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public delete() {
     this.dispatcher.dispatch(new DeleteAction(this.path));
+  }
+
+  /**
+   * Runs `func` on a shallow clone of the state, replacing the state with the clone. The first argument to `func` will be the cloned state, followed by the arguments in `args`.
+   *
+   * WARNING: You SHOULD NOT use a function that will mutate nested objects within the state.
+   */
+  public mutateUsing(func: Function1<T, void>): void;
+  public mutateUsing<A>(func: Function2<T, A, void>, a: A): void;
+  public mutateUsing<A, B>(func: Function3<T, A, B, void>, a: A, b: B): void;
+  public mutateUsing<A, B, C>(
+    func: Function4<T, A, B, C, void>, a: A, b: B, c: C,
+  ): void;
+  public mutateUsing(func: Function, ...args: any[]) {
+    this.dispatcher.dispatch(new MutateUsingAction(this.path, func, args));
   }
 
   /**
