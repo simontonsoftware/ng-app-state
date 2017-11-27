@@ -211,28 +211,6 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.merge()', () => {
-    it('merges in the objects given', () => {
-      const o1 = new State();
-      o1.counter = 1;
-      o1.nested.left = new InnerState(2);
-      store.merge(o1);
-      expect(store.state()).toEqual({
-        counter: 1,
-        nested: {state: 0, left: new InnerState(2)},
-      });
-
-      const o2 = new State();
-      o2.counter = 3;
-      o2.nested.right = new InnerState(4);
-      store.merge(o2);
-      expect(store.state()).toEqual({
-        counter: 3,
-        nested: {state: 0, left: new InnerState(2), right: new InnerState(4)},
-      });
-    });
-  });
-
   describe('.delete()', () => {
     it('removes sub-trees from the store', () => {
       store('optional').set(new InnerState());

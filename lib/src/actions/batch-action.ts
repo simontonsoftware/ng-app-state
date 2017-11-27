@@ -1,4 +1,4 @@
-import { AppStateAction } from '../app-state-action';
+import { AppStateAction } from './app-state-action';
 
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];

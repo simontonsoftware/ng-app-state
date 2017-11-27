@@ -3,9 +3,7 @@ import { Function1, Function2, Function3, Function4, omit } from 'micro-dash';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators/take';
 import { BatchAction } from './actions/batch-action';
-import { MergeAction } from './actions/merge-action';
-import { MutateUsingAction } from './actions/mutate-using-action';
-import { SetUsingAction } from './actions/set-using-action';
+import { FunctionAction } from './actions/function-action';
 import { ExtensibleFunction } from './utils/extensible-function';
 
 export interface StoreObject<T> {
@@ -67,13 +65,6 @@ export class StoreObject<T> extends ExtensibleFunction {
   }
 
   /**
-   * Does a deep merge of the gives value into the current state. The result will be like a [lodash merge](https://lodash.com/docs/4.17.4#merge).
-   */
-  public merge(value: Partial<T>) {
-    this.dispatcher.dispatch(new MergeAction(this.path, value));
-  }
-
-  /**
    * Removes the state represented by this store object from its parent. E.g. to remove the current user:
    * ```ts
    * store('currentUser').delete();
@@ -96,7 +87,7 @@ export class StoreObject<T> extends ExtensibleFunction {
     func: Function4<T, A, B, C, T>, a: A, b: B, c: C,
   ): void;
   public setUsing(func: Function, ...args: any[]) {
-    this.dispatcher.dispatch(new SetUsingAction(this.path, func, args));
+    this.dispatcher.dispatch(new FunctionAction(this.path, false, func, args));
   }
 
   /**
@@ -111,7 +102,7 @@ export class StoreObject<T> extends ExtensibleFunction {
     func: Function4<T, A, B, C, void>, a: A, b: B, c: C,
   ): void;
   public mutateUsing(func: Function, ...args: any[]) {
-    this.dispatcher.dispatch(new MutateUsingAction(this.path, func, args));
+    this.dispatcher.dispatch(new FunctionAction(this.path, true, func, args));
   }
 
   /**

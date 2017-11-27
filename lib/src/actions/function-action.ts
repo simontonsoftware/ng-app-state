@@ -1,15 +1,14 @@
-import { Action } from '@ngrx/store';
 import { clone } from 'micro-dash';
+import { AppStateAction } from './app-state-action';
 
-export abstract class AppStateAction implements Action {
-  public type: string;
-
+export class FunctionAction extends AppStateAction {
   constructor(
-    name: string,
-    protected path: string[],
-    protected value?: any,
+    path: string[],
+    private mutates: boolean,
+    private func: Function,
+    private args: any[],
   ) {
-    this.type = `[${name}] ${path.join('.')}`;
+    super(`${mutates ? 'mutate' : 'set'}:${func.name}`, path);
   }
 
   public execute<T extends object>(state: T) {
@@ -31,12 +30,12 @@ export abstract class AppStateAction implements Action {
       const newState = clone(oldState);
       newState[key] = this.getNewState(path.slice(1), oldState[key]);
       return newState;
+    } else if (this.mutates) {
+      const newState = clone(oldState);
+      this.func(newState, ...this.args);
+      return newState;
     } else {
-      return this.getNewValue(oldState);
+      return this.func(oldState, ...this.args);
     }
-  }
-
-  protected getNewValue<T>(oldValue: T): T {
-    return this.value;
   }
 }
