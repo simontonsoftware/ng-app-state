@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/simontonsoftware/ng-app-state.svg?branch=master)](https://travis-ci.org/simontonsoftware/ng-app-state) [![Coverage Status](https://coveralls.io/repos/github/simontonsoftware/ng-app-state/badge.svg?branch=master)](https://coveralls.io/github/simontonsoftware/ng-app-state?branch=master)
 
 ## Introduction
-A basic idea behind this library, the underlying `ngrx/store`, and `Redux` on which it is modeled is to keep all the state of your app in one place, accessible for any component to access, modify and subscribe to changes on. This has several benefits:
+A basic idea behind this library (as well as the underlying `ngrx/store`, and `Redux` on which it is modeled) is to keep all the state of your app in one place, accessible for any component or service to access, modify and subscribe to changes. This has several benefits:
 
 - Components no longer need multiples inputs and outputs to route state and mutations to the proper components. Instead they can obtain the store via dependency injection.
 - During debugging you can look in one place to see the state of your entire app. Moreover, development tools can be used to see this information at a glance along with a full history of changes leading up to the current state, e.g. the [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) or [ngrx-store-logger](https://github.com/btroncone/ngrx-store-logger).
 - The objects in the store are immutable (as long as you only modify the state via the store, as you should), which enables more benefits:
   - Immutable objects all you to use Angular's on-push change detection, which can be a huge performance gain for apps with a large state.
-  - Undo/redo features become very simple. This library even includes a helper for it (more info below).
+  - Undo/redo features become very simple. This library includes a helper to make it even easier (more info below).
 - Every piece of state is observable. You can subscribe to the root of the store to get notified of every state change anywhere in the app, for a specific boolean buried deep within your state, or anywhere in between.
 
 2 terms are worth defining immediately. As they are used in this library, they mean:
@@ -147,6 +147,11 @@ export class MyAppComponent {
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
 - View the [full diff](https://github.com/simontonsoftware/ng-app-state/compare/unmodified-counter-demo...b9c72c04767cc5b9bbcc90921d80230227ffae4c) of the Counter app between `ngrx/store` and `ng-app-state`.
+- View the diff for [`ngrx/example-app`](https://github.com/ngrx/platform/tree/master/example-app) converted to `ng-app-state`. This is a large demo, so each feature module was converted separately for easier-to-follow diffs. This also demonstrates that `ng-app-state` can work side-by-side with actions and reducers, as well as [`ngrx/db`](https://github.com/ngrx/db), [`/effects`](https://github.com/ngrx/platform/blob/master/docs/effects/README.md), [`/store-devtools`](https://github.com/ngrx/platform/blob/master/docs/store-devtools/README.md), and [`/entity`](https://github.com/ngrx/platform/blob/master/docs/entity/README.md).
+
+  - [Books Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-books): 302 lines added, 748 deleted. There are pros and cons to using actions, reducers and effects compared to an object-oriented approach with this library. One pro is that there is less boilerplate.
+
+  Even most commits in the branches linked above are functional, which demonstrates that you can read and write to the same parts of the store with either `ng-app-state` or raw `ngrx/store` in the same module.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
@@ -163,7 +168,7 @@ The main difference you'll see with `ng-app-state` is that you do not define red
   ```
 
 ## UndoManager
-This package includes an abstract class, `UndoManager` to assist you in creating undo/redo functionality. For example, a simple subclass that captures every state change into the undo history:
+This package includes an abstract class, `UndoManager`, to assist you in creating undo/redo functionality. For example, a simple subclass that captures every state change into the undo history:
 ```ts
 @Injectable()
 class UndoService extends UndoManager<MyAppState, MyAppState> {
