@@ -147,11 +147,17 @@ export class MyAppComponent {
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
 - View the [full diff](https://github.com/simontonsoftware/ng-app-state/compare/unmodified-counter-demo...b9c72c04767cc5b9bbcc90921d80230227ffae4c) of the Counter app between `ngrx/store` and `ng-app-state`.
-- View the diff for [`ngrx/example-app`](https://github.com/ngrx/platform/tree/master/example-app) converted to `ng-app-state`. This is a large demo, so each feature module was converted separately for easier-to-follow diffs. This also demonstrates that `ng-app-state` can work side-by-side with actions and reducers, as well as [`ngrx/db`](https://github.com/ngrx/db), [`/effects`](https://github.com/ngrx/platform/blob/master/docs/effects/README.md), [`/store-devtools`](https://github.com/ngrx/platform/blob/master/docs/store-devtools/README.md), and [`/entity`](https://github.com/ngrx/platform/blob/master/docs/entity/README.md).
+- View the diff for `ngrx/example-app` converted to `ng-app-state`. This is a large demo, so each feature module was converted separately for easier-to-follow diffs. This also demonstrates that `ng-app-state` can work side-by-side with actions and reducers, as well as [`ngrx/db`](https://github.com/ngrx/db), [`/effects`](https://github.com/ngrx/platform/blob/master/docs/effects/README.md), [`/store-devtools`](https://github.com/ngrx/platform/blob/master/docs/store-devtools/README.md), and [`/entity`](https://github.com/ngrx/platform/blob/master/docs/entity/README.md).
 
+  - [Auth Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-auth): a smaller module.
   - [Books Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-books): 302 lines added, 748 deleted. There are pros and cons to using actions, reducers and effects compared to an object-oriented approach with this library. One pro is that there is less boilerplate.
 
-  Even most commits in the branches linked above are functional, which demonstrates that you can read and write to the same parts of the store with either `ng-app-state` or raw `ngrx/store` in the same module.
+  Even most commits in the branches linked above are functional, which demonstrates that you can read and write even to the same parts of the store with either `ng-app-state` or raw `ngrx/store` in the same module.
+  
+  Each module above follows a general pattern:
+  - State definitions are extracted to their own file, with initial values inlined with the definiton itself.
+  - A service with traditional methods is used in place of effects and their corresponding reducer.
+  - The boilerplate for actions and their `type` constants are discarded in favor of calling methods on the service directly.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
