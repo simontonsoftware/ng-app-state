@@ -147,18 +147,7 @@ export class MyAppComponent {
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
 - View the [full diff](https://github.com/simontonsoftware/ng-app-state/compare/unmodified-counter-demo...b9c72c04767cc5b9bbcc90921d80230227ffae4c) of the Counter app between `ngrx/store` and `ng-app-state`.
-- View the [full diff](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-all) of the `ngrx/example-app` converted to `ng-app-state`. This is a large demo, with ~500 lines added and ~1000 removed, so the full is is probably overwhelming, but that gives you a sense of the amount of boilerplate that `ng-app-state` eliminates. For more navigable diffs, here is each feature module migrated separately:
-
-  - [Core Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-core): a very simple module, this demonstrates manipulating the store directly from your components. This is not recommended for more complex interactions, but is a very easy solution in cases like this one.
-  - [Auth Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-auth): a slightly more complex module, this demonstrates going through a service to interact with the store and trigger other side effects (in this case, redirecting to the login page). 
-  - [Books Module](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/compare/master...migrate-books): the most complex module, this continues the same theme above.
-
-  Each branch linked above is fully functionaly, demonstrating that `ng-app-state` can work side-by-side with custom actions and reducers as well as [`ngrx/db`](https://github.com/ngrx/db), [`/effects`](https://github.com/ngrx/platform/blob/master/docs/effects/README.md), [`/store-devtools`](https://github.com/ngrx/platform/blob/master/docs/store-devtools/README.md), and [`/entity`](https://github.com/ngrx/platform/blob/master/docs/entity/README.md).
-  
-  The more complex modules above follows a general pattern:
-  - State definitions are extracted to their own file, with initial values inlined with the definiton itself.
-  - A service with traditional methods is used in place of effects and their corresponding reducer. E.g., all the code to add a book to your collection is handled by `CollectionService.addBook()` which inserts into the db and updates the store.
-  - The boilerplate for actions and their `type` constants are discarded in favor of calling methods on the service directly.
+- For a meatier example, check out the [migrated `example-app`](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/blob/master/README.md). It shows 3 more migrations of differing complexities for each of the 3 modules in [ngrx's `example-app`](https://github.com/ngrx/platform/blob/master/example-app/README.md). Put together, the full diff sheds about 500 lines compared to the original.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.
