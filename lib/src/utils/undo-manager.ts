@@ -9,6 +9,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
 
   private canUndoSubject = new BehaviorSubject(false);
   private canRedoSubject = new BehaviorSubject(false);
+  private stackSubject = new BehaviorSubject([] as UndoStateType[]);
 
   /**
    * An observable that emits the result of `canUndo()` every time that value changes.
@@ -21,6 +22,11 @@ export abstract class UndoManager<StateType, UndoStateType> {
    */
   canRedo$: Observable<boolean> =
     this.canRedoSubject.pipe(distinctUntilChanged());
+
+  /**
+   * An observable that emits the current stack whenever the stack or `currentStateIndex` changes
+   */
+  stack$: Observable<UndoStateType[]> = this.stackSubject.asObservable();
 
   /**
    * @param maxDepth The maximum size of the history before discarding the oldest state. `0` means no limit.
@@ -125,5 +131,6 @@ export abstract class UndoManager<StateType, UndoStateType> {
   private fireUndoChanges() {
     this.canUndoSubject.next(this.canUndo());
     this.canRedoSubject.next(this.canRedo());
+    this.stackSubject.next(this.stack);
   }
 }
