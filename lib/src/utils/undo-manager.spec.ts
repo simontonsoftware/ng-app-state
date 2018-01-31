@@ -194,6 +194,39 @@ describe('UndoManager', () => {
     });
   });
 
+  describe('.stack$', () => {
+    it('fires (only) when the stack (or current state index) changes', () => {
+      let callCount = 0;
+      let lastValue = [] as State[];
+      undoManager.stack$.subscribe((stack) => {
+        ++callCount;
+        lastValue = stack;
+      })
+      expect(callCount).toBe(1);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([0]);
+
+      store('counter').set(1);
+      expect(callCount).toBe(2);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([0, 1]);
+
+      undoManager.undo();
+      expect(callCount).toBe(3);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([0, 1]);
+
+      undoManager.redo();
+      expect(callCount).toBe(4);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([0, 1]);
+
+      store('counter').set(10);
+      expect(callCount).toBe(5);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([0, 1, 10]);
+
+      undoManager.reset();
+      expect(callCount).toBe(6);
+      expect(lastValue.map((state) => { return state.counter })).toEqual([10]);
+    })
+  })
+
   describe('.reset()', () => {
     it('does not affect the store', () => {
       undoManager.reset();
