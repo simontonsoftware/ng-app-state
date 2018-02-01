@@ -35,8 +35,8 @@
   },
   "peerDependencies": {
     "@angular/core": ">=5.0.0 <6.0.0",
-    "@ngrx/store": ">=4.0.0 <5.0.0",
-    "micro-dash": ">=1.0.0 <2.0.0",
+    "@ngrx/store": ">=5.0.0 <6.0.0",
+    "micro-dash": ">=3.0.0 <4.0.0",
     "rxjs": ">=5.5.0 <6.0.0"
   },
   "devDependencies": {
