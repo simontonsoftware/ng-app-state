@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.1.0"></a>
+# [4.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v4.0.0...v4.1.0) (2018-02-01)
+
+
+### Features
+
+* **UndoManager:** `.state$` observable ([6a42fc7](https://github.com/simontonsoftware/ng-app-state/commit/6a42fc7))
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v3.1.1...v4.0.0) (2017-11-27)
 
