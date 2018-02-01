@@ -194,7 +194,7 @@ class UndoService extends UndoManager<MyAppState, MyAppState> {
 } 
 ```
 
-You will likely want to be more selective about which states are pushed into the undo history, rather than subscribing to all changes. Real-world usage be more selective about calling `pushCurrentState()`, and maybe from other places in your app instead of within the service.
+You will likely want to be more selective about which states are pushed into the undo history, rather than subscribing to all changes. Real-world usage will be more selective about calling `pushCurrentState()`, and maybe from other places in your app instead of within the service itself.
 
 You may also want to tailor which pieces of state are included in undo/redo operations by returning only those portions from `extractUndoState()` (which will change what is passed to `applyUndoState()`).
 

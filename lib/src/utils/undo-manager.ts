@@ -1,14 +1,15 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StoreObject } from '../store-object';
 
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
   private currentStateIndex: number;
 
-  private canUndoSubject = new BehaviorSubject(false);
-  private canRedoSubject = new BehaviorSubject(false);
+  private canUndoSubject = new ReplaySubject<boolean>(1);
+  private canRedoSubject = new ReplaySubject<boolean>(1);
+  private stateSubject = new ReplaySubject<UndoStateType>(1);
 
   /**
    * An observable that emits the result of `canUndo()` every time that value changes.
@@ -21,6 +22,13 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * An observable that emits the result of `canRedo()` every time that value changes.
    */
   canRedo$: Observable<boolean> = this.canRedoSubject.pipe(
+    distinctUntilChanged(),
+  );
+
+  /**
+   * An observable that emits the current state every time it changes.
+   */
+  state$: Observable<UndoStateType> = this.stateSubject.pipe(
     distinctUntilChanged(),
   );
 
@@ -134,5 +142,6 @@ export abstract class UndoManager<StateType, UndoStateType> {
   private fireUndoChanges() {
     this.canUndoSubject.next(this.canUndo());
     this.canRedoSubject.next(this.canRedo());
+    this.stateSubject.next(this.stack[this.currentStateIndex]);
   }
 }

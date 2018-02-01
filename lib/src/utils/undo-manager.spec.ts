@@ -150,6 +150,23 @@ describe('UndoManager', () => {
       expect(callCount).toBe(7);
       expect(lastValue).toBe(false);
     });
+
+    it('fires immediately with the current value', () => {
+      store('counter').set(1);
+
+      let callCount = 0;
+      let lastValue = false;
+      undoManager.canUndo$.subscribe((value) => {
+        ++callCount;
+        lastValue = value;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toBe(true);
+
+      undoManager.undo();
+      expect(callCount).toBe(2);
+      expect(lastValue).toBe(false);
+    });
   });
 
   describe('.canRedo$', () => {
@@ -191,6 +208,72 @@ describe('UndoManager', () => {
 
       undoManager.reset();
       expect(callCount).toBe(5);
+    });
+
+    it('fires immediately with the current value', () => {
+      store('counter').set(1);
+
+      let callCount = 0;
+      let lastValue = false;
+      undoManager.canRedo$.subscribe((value) => {
+        ++callCount;
+        lastValue = value;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toBe(false);
+
+      undoManager.undo();
+      expect(callCount).toBe(2);
+      expect(lastValue).toBe(true);
+    });
+  });
+
+  describe('.state$', () => {
+    it('fires (only) when the state changes', () => {
+      let callCount = 0;
+      let lastValue = {} as State;
+      undoManager.state$.subscribe((stack) => {
+        ++callCount;
+        lastValue = stack;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toEqual(new State());
+
+      store('counter').set(1);
+      expect(callCount).toBe(2);
+      expect(lastValue).toEqual({ counter: 1 });
+
+      undoManager.undo();
+      expect(callCount).toBe(3);
+      expect(lastValue).toEqual(new State());
+
+      undoManager.redo();
+      expect(callCount).toBe(4);
+      expect(lastValue).toEqual({ counter: 1 });
+
+      store('counter').set(10);
+      expect(callCount).toBe(5);
+      expect(lastValue).toEqual({ counter: 10 });
+
+      undoManager.reset();
+      expect(callCount).toBe(5);
+    });
+
+    it('fires immediately with the current value', () => {
+      store('counter').set(1);
+
+      let callCount = 0;
+      let lastValue = new State();
+      undoManager.state$.subscribe((value) => {
+        ++callCount;
+        lastValue = value;
+      });
+      expect(callCount).toBe(1);
+      expect(lastValue).toEqual({ counter: 1 });
+
+      undoManager.undo();
+      expect(callCount).toBe(2);
+      expect(lastValue).toEqual(new State());
     });
   });
 
