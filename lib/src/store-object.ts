@@ -30,7 +30,9 @@ export class StoreObject<T> extends ExtensibleFunction {
    * An `Observable` of the state of this store object.
    */
   public get $(): Observable<T> {
-    if (!this._$) { this._$ = (this.store.select as any)(...this.path); }
+    if (!this._$) {
+      this._$ = (this.store.select as any)(...this.path);
+    }
     return this._$;
   }
 
@@ -71,8 +73,11 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    new StoreObject(this.store, this.path.slice(0, -1), this.dispatcher)
-      .setUsing(omit, this.path[this.path.length - 1]);
+    new StoreObject(
+      this.store,
+      this.path.slice(0, -1),
+      this.dispatcher,
+    ).setUsing(omit, this.path[this.path.length - 1]);
   }
 
   /**
@@ -84,7 +89,10 @@ export class StoreObject<T> extends ExtensibleFunction {
   public setUsing<A>(func: Function2<T, A, T>, a: A): void;
   public setUsing<A, B>(func: Function3<T, A, B, T>, a: A, b: B): void;
   public setUsing<A, B, C>(
-    func: Function4<T, A, B, C, T>, a: A, b: B, c: C,
+    func: Function4<T, A, B, C, T>,
+    a: A,
+    b: B,
+    c: C,
   ): void;
   public setUsing(func: Function, ...args: any[]) {
     this.dispatcher.dispatch(new FunctionAction(this.path, false, func, args));
@@ -99,7 +107,10 @@ export class StoreObject<T> extends ExtensibleFunction {
   public mutateUsing<A>(func: Function2<T, A, void>, a: A): void;
   public mutateUsing<A, B>(func: Function3<T, A, B, void>, a: A, b: B): void;
   public mutateUsing<A, B, C>(
-    func: Function4<T, A, B, C, void>, a: A, b: B, c: C,
+    func: Function4<T, A, B, C, void>,
+    a: A,
+    b: B,
+    c: C,
   ): void;
   public mutateUsing(func: Function, ...args: any[]) {
     this.dispatcher.dispatch(new FunctionAction(this.path, true, func, args));
@@ -110,7 +121,9 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public state() {
     let value: T;
-    this.$.pipe(take(1)).subscribe((v) => { value = v; });
+    this.$.pipe(take(1)).subscribe((v) => {
+      value = v;
+    });
     return value!;
   }
 

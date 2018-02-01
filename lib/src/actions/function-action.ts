@@ -21,8 +21,8 @@ export class FunctionAction extends AppStateAction {
     if (path.length) {
       if (oldState == null) {
         throw new Error(
-          this.path.slice(0, -path.length).join('.')
-          + ` is null or undefined (during ${this.type})`,
+          this.path.slice(0, -path.length).join('.') +
+            ` is null or undefined (during ${this.type})`,
         );
       }
 

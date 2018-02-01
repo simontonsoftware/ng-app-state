@@ -25,9 +25,11 @@ describe('StoreObject', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]})],
+      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    inject([Store], (s: Store<any>) => { backingStore = s; })();
+    inject([Store], (s: Store<any>) => {
+      backingStore = s;
+    })();
     store = new AppStore(backingStore, 'testKey', new State());
   });
 
@@ -55,9 +57,15 @@ describe('StoreObject', () => {
       let rootFires = 0;
       let counterFires = 0;
       let nestedFires = 0;
-      store.$.subscribe(() => { ++rootFires; });
-      store('counter').$.subscribe(() => { ++counterFires; });
-      store('nested').$.subscribe(() => { ++nestedFires; });
+      store.$.subscribe(() => {
+        ++rootFires;
+      });
+      store('counter').$.subscribe(() => {
+        ++counterFires;
+      });
+      store('nested').$.subscribe(() => {
+        ++nestedFires;
+      });
       expect(rootFires).toBe(1);
       expect(counterFires).toBe(1);
       expect(nestedFires).toBe(1);
@@ -73,7 +81,9 @@ describe('StoreObject', () => {
 
     it('gives the new value', () => {
       let lastValue: InnerState;
-      store('nested').$.subscribe((value) => { lastValue = value; });
+      store('nested').$.subscribe((value) => {
+        lastValue = value;
+      });
       expect(lastValue!).toBe(store.state().nested);
       expect(lastValue!).toEqual(new InnerState());
 
@@ -107,9 +117,13 @@ describe('StoreObject', () => {
     it('does not fire when parent objects change', () => {
       let counterFires = 0;
       let optionalFires = 0;
-      store('counter').$.subscribe(() => { ++counterFires; });
+      store('counter').$.subscribe(() => {
+        ++counterFires;
+      });
       store<'optional', InnerState>('optional')('state').$.subscribe(
-        (value) => { ++optionalFires; },
+        (value) => {
+          ++optionalFires;
+        },
       );
       expect(counterFires).toBe(1);
       expect(optionalFires).toBe(1);
@@ -144,7 +158,9 @@ describe('StoreObject', () => {
   describe('.batch()', () => {
     it('causes a single update after multiple actions', () => {
       let fires = 0;
-      store.$.subscribe(() => { ++fires; });
+      store.$.subscribe(() => {
+        ++fires;
+      });
       expect(fires).toBe(1);
 
       store.batch((batch) => {
@@ -154,7 +170,7 @@ describe('StoreObject', () => {
       });
 
       expect(fires).toBe(2);
-      expect(store.state()).toEqual({counter: 3, nested: {state: 6}});
+      expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
   });
 
@@ -200,7 +216,7 @@ describe('StoreObject', () => {
       const before = store.state().nested;
       const left = new InnerState();
       const right = new InnerState();
-      store('nested').assign({left, right});
+      store('nested').assign({ left, right });
       const after = store.state().nested;
 
       expect(before).not.toBe(after);
@@ -275,10 +291,18 @@ describe('StoreObject', () => {
     it('uses the passed-in arguments', () => {
       store('array').set([]);
 
-      store('array').mutateUsing((array) => { array!.push(1); });
+      store('array').mutateUsing((array) => {
+        array!.push(1);
+      });
       expect(store.state().array).toEqual([1]);
 
-      store('array').mutateUsing((array, a, b) => { array!.push(a, b); }, 2, 3);
+      store('array').mutateUsing(
+        (array, a, b) => {
+          array!.push(a, b);
+        },
+        2,
+        3,
+      );
       expect(store.state().array).toEqual([1, 2, 3]);
     });
 
@@ -301,17 +325,19 @@ describe('StoreObject', () => {
     it('forwards actions on to ngrx', () => {
       let callCount = 0;
       backingStore.addReducer('testKey', (state = {}, action) => {
-        if (action.type === 'the action') { ++callCount; }
+        if (action.type === 'the action') {
+          ++callCount;
+        }
         return state;
       });
-      store.dispatch({type: 'the action'});
+      store.dispatch({ type: 'the action' });
       expect(callCount).toBe(1);
 
-      store('nested').dispatch({type: 'the action'});
+      store('nested').dispatch({ type: 'the action' });
       expect(callCount).toBe(2);
 
       store('counter').batch((batch) => {
-        batch.dispatch({type: 'the action'});
+        batch.dispatch({ type: 'the action' });
         expect(callCount).toBe(3);
       });
       expect(callCount).toBe(3);
@@ -320,7 +346,9 @@ describe('StoreObject', () => {
 
   function getGlobalState() {
     let value: any;
-    backingStore.pipe(take(1)).subscribe((v) => { value = v; });
+    backingStore.pipe(take(1)).subscribe((v) => {
+      value = v;
+    });
     return value!;
   }
 });

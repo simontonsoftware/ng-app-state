@@ -13,20 +13,23 @@ export abstract class UndoManager<StateType, UndoStateType> {
   /**
    * An observable that emits the result of `canUndo()` every time that value changes.
    */
-  canUndo$: Observable<boolean> =
-    this.canUndoSubject.pipe(distinctUntilChanged());
+  canUndo$: Observable<boolean> = this.canUndoSubject.pipe(
+    distinctUntilChanged(),
+  );
 
   /**
    * An observable that emits the result of `canRedo()` every time that value changes.
    */
-  canRedo$: Observable<boolean> =
-    this.canRedoSubject.pipe(distinctUntilChanged());
+  canRedo$: Observable<boolean> = this.canRedoSubject.pipe(
+    distinctUntilChanged(),
+  );
 
   /**
    * @param maxDepth The maximum size of the history before discarding the oldest state. `0` means no limit.
    */
   constructor(
-    protected readonly store: StoreObject<StateType>, protected maxDepth = 0,
+    protected readonly store: StoreObject<StateType>,
+    protected maxDepth = 0,
   ) {
     this.reset();
   }
@@ -45,8 +48,9 @@ export abstract class UndoManager<StateType, UndoStateType> {
    */
   pushCurrentState() {
     ++this.currentStateIndex;
-    this.stack[this.currentStateIndex] =
-      this.extractUndoState(this.store.state());
+    this.stack[this.currentStateIndex] = this.extractUndoState(
+      this.store.state(),
+    );
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
 
     while (this.stack.length > 1 && this.isOverSize(this.stack.length)) {
@@ -77,7 +81,9 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * @throws Error when there is no such state (i.e. when `canUndo()` returns false)
    */
   undo() {
-    if (!this.canUndo()) { throw new Error('Cannot undo'); }
+    if (!this.canUndo()) {
+      throw new Error('Cannot undo');
+    }
 
     --this.currentStateIndex;
     this.applyCurrentState();
@@ -90,7 +96,9 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * @throws Error when there is no such state (i.e. when `canRedo()` returns false)
    */
   redo() {
-    if (!this.canRedo()) { throw new Error('Cannot redo'); }
+    if (!this.canRedo()) {
+      throw new Error('Cannot redo');
+    }
 
     ++this.currentStateIndex;
     this.applyCurrentState();
@@ -106,7 +114,8 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * Reset the store to the given state.
    */
   protected abstract applyUndoState(
-    undoState: UndoStateType, batch: StoreObject<StateType>,
+    undoState: UndoStateType,
+    batch: StoreObject<StateType>,
   ): void;
 
   /**

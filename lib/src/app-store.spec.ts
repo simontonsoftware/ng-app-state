@@ -9,29 +9,37 @@ describe('AppStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]})],
+      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    inject([Store], (s: Store<any>) => { backingStore = s; })();
+    inject([Store], (s: Store<any>) => {
+      backingStore = s;
+    })();
   });
 
   it('uses the given constructor arguments', () => {
-    const store = new AppStore(backingStore, 's', {initial: true});
-    expect(getState()).toEqual({s: {initial: true}});
+    const store = new AppStore(backingStore, 's', { initial: true });
+    expect(getState()).toEqual({ s: { initial: true } });
   });
 
   it('can have multiple instances', () => {
-    const store1 = new AppStore(backingStore, 's1', {firstValue: 1});
-    const store2 = new AppStore(backingStore, 's2', {secondValue: 1});
-    expect(getState()).toEqual({s1: {firstValue: 1}, s2: {secondValue: 1}});
+    const store1 = new AppStore(backingStore, 's1', { firstValue: 1 });
+    const store2 = new AppStore(backingStore, 's2', { secondValue: 1 });
+    expect(getState()).toEqual({
+      s1: { firstValue: 1 },
+      s2: { secondValue: 1 },
+    });
 
     store1('firstValue').set(2);
     store2('secondValue').set(3);
-    expect(getState()).toEqual({s1: {firstValue: 2}, s2: {secondValue: 3}});
+    expect(getState()).toEqual({
+      s1: { firstValue: 2 },
+      s2: { secondValue: 3 },
+    });
   });
 
   it('can be deleted', () => {
-    const store = new AppStore(backingStore, 's', {initial: true});
-    expect(getState()).toEqual({s: {initial: true}});
+    const store = new AppStore(backingStore, 's', { initial: true });
+    expect(getState()).toEqual({ s: { initial: true } });
 
     store.delete();
     expect(getState()).toEqual({});
@@ -39,7 +47,9 @@ describe('AppStore', () => {
 
   function getState() {
     let value: any;
-    backingStore.pipe(take(1)).subscribe((v) => { value = v; });
+    backingStore.pipe(take(1)).subscribe((v) => {
+      value = v;
+    });
     return value!;
   }
 });

@@ -13,7 +13,8 @@ export class BatchAction extends AppStateAction {
 
   public execute<T extends object>(state: T) {
     return this.children.reduce(
-      (curState, child) => child.execute(curState), state,
+      (curState, child) => child.execute(curState),
+      state,
     );
   }
 }

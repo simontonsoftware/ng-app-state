@@ -40,7 +40,7 @@ describe('UndoManager', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, {metaReducers: [ngAppStateReducer]})],
+      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
     inject([Store], (backingStore: Store<any>) => {
       store = new AppStore(backingStore, 'testKey', new State());
@@ -245,37 +245,51 @@ describe('UndoManager', () => {
 
   describe('.undo()', () => {
     it('throws an error if at the beginning of the stack', () => {
-      expect(() => { undoManager.undo(); }).toThrowError('Cannot undo');
+      expect(() => {
+        undoManager.undo();
+      }).toThrowError('Cannot undo');
 
       store('counter').set(1);
       undoManager.undo();
-      expect(() => { undoManager.undo(); }).toThrowError('Cannot undo');
+      expect(() => {
+        undoManager.undo();
+      }).toThrowError('Cannot undo');
 
       undoManager.redo();
       store('counter').set(2);
       undoManager.undo();
       undoManager.undo();
-      expect(() => { undoManager.undo(); }).toThrowError('Cannot undo');
+      expect(() => {
+        undoManager.undo();
+      }).toThrowError('Cannot undo');
     });
   });
 
   describe('.redo()', () => {
     it('throws an error if at the end of the stack', () => {
-      expect(() => { undoManager.redo(); }).toThrowError('Cannot redo');
+      expect(() => {
+        undoManager.redo();
+      }).toThrowError('Cannot redo');
 
       store('counter').set(1);
-      expect(() => { undoManager.redo(); }).toThrowError('Cannot redo');
+      expect(() => {
+        undoManager.redo();
+      }).toThrowError('Cannot redo');
 
       undoManager.undo();
       undoManager.redo();
-      expect(() => { undoManager.redo(); }).toThrowError('Cannot redo');
+      expect(() => {
+        undoManager.redo();
+      }).toThrowError('Cannot redo');
 
       store('counter').set(2);
       undoManager.undo();
       undoManager.undo();
       undoManager.redo();
       undoManager.redo();
-      expect(() => { undoManager.redo(); }).toThrowError('Cannot redo');
+      expect(() => {
+        undoManager.redo();
+      }).toThrowError('Cannot redo');
     });
   });
 
@@ -314,7 +328,7 @@ describe('UndoManager', () => {
             return false;
           }
         }
-      };
+      }();
 
       store('counter').set(1);
       store('counter').set(2);
@@ -332,7 +346,9 @@ describe('UndoManager', () => {
   });
 
   function expectStack(...states: number[]) {
-    while (undoManager.canUndo()) { undoManager.undo(); }
+    while (undoManager.canUndo()) {
+      undoManager.undo();
+    }
 
     const stack = [store.state().counter];
     while (undoManager.canRedo()) {
