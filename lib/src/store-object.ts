@@ -1,5 +1,12 @@
 import { Action, Store } from '@ngrx/store';
-import { Function1, Function2, Function3, Function4, omit } from 'micro-dash';
+import {
+  Function1,
+  Function2,
+  Function3,
+  Function4,
+  memoize,
+  omit,
+} from 'micro-dash';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators/take';
 import { BatchAction } from './actions/batch-action';
@@ -20,9 +27,14 @@ export class StoreObject<T> extends ExtensibleFunction {
     protected store: Store<any>,
     private path: string[],
     private dispatcher: { dispatch(action?: Action): void },
+    private _withCaching = false,
   ) {
     super(
-      (prop: string) => new StoreObject(store, [...path, prop], dispatcher),
+      maybeMemoize(
+        (prop: string) =>
+          new StoreObject(store, [...path, prop], dispatcher, _withCaching),
+        _withCaching,
+      ),
     );
   }
 
@@ -128,9 +140,41 @@ export class StoreObject<T> extends ExtensibleFunction {
   }
 
   /**
+   * Creates a new store object representing the same state as this one, but with caching turned on or off. When caching is on, selecting the same sub-store multiple times will return the same object. This allows you to safely use expressions like this in an Angular template:
+   *
+   * ```html
+   * <child-component [childStore]="myStore('subKey')"></child-component>
+   * ```
+   *
+   * Without caching `myStore('subKey')` would evaluate to a new object every time change detection runs.
+   *
+   * Caching propogates to descendant stores, so e.g. `myStore('subKey')('deepKey')` always return the same object, which will itself have caching turned on.
+   *
+   * This method does not modify the current store object; it returns a new one with the given setting.
+   */
+  public withCaching(value = true): StoreObject<T> {
+    return new StoreObject(this.store, this.path, this.dispatcher, value);
+  }
+
+  /**
+   * @return whether or not caching is turned on for this store object. See `.withCaching()` for details.
+   */
+  public caches() {
+    return this._withCaching;
+  }
+
+  /**
    * A convenience method to dispatch non-`ng-app-state` actions. This exists simply so you do not have to inject `Store` in case you are using something like `@ngrx/effects`.
    */
   public dispatch(action: Action) {
     this.store.dispatch(action);
+  }
+}
+
+function maybeMemoize(fn: Function, withCaching: boolean) {
+  if (withCaching) {
+    return memoize(fn);
+  } else {
+    return fn;
   }
 }

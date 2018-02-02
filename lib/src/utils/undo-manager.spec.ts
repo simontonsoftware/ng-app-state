@@ -232,9 +232,9 @@ describe('UndoManager', () => {
     it('fires (only) when the state changes', () => {
       let callCount = 0;
       let lastValue = {} as State;
-      undoManager.state$.subscribe((stack) => {
+      undoManager.state$.subscribe((state) => {
         ++callCount;
-        lastValue = stack;
+        lastValue = state;
       });
       expect(callCount).toBe(1);
       expect(lastValue).toEqual(new State());
