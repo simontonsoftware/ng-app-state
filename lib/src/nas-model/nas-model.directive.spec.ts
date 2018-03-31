@@ -29,11 +29,11 @@ import {
   NgControl,
   NgForm,
 } from '@angular/forms';
-import {By} from '@angular/platform-browser';
-import {Store, StoreModule} from '@ngrx/store';
-import {AppStore} from '../app-store';
-import {ngAppStateReducer} from '../meta-reducer';
-import {NasModelModule} from './nas-model.module';
+import { By } from '@angular/platform-browser';
+import { Store, StoreModule } from '@ngrx/store';
+import { AppStore } from '../app-store';
+import { ngAppStateReducer } from '../meta-reducer';
+import { NasModelModule } from './nas-model.module';
 
 describe('value accessors', () => {
   function initTest<T>(
@@ -47,7 +47,7 @@ describe('value accessors', () => {
         StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
         NasModelModule,
       ],
-      providers: [CityStore],
+      providers: [CityStore, MultipleCityStore],
     });
     return TestBed.createComponent(component);
   }
@@ -255,13 +255,17 @@ describe('value accessors', () => {
 
   describe('select multiple controls', () => {
     describe('in template-driven forms', () => {
-      let fixture: ComponentFixture<NgModelSelectMultipleForm>;
-      let comp: NgModelSelectMultipleForm;
+      let fixture: ComponentFixture<NasModelSelectMultipleForm>;
+      let store: MultipleCityStore;
 
       beforeEach(() => {
-        fixture = initTest(NgModelSelectMultipleForm);
-        comp = fixture.componentInstance;
-        comp.cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'Buffalo' }];
+        fixture = initTest(NasModelSelectMultipleForm);
+        store = TestBed.get(MultipleCityStore);
+        store('cities').set([
+          { name: 'SF' },
+          { name: 'NYC' },
+          { name: 'Buffalo' },
+        ]);
       });
 
       const detectChangesAndTick = (): void => {
@@ -270,7 +274,7 @@ describe('value accessors', () => {
       };
 
       const setSelectedCities = (selectedCities: any): void => {
-        comp.selectedCities = selectedCities;
+        store('selectedCities').set(selectedCities);
         detectChangesAndTick();
       };
 
@@ -301,7 +305,9 @@ describe('value accessors', () => {
           selectOptionViaUI('1: Object');
           assertOptionElementSelectedState([false, true, false]);
 
-          comp.cities.push({ name: 'Chicago' });
+          store('cities').mutateUsing((cities) => {
+            cities.push({ name: 'Chicago' });
+          });
           detectChangesAndTick();
 
           assertOptionElementSelectedState([false, true, false, false]);
@@ -316,7 +322,9 @@ describe('value accessors', () => {
           selectOptionViaUI('1: Object');
           assertOptionElementSelectedState([false, true, false]);
 
-          comp.cities.pop();
+          store('cities').mutateUsing((cities) => {
+            cities.pop();
+          });
           detectChangesAndTick();
 
           assertOptionElementSelectedState([false, true]);
@@ -325,7 +333,7 @@ describe('value accessors', () => {
     });
 
     it('should throw an error when compareWith is not a function', () => {
-      const fixture = initTest(NgModelSelectMultipleWithCustomCompareFnForm);
+      const fixture = initTest(NasModelSelectMultipleWithCustomCompareFnForm);
       const comp = fixture.componentInstance;
       comp.compareFn = null!;
       expect(() => fixture.detectChanges()).toThrowError(
@@ -336,10 +344,14 @@ describe('value accessors', () => {
     it(
       'should compare options using provided compareWith function',
       fakeAsync(() => {
-        const fixture = initTest(NgModelSelectMultipleWithCustomCompareFnForm);
-        const comp = fixture.componentInstance;
-        comp.cities = [{ id: 1, name: 'SF' }, { id: 2, name: 'LA' }];
-        comp.selectedCities = [comp.cities[0]];
+        const fixture = initTest(NasModelSelectMultipleWithCustomCompareFnForm);
+        const store: MultipleCityStore = TestBed.get(MultipleCityStore);
+
+        const cities = [{ id: 1, name: 'SF' }, { id: 2, name: 'LA' }];
+        store.assign({
+          cities,
+          selectedCities: [cities[0]],
+        });
         fixture.detectChanges();
         tick();
 
@@ -626,32 +638,58 @@ class NgModelSelectWithCustomCompareFnForm {
   }
 }
 
+class MultipleCityState {
+  selectedCities: any[] = [];
+  cities: any[] = [];
+}
+
+@Injectable()
+class MultipleCityStore extends AppStore<MultipleCityState> {
+  constructor(store: Store<any>) {
+    super(store, 'mulitpleCityStore', new MultipleCityState());
+  }
+}
+
 @Component({
   selector: 'ng-model-select-multiple-compare-with',
   template: `
-    <select multiple [(ngModel)]="selectedCities" [compareWith]="compareFn">
-      <option *ngFor="let c of cities" [ngValue]="c"> {{c.name}} </option>
+    <select
+      multiple
+      [nasModel]="store('selectedCities')"
+      [compareWith]="compareFn"
+    >
+      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+        {{c.name}}
+      </option>
     </select>
   `,
 })
-class NgModelSelectMultipleWithCustomCompareFnForm {
-  selectedCities: any[] = [];
-  cities: any[] = [];
+class NasModelSelectMultipleWithCustomCompareFnForm {
+  store: MultipleCityStore;
   compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
     o1 && o2 ? o1.id === o2.id : o1 === o2;
+
+  constructor(store: MultipleCityStore) {
+    this.store = store.withCaching();
+  }
 }
 
 @Component({
   selector: 'ng-model-select-multiple-form',
   template: `
-    <select multiple [(ngModel)]="selectedCities">
-      <option *ngFor="let c of cities" [ngValue]="c"> {{c.name}} </option>
+    <select multiple [nasModel]="store('selectedCities')">
+      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+        {{c.name}}
+      </option>
     </select>
   `,
 })
-class NgModelSelectMultipleForm {
-  selectedCities: any[];
-  cities: any[] = [];
+class NasModelSelectMultipleForm {
+  store: MultipleCityStore;
+
+  constructor(store: MultipleCityStore) {
+    this.store = store.withCaching();
+  }
 }
 
 @Component({
