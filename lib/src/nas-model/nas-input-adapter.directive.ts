@@ -6,7 +6,7 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
  */
 @Directive({
   selector:
-    'input:not([type=checkbox]):not([type=radio])[nasModel],textarea[nasModel]',
+    'input:not([type=checkbox]):not([type=radio]):not([type=range])[nasModel],textarea[nasModel]',
   host: {
     '(input)': '$any(this)._handleInput($event.target.value)',
     '(blur)': 'onTouched()',

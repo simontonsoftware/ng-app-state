@@ -2978,8 +2978,8 @@ meow@^3.3.0:
     trim-newlines "^1.0.0"
 
 micro-dash@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-3.2.0.tgz#d769df868b98bfabb1d94f200ba202bd37ce2419"
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-3.3.0.tgz#c1bd698ce8db6908a24a5f430b66c2ff9eb234a5"
 
 micromatch@2.3.11, micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"
