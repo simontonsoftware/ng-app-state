@@ -21,13 +21,11 @@ import {
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormControl,
   FormGroup,
   FormsModule,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NgControl,
-  NgForm,
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
@@ -47,7 +45,7 @@ describe('value accessors', () => {
         StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
         NasModelModule,
       ],
-      providers: [CityStore, MultipleCityStore],
+      providers: [AnyStore, CityStore, MenuStore, MultipleCityStore],
     });
     return TestBed.createComponent(component);
   }
@@ -332,15 +330,6 @@ describe('value accessors', () => {
       );
     });
 
-    it('should throw an error when compareWith is not a function', () => {
-      const fixture = initTest(NasModelSelectMultipleWithCustomCompareFnForm);
-      const comp = fixture.componentInstance;
-      comp.compareFn = null!;
-      expect(() => fixture.detectChanges()).toThrowError(
-        /compareWith must be a function, but received null/,
-      );
-    });
-
     it(
       'should compare options using provided compareWith function',
       fakeAsync(() => {
@@ -368,8 +357,9 @@ describe('value accessors', () => {
       it(
         'should support basic functionality',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
-          fixture.componentInstance.food = 'fish';
+          const fixture = initTest(NasModelRadioForm);
+          const store: MenuStore = TestBed.get(MenuStore);
+          store('food').set('fish');
           fixture.detectChanges();
           tick();
 
@@ -382,7 +372,7 @@ describe('value accessors', () => {
           tick();
 
           // view -> model
-          expect(fixture.componentInstance.food).toEqual('chicken');
+          expect(store.state().food).toEqual('chicken');
           expect(inputs[1].nativeElement.checked).toEqual(false);
         }),
       );
@@ -390,9 +380,9 @@ describe('value accessors', () => {
       it(
         'should support multiple named <type=radio> groups',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
-          fixture.componentInstance.food = 'fish';
-          fixture.componentInstance.drink = 'sprite';
+          const fixture = initTest(NasModelRadioForm);
+          const store: MenuStore = TestBed.get(MenuStore);
+          store.assign({ food: 'fish', drink: 'sprite' });
           fixture.detectChanges();
           tick();
 
@@ -405,8 +395,8 @@ describe('value accessors', () => {
           dispatchEvent(inputs[0].nativeElement, 'change');
           tick();
 
-          expect(fixture.componentInstance.food).toEqual('chicken');
-          expect(fixture.componentInstance.drink).toEqual('sprite');
+          expect(store.state().food).toEqual('chicken');
+          expect(store.state().drink).toEqual('sprite');
           expect(inputs[1].nativeElement.checked).toEqual(false);
           expect(inputs[2].nativeElement.checked).toEqual(false);
           expect(inputs[3].nativeElement.checked).toEqual(true);
@@ -416,7 +406,7 @@ describe('value accessors', () => {
       it(
         'should support initial undefined value',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
+          const fixture = initTest(NasModelRadioForm);
           fixture.detectChanges();
           tick();
 
@@ -431,13 +421,14 @@ describe('value accessors', () => {
       it(
         'should support resetting properly',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
-          fixture.componentInstance.food = 'chicken';
+          const fixture = initTest(NasModelRadioForm);
+          const store: MenuStore = TestBed.get(MenuStore);
+          store('food').set('chicken');
           fixture.detectChanges();
           tick();
 
           const form = fixture.debugElement.query(By.css('form'));
-          dispatchEvent(form.nativeElement, 'reset');
+          form.nativeElement.reset();
           fixture.detectChanges();
           tick();
 
@@ -450,12 +441,13 @@ describe('value accessors', () => {
       it(
         'should support setting value to null and undefined',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
-          fixture.componentInstance.food = 'chicken';
+          const fixture = initTest(NasModelRadioForm);
+          const store: MenuStore = TestBed.get(MenuStore);
+          store('food').set('chicken');
           fixture.detectChanges();
           tick();
 
-          fixture.componentInstance.food = null!;
+          store('food').set(null!);
           fixture.detectChanges();
           tick();
 
@@ -463,51 +455,15 @@ describe('value accessors', () => {
           expect(inputs[0].nativeElement.checked).toEqual(false);
           expect(inputs[1].nativeElement.checked).toEqual(false);
 
-          fixture.componentInstance.food = 'chicken';
+          store('food').set('chicken');
           fixture.detectChanges();
           tick();
 
-          fixture.componentInstance.food = undefined!;
+          store('food').set(undefined!);
           fixture.detectChanges();
           tick();
           expect(inputs[0].nativeElement.checked).toEqual(false);
           expect(inputs[1].nativeElement.checked).toEqual(false);
-        }),
-      );
-
-      it(
-        'should disable radio controls properly with programmatic call',
-        fakeAsync(() => {
-          const fixture = initTest(NgModelRadioForm);
-          fixture.componentInstance.food = 'fish';
-          fixture.detectChanges();
-          tick();
-
-          const form = fixture.debugElement.children[0].injector.get(NgForm);
-          form.control.get('food')!.disable();
-          tick();
-
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.disabled).toBe(true);
-          expect(inputs[1].nativeElement.disabled).toBe(true);
-          expect(inputs[2].nativeElement.disabled).toBe(false);
-          expect(inputs[3].nativeElement.disabled).toBe(false);
-
-          form.control.disable();
-          tick();
-
-          expect(inputs[0].nativeElement.disabled).toBe(true);
-          expect(inputs[1].nativeElement.disabled).toBe(true);
-          expect(inputs[2].nativeElement.disabled).toBe(true);
-          expect(inputs[3].nativeElement.disabled).toBe(true);
-
-          form.control.enable();
-          tick();
-
-          expect(inputs[0].nativeElement.disabled).toBe(false);
-          expect(inputs[1].nativeElement.disabled).toBe(false);
-          expect(inputs[2].nativeElement.disabled).toBe(false);
-          expect(inputs[3].nativeElement.disabled).toBe(false);
         }),
       );
     });
@@ -519,8 +475,10 @@ describe('value accessors', () => {
         'with basic use case',
         fakeAsync(() => {
           const fixture = initTest(NgModelRangeForm);
+          const store: AnyStore = TestBed.get(AnyStore);
+
           // model -> view
-          fixture.componentInstance.val = 4;
+          store.set(4);
           fixture.detectChanges();
           tick();
           const input = fixture.debugElement.query(By.css('input'));
@@ -530,9 +488,10 @@ describe('value accessors', () => {
           const newVal = '4';
           input.triggerEventHandler('input', { target: { value: newVal } });
           tick();
+
           // view -> model
           fixture.detectChanges();
-          expect(typeof fixture.componentInstance.val).toBe('number');
+          expect(typeof store.state()).toBe('number');
         }),
       );
     });
@@ -569,6 +528,10 @@ describe('value accessors', () => {
   });
 });
 
+//
+// State/Store Definitions
+//
+
 class CityState {
   selectedCity: any = {};
   cities: any[] = [];
@@ -580,6 +543,41 @@ class CityStore extends AppStore<CityState> {
     super(store, 'cityStore', new CityState());
   }
 }
+
+class MultipleCityState {
+  selectedCities: any[] = [];
+  cities: any[] = [];
+}
+
+@Injectable()
+class MultipleCityStore extends AppStore<MultipleCityState> {
+  constructor(store: Store<any>) {
+    super(store, 'mulitpleCityStore', new MultipleCityState());
+  }
+}
+
+class MenuState {
+  food: string;
+  drink: string;
+}
+
+@Injectable()
+class MenuStore extends AppStore<MenuState> {
+  constructor(store: Store<any>) {
+    super(store, 'menuStore', new MenuState());
+  }
+}
+
+@Injectable()
+class AnyStore extends AppStore<any> {
+  constructor(store: Store<any>) {
+    super(store, 'anyStore', undefined);
+  }
+}
+
+//
+// Component Definitions
+//
 
 @Component({
   selector: 'ng-model-select-form',
@@ -638,18 +636,6 @@ class NgModelSelectWithCustomCompareFnForm {
   }
 }
 
-class MultipleCityState {
-  selectedCities: any[] = [];
-  cities: any[] = [];
-}
-
-@Injectable()
-class MultipleCityStore extends AppStore<MultipleCityState> {
-  constructor(store: Store<any>) {
-    super(store, 'mulitpleCityStore', new MultipleCityState());
-  }
-}
-
 @Component({
   selector: 'ng-model-select-multiple-compare-with',
   template: `
@@ -693,52 +679,31 @@ class NasModelSelectMultipleForm {
 }
 
 @Component({
-  selector: 'form-control-range-input',
-  template: `<input type="range" [formControl]="control">`,
-})
-class FormControlRangeInput {
-  control: FormControl;
-}
-
-@Component({
   selector: 'ng-model-range-form',
-  template: '<input type="range" [(ngModel)]="val">',
+  template: '<input type="range" [nasModel]="store">',
 })
 class NgModelRangeForm {
-  val: any;
-}
-
-@Component({
-  selector: 'form-control-radio-buttons',
-  template: `
-    <form [formGroup]="form" *ngIf="showRadio.value === 'yes'">
-      <input type="radio" formControlName="food" value="chicken">
-      <input type="radio" formControlName="food" value="fish">
-      <input type="radio" formControlName="drink" value="cola">
-      <input type="radio" formControlName="drink" value="sprite">
-    </form>
-    <input type="radio" [formControl]="showRadio" value="yes">
-    <input type="radio" [formControl]="showRadio" value="no">`,
-})
-export class FormControlRadioButtons {
-  form: FormGroup;
-  showRadio = new FormControl('yes');
+  constructor(public store: AnyStore) {}
 }
 
 @Component({
   selector: 'ng-model-radio-form',
   template: `
     <form>
-      <input type="radio" name="food" [(ngModel)]="food" value="chicken">
-      <input type="radio" name="food"  [(ngModel)]="food" value="fish">
-      <input type="radio" name="drink" [(ngModel)]="drink" value="cola">
-      <input type="radio" name="drink" [(ngModel)]="drink" value="sprite">
+      <input type="radio" [nasModel]="store('food')" value="chicken">
+      <input type="radio" [nasModel]="store('food')" value="fish">
+      <input type="radio" [nasModel]="store('drink')" value="cola">
+      <input type="radio" [nasModel]="store('drink')" value="sprite">
+      <input type="reset">
     </form>
   `,
 })
-class NgModelRadioForm {
-  food: string;
-  drink: string;
+class NasModelRadioForm {
+  store: MenuStore;
+
+  constructor(store: MenuStore) {
+    this.store = store.withCaching();
+  }
 }
 
 @Directive({

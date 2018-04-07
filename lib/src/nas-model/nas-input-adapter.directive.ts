@@ -5,7 +5,8 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
  * Allows the NasModel directive to
  */
 @Directive({
-  selector: 'input:not([type=checkbox])[nasModel],textarea[nasModel]',
+  selector:
+    'input:not([type=checkbox]):not([type=radio])[nasModel],textarea[nasModel]',
   host: {
     '(input)': '$any(this)._handleInput($event.target.value)',
     '(blur)': 'onTouched()',
