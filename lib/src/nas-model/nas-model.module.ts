@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
-import { NasCheckboxAdapterDirective } from './nas-checkbox-adapter.directive';
-import { NasInputAdapterDirective } from './nas-input-adapter.directive';
 import { NasModelDirective } from './nas-model.directive';
-import { NasRadioAdapterDirective } from './nas-radio-adapter.directive';
-import { NasRangeAdapterDirective } from './nas-range-adapter.directive';
-import { NasSelectAdapterDirective } from './nas-select-adapter.directive';
-import { NasSelectMultipleAdapterDirective } from './nas-select-multiple-adapter.directive';
+import { CheckboxValueAccessorDirective } from './value-accessors/checkbox-value-accessor.directive';
+import { InputValueAccessorDirective } from './value-accessors/input-value-accessor.directive';
+import { RadioValueAccessorDirective } from './value-accessors/radio-value-accessor.directive';
+import { RangeValueAccessorDirective } from './value-accessors/range-value-accessor.directive';
+import { SelectValueAccessorDirective } from './value-accessors/select-value-accessor.directive';
+import { SelectMultipleValueAccessorDirective } from './value-accessors/select-multiple-value-accessor.directive';
 
 const exportedDirectives = [
-  NasCheckboxAdapterDirective,
-  NasInputAdapterDirective,
+  CheckboxValueAccessorDirective,
+  InputValueAccessorDirective,
   NasModelDirective,
-  NasRadioAdapterDirective,
-  NasRangeAdapterDirective,
-  NasSelectAdapterDirective,
-  NasSelectMultipleAdapterDirective,
+  RadioValueAccessorDirective,
+  RangeValueAccessorDirective,
+  SelectValueAccessorDirective,
+  SelectMultipleValueAccessorDirective,
 ];
 
 @NgModule({

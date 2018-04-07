@@ -10,12 +10,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasRadioAdapterDirective),
+      useExisting: forwardRef(() => RadioValueAccessorDirective),
       multi: true,
     },
   ],
 })
-export class NasRadioAdapterDirective implements ControlValueAccessor {
+export class RadioValueAccessorDirective implements ControlValueAccessor {
   onChange = () => {};
   onTouched = () => {};
 

@@ -2,15 +2,7 @@
  * Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
  */
 
-import {
-  Component,
-  Directive,
-  EventEmitter,
-  Injectable,
-  Input,
-  Output,
-  Type,
-} from '@angular/core';
+import { Component, Injectable, Input, Type } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -19,13 +11,9 @@ import {
   tick,
 } from '@angular/core/testing';
 import {
-  AbstractControl,
   ControlValueAccessor,
-  FormGroup,
   FormsModule,
-  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  NgControl,
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
@@ -45,7 +33,7 @@ describe('value accessors', () => {
         StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
         NasModelModule,
       ],
-      providers: [AnyStore, CityStore, MenuStore, MultipleCityStore],
+      providers: [AnyStore, CityStore, MenuStore, MultipleCityStore, NameStore],
     });
     return TestBed.createComponent(component);
   }
@@ -503,7 +491,9 @@ describe('value accessors', () => {
         'should support standard writing to view and model',
         async(() => {
           const fixture = initTest(NgModelCustomWrapper, NgModelCustomComp);
-          fixture.componentInstance.name = 'Nancy';
+          const store: NameStore = TestBed.get(NameStore);
+
+          store('name').set('Nancy');
           fixture.detectChanges();
           fixture.whenStable().then(() => {
             fixture.detectChanges();
@@ -519,7 +509,7 @@ describe('value accessors', () => {
               fixture.detectChanges();
 
               // view -> model
-              expect(fixture.componentInstance.name).toEqual('Carson');
+              expect(store.state().name).toEqual('Carson');
             });
           });
         }),
@@ -572,6 +562,18 @@ class MenuStore extends AppStore<MenuState> {
 class AnyStore extends AppStore<any> {
   constructor(store: Store<any>) {
     super(store, 'anyStore', undefined);
+  }
+}
+
+class NameState {
+  name: string;
+  isDisabled = false;
+}
+
+@Injectable()
+class NameStore extends AppStore<NameState> {
+  constructor(store: Store<any>) {
+    super(store, 'nameStore', new NameState());
   }
 }
 
@@ -706,82 +708,6 @@ class NasModelRadioForm {
   }
 }
 
-@Directive({
-  selector: '[wrapped-value]',
-  host: { '(input)': 'handleOnInput($event.target.value)', '[value]': 'value' },
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, multi: true, useExisting: WrappedValue },
-    { provide: NG_VALIDATORS, multi: true, useExisting: WrappedValue },
-  ],
-})
-class WrappedValue implements ControlValueAccessor {
-  value: any;
-  onChange: Function;
-
-  writeValue(value: any) {
-    this.value = `!${value}!`;
-  }
-
-  registerOnChange(fn: (value: any) => void) {
-    this.onChange = fn;
-  }
-  registerOnTouched(fn: any) {}
-
-  handleOnInput(value: any) {
-    this.onChange(value.substring(1, value.length - 1));
-  }
-
-  validate(c: AbstractControl) {
-    return c.value === 'expected' ? null : { err: true };
-  }
-}
-
-@Component({ selector: 'my-input', template: '' })
-export class MyInput implements ControlValueAccessor {
-  @Output('input') onInput = new EventEmitter();
-  value: string;
-
-  constructor(cd: NgControl) {
-    cd.valueAccessor = this;
-  }
-
-  writeValue(value: any) {
-    this.value = `!${value}!`;
-  }
-
-  registerOnChange(fn: (value: any) => void) {
-    this.onInput.subscribe({ next: fn });
-  }
-
-  registerOnTouched(fn: any) {}
-
-  dispatchChangeEvent() {
-    this.onInput.emit(this.value.substring(1, this.value.length - 1));
-  }
-}
-
-@Component({
-  selector: 'my-input-form',
-  template: `
-    <div [formGroup]="form">
-      <my-input formControlName="login"></my-input>
-    </div>`,
-})
-export class MyInputForm {
-  form: FormGroup;
-}
-
-@Component({
-  selector: 'wrapped-value-form',
-  template: `
-    <div [formGroup]="form">
-      <input type="text" formControlName="login" wrapped-value>
-    </div>`,
-})
-class WrappedValueForm {
-  form: FormGroup;
-}
-
 @Component({
   selector: 'ng-model-custom-comp',
   template: `
@@ -815,13 +741,17 @@ export class NgModelCustomComp implements ControlValueAccessor {
   selector: 'ng-model-custom-wrapper',
   template: `
     <form>
-      <ng-model-custom-comp name="name" [(ngModel)]="name" [disabled]="isDisabled"></ng-model-custom-comp>
+      <ng-model-custom-comp [nasModel]="store('name')" [disabled]="isDisabled"></ng-model-custom-comp>
     </form>
   `,
 })
 export class NgModelCustomWrapper {
-  name: string;
+  store: NameStore;
   isDisabled = false;
+
+  constructor(store: NameStore) {
+    this.store = store.withCaching();
+  }
 }
 
 function dispatchEvent(domElement: EventTarget, type: string) {

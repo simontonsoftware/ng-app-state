@@ -13,9 +13,9 @@ import {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasCheckboxAdapterDirective),
+      useExisting: forwardRef(() => CheckboxValueAccessorDirective),
       multi: true,
     },
   ],
 })
-export class NasCheckboxAdapterDirective extends CheckboxControlValueAccessor {}
+export class CheckboxValueAccessorDirective extends CheckboxControlValueAccessor {}

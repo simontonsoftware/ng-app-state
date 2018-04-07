@@ -12,12 +12,12 @@ import { isNil } from 'micro-dash';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasRangeAdapterDirective),
+      useExisting: forwardRef(() => RangeValueAccessorDirective),
       multi: true,
     },
   ],
 })
-export class NasRangeAdapterDirective implements ControlValueAccessor {
+export class RangeValueAccessorDirective implements ControlValueAccessor {
   onChange = (_: any) => {};
   onTouched = () => {};
 
@@ -25,7 +25,7 @@ export class NasRangeAdapterDirective implements ControlValueAccessor {
 
   registerOnChange(fn: (_: number | null) => void): void {
     this.onChange = (value) => {
-      fn(isNil(value) ? parseFloat(value) : null);
+      fn(isNil(value) ? null : parseFloat(value));
     };
   }
 

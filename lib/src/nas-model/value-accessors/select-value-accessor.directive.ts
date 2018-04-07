@@ -10,13 +10,13 @@ import { NG_VALUE_ACCESSOR, SelectControlValueAccessor } from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasSelectAdapterDirective),
+      useExisting: forwardRef(() => SelectValueAccessorDirective),
       multi: true,
     },
     {
       provide: SelectControlValueAccessor,
-      useExisting: forwardRef(() => NasSelectAdapterDirective),
+      useExisting: forwardRef(() => SelectValueAccessorDirective),
     },
   ],
 })
-export class NasSelectAdapterDirective extends SelectControlValueAccessor {}
+export class SelectValueAccessorDirective extends SelectControlValueAccessor {}

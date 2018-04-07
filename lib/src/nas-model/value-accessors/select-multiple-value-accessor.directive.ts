@@ -10,13 +10,13 @@ import {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasSelectMultipleAdapterDirective),
+      useExisting: forwardRef(() => SelectMultipleValueAccessorDirective),
       multi: true,
     },
     {
       provide: SelectMultipleControlValueAccessor,
-      useExisting: forwardRef(() => NasSelectMultipleAdapterDirective),
+      useExisting: forwardRef(() => SelectMultipleValueAccessorDirective),
     },
   ],
 })
-export class NasSelectMultipleAdapterDirective extends SelectMultipleControlValueAccessor {}
+export class SelectMultipleValueAccessorDirective extends SelectMultipleControlValueAccessor {}

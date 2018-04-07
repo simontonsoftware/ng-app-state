@@ -16,9 +16,9 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NasInputAdapterDirective),
+      useExisting: forwardRef(() => InputValueAccessorDirective),
       multi: true,
     },
   ],
 })
-export class NasInputAdapterDirective extends DefaultValueAccessor {}
+export class InputValueAccessorDirective extends DefaultValueAccessor {}
