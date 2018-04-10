@@ -94,7 +94,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
     }
 
     --this.currentStateIndex;
-    this.applyCurrentState();
+    this.applyCurrentUndoState();
     this.fireUndoChanges();
   }
 
@@ -109,7 +109,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
     }
 
     ++this.currentStateIndex;
-    this.applyCurrentState();
+    this.applyCurrentRedoState();
     this.fireUndoChanges();
   }
 
@@ -119,10 +119,20 @@ export abstract class UndoManager<StateType, UndoStateType> {
   protected abstract extractUndoState(state: StateType): UndoStateType;
 
   /**
-   * Reset the store to the given state.
+   * Use the given states to implement undo.
    */
   protected abstract applyUndoState(
-    undoState: UndoStateType,
+    undoingToState: UndoStateType,
+    undoingFromState: UndoStateType,
+    batch: StoreObject<StateType>,
+  ): void;
+
+  /**
+   * Use the given states to implement redo.
+   */
+  protected abstract applyRedoState(
+    redoingToState: UndoStateType,
+    redoingFromState: UndoStateType,
     batch: StoreObject<StateType>,
   ): void;
 
@@ -133,9 +143,23 @@ export abstract class UndoManager<StateType, UndoStateType> {
     return this.maxDepth > 0 && size > this.maxDepth;
   }
 
-  private applyCurrentState() {
+  private applyCurrentUndoState() {
     this.store.batch((batch) => {
-      this.applyUndoState(this.stack[this.currentStateIndex], batch);
+      this.applyUndoState(
+        this.stack[this.currentStateIndex],
+        this.stack[this.currentStateIndex + 1],
+        batch,
+      );
+    });
+  }
+
+  private applyCurrentRedoState() {
+    this.store.batch((batch) => {
+      this.applyRedoState(
+        this.stack[this.currentStateIndex],
+        this.stack[this.currentStateIndex - 1],
+        batch,
+      );
     });
   }
 
