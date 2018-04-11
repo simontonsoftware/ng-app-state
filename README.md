@@ -168,11 +168,11 @@ This package includes an abstract class, `UndoManager`, to assist you in creatin
 ```ts
 @Injectable()
 class UndoService extends UndoManager<MyAppState, MyAppState> {
-  private skipNextChange = false;
+  private skipNextChange = true;
 
   constructor(store: MyAppStore) {
     super(store);
-    store.$.pipe(skip(1)).subscribe(() => {
+    store.$.subscribe(() => {
       if (this.skipNextChange) {
         this.skipNextChange = false;
       } else {
@@ -186,10 +186,10 @@ class UndoService extends UndoManager<MyAppState, MyAppState> {
   }
   
   protected applyUndoState(
-    undoState: MyAppState, batch: StoreObject<MyAppState>,
+    newState: MyAppState, batch: StoreObject<MyAppState>,
   ) {
     this.skipNextChange = true;
-    batch.set(undoState);
+    batch.set(newState);
   }
 } 
 ```

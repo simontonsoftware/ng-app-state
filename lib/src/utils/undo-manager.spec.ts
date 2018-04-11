@@ -1,21 +1,22 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { skip } from 'rxjs/operators/skip';
 import { AppStore } from '../app-store';
 import { ngAppStateReducer } from '../meta-reducer';
 import { StoreObject } from '../store-object';
-import { UndoManager } from './undo-manager';
+import { UndoManager, UndoOrRedo } from './undo-manager';
 
 class State {
   counter = 0;
 }
 
 class TestImpl extends UndoManager<State, State> {
-  private skipNextChange = false;
+  lastApplicationUndoOrRedo?: UndoOrRedo;
+  lastApplicationOldState?: State;
+  private skipNextChange = true;
 
   constructor(store: AppStore<State>, maxDepth = 0) {
     super(store, maxDepth);
-    store.$.pipe(skip(1)).subscribe(() => {
+    store.$.subscribe(() => {
       if (this.skipNextChange) {
         this.skipNextChange = false;
       } else {
@@ -28,9 +29,16 @@ class TestImpl extends UndoManager<State, State> {
     return state;
   }
 
-  protected applyUndoState(undoState: State, batch: StoreObject<State>) {
+  protected applyUndoState(
+    newState: State,
+    batch: StoreObject<State>,
+    undoOrRedo: UndoOrRedo,
+    oldState: State,
+  ) {
     this.skipNextChange = true;
-    batch.set(undoState);
+    batch.set(newState);
+    this.lastApplicationUndoOrRedo = undoOrRedo;
+    this.lastApplicationOldState = oldState;
   }
 }
 
@@ -278,6 +286,8 @@ describe('UndoManager', () => {
   });
 
   describe('.reset()', () => {
+    // most of `.reset()` is tested within the `.can[Un/Re]do()` blocks above
+
     it('does not affect the store', () => {
       undoManager.reset();
       expectStack(0);
@@ -327,6 +337,23 @@ describe('UndoManager', () => {
   });
 
   describe('.undo()', () => {
+    it('undoes, giving the correct arguments to the subclass', () => {
+      store('counter').set(1);
+      store('counter').set(2);
+      expect(undoManager.lastApplicationUndoOrRedo).toBeUndefined();
+      expect(undoManager.lastApplicationOldState).toBeUndefined();
+
+      undoManager.undo();
+      expect(store.state()).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationUndoOrRedo).toEqual('undo');
+      expect(undoManager.lastApplicationOldState).toEqual({ counter: 2 });
+
+      undoManager.undo();
+      expect(store.state()).toEqual(new State());
+      expect(undoManager.lastApplicationUndoOrRedo).toEqual('undo');
+      expect(undoManager.lastApplicationOldState).toEqual({ counter: 1 });
+    });
+
     it('throws an error if at the beginning of the stack', () => {
       expect(() => {
         undoManager.undo();
@@ -349,6 +376,23 @@ describe('UndoManager', () => {
   });
 
   describe('.redo()', () => {
+    it('redoes, giving the correct arguments to the subclass', () => {
+      store('counter').set(1);
+      store('counter').set(2);
+      undoManager.undo();
+      undoManager.undo();
+
+      undoManager.redo();
+      expect(store.state()).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationUndoOrRedo).toEqual('redo');
+      expect(undoManager.lastApplicationOldState).toEqual(new State());
+
+      undoManager.redo();
+      expect(store.state()).toEqual({ counter: 2 });
+      expect(undoManager.lastApplicationUndoOrRedo).toEqual('redo');
+      expect(undoManager.lastApplicationOldState).toEqual({ counter: 1 });
+    });
+
     it('throws an error if at the end of the stack', () => {
       expect(() => {
         undoManager.redo();

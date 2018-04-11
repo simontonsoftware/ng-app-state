@@ -3,6 +3,8 @@ import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StoreObject } from '../store-object';
 
+export type UndoOrRedo = 'undo' | 'redo';
+
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
   private currentStateIndex: number;
@@ -93,9 +95,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
       throw new Error('Cannot undo');
     }
 
-    --this.currentStateIndex;
-    this.applyCurrentState();
-    this.fireUndoChanges();
+    this.changeState(-1, 'undo');
   }
 
   /**
@@ -108,9 +108,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
       throw new Error('Cannot redo');
     }
 
-    ++this.currentStateIndex;
-    this.applyCurrentState();
-    this.fireUndoChanges();
+    this.changeState(1, 'redo');
   }
 
   /**
@@ -120,10 +118,14 @@ export abstract class UndoManager<StateType, UndoStateType> {
 
   /**
    * Reset the store to the given state.
+   *
+   * The `undoOrRedo` and `oldState` parameters can be useful e.g. if a scroll position is kept in the undo state. In such a case you want to change the scrolling so the user can see what just changed by undoing/redoing. To do that, set the scoll to what it was in `oldState` when undoing, and to what it is in `newState` when redoing.
    */
   protected abstract applyUndoState(
-    undoState: UndoStateType,
+    newState: UndoStateType,
     batch: StoreObject<StateType>,
+    undoOrRedo: UndoOrRedo,
+    oldState: UndoStateType,
   ): void;
 
   /**
@@ -133,10 +135,14 @@ export abstract class UndoManager<StateType, UndoStateType> {
     return this.maxDepth > 0 && size > this.maxDepth;
   }
 
-  private applyCurrentState() {
+  private changeState(change: 1 | -1, undoOrRedo: UndoOrRedo) {
+    const oldState = this.stack[this.currentStateIndex];
+    this.currentStateIndex += change;
+    const newState = this.stack[this.currentStateIndex];
     this.store.batch((batch) => {
-      this.applyUndoState(this.stack[this.currentStateIndex], batch);
+      this.applyUndoState(newState, batch, undoOrRedo, oldState);
     });
+    this.fireUndoChanges();
   }
 
   private fireUndoChanges() {
