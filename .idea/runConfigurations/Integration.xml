@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Integration: E2E" type="js.build_tools.npm" factoryName="npm">
-    <package-json value="$PROJECT_DIR$/integration/package.json" />
+  <configuration default="false" name="Integration" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="e2e" />
+      <script value="integration" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

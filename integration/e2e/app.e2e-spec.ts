@@ -1,9 +1,15 @@
 import { browser, element, by, ElementFinder, Key } from 'protractor';
+import { AppPage } from './app.po';
 
 const cities = ['San Francisco', 'Nairobi', 'Gulu'];
 
-describe('ng-app-state E2E Tests', () => {
-  beforeEach(() => browser.get(''));
+describe('integration App', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    page.navigateTo();
+  });
 
   afterEach(() => {
     browser
@@ -15,15 +21,6 @@ describe('ng-app-state E2E Tests', () => {
         expect(errors).toEqual([]);
       });
   });
-
-  async function clearAndEnterValue(
-    control: string | ElementFinder,
-    value: string,
-  ) {
-    control = getControl(control);
-    await clearValue(control);
-    await control.sendKeys(value);
-  }
 
   async function clearValue(control: string | ElementFinder) {
     control = getControl(control);
@@ -46,6 +43,8 @@ describe('ng-app-state E2E Tests', () => {
     let css = 'input';
     if (type) {
       css += `[type="${type}"]`;
+    } else {
+      css += ':not([type])';
     }
     return element(by.css(css));
   }
@@ -66,7 +65,7 @@ describe('ng-app-state E2E Tests', () => {
     ) {
       await clearValue(control);
       await expectValue('');
-      await clearAndEnterValue(control, value);
+      await getControl(control).sendKeys(value);
       await expectValue(value, options);
     }
 
@@ -184,7 +183,7 @@ describe('ng-app-state E2E Tests', () => {
       }
     }
 
-    fit('work', async () => {
+    it('work', async () => {
       await expectValues(['Nairobi', 'Gulu']);
 
       await getOption('Gulu').click();
@@ -196,4 +195,70 @@ describe('ng-app-state E2E Tests', () => {
       await expectValues([]);
     });
   });
+
+  describe('date and time controls', () => {
+    async function testControl(
+      type: string,
+      keys: string,
+      value: string,
+      week: string,
+    ) {
+      await clearDate(type);
+      await expectValue('', '');
+      await getInput(type).sendKeys(keys);
+      await propagate(type);
+      await expectValue(value, week);
+    }
+
+    async function clearDate(type: string) {
+      const control = getInput(type);
+      await control.sendKeys(Key.BACK_SPACE);
+      await propagate(type);
+    }
+
+    async function propagate(type: string) {
+      await element(by.cssContainingText('button', type + ' flush')).click();
+    }
+
+    async function expectValue(datetime: string, week: string) {
+      expect(await getInput('datetime-local').getAttribute('value')).toEqual(
+        datetime,
+      );
+      expect(await getInput('date').getAttribute('value')).toEqual(
+        datetime.substr(0, 10),
+      );
+      expect(await getInput('month').getAttribute('value')).toEqual(
+        datetime.substr(0, 7),
+      );
+      expect(await getInput('week').getAttribute('value')).toEqual(week);
+      expect(await getInput('time').getAttribute('value')).toEqual(
+        datetime.substr(11),
+      );
+    }
+
+    it('work', async () => {
+      await expectValue('1980-11-04T10:30', '1980-W45');
+      await testControl(
+        'datetime-local',
+        `06211975${Key.TAB}0426p`,
+        '1975-06-21T16:26',
+        '1975-W25',
+      );
+      await testControl('date', `07041776`, '1776-07-04T00:00', '1776-W27');
+      await testControl(
+        'month',
+        `d${Key.TAB}1999`,
+        '1999-12-01T00:00',
+        '1999-W48',
+      );
+      await testControl('week', `412032`, '2032-10-09T00:00', '2032-W41');
+      await testControl('time', `0844p`, '2000-01-01T20:44', '2000-W01');
+    });
+  });
 });
+
+function delay(millis: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, millis);
+  });
+}

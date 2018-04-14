@@ -26,10 +26,8 @@
     "coverage": "karma start karma-coverage.conf.js --single-run --browsers Chrome",
     "pretest:once": "yarn build-test",
     "test:once": "karma start karma.conf.js --single-run --browsers Chrome",
-    "preintegration": "yarn build && cd integration && yarn clean && npm install",
-    "integration": "yarn integration:aot && yarn integration:jit",
-    "integration:jit": "cd integration && yarn e2e",
-    "integration:aot": "cd integration && yarn e2e:aot",
+    "preintegration": "yarn build && cd integration && yarn --check-files",
+    "integration": "cd integration && yarn e2e",
     "lint": "tslint ./lib/**/*.ts -t verbose",
     "release": "standard-version && yarn run build"
   },
