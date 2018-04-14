@@ -1,10 +1,10 @@
-import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { Directive, ElementRef, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Directive({
   selector: 'input[type=radio][nasModel]',
   host: {
-    '(change)': 'onChange()',
+    '(change)': 'onChange($event.target.value)',
     '(blur)': 'onTouched()',
   },
   providers: [
@@ -16,15 +16,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class RadioValueAccessorDirective implements ControlValueAccessor {
-  onChange = () => {};
+  onChange = (_: any) => {};
   onTouched = () => {};
 
   constructor(private elementRef: ElementRef) {}
 
   registerOnChange(fn: any): void {
-    this.onChange = () => {
-      fn(this.button.value);
-    };
+    this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {

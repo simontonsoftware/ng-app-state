@@ -23,6 +23,10 @@ export class RangeValueAccessorDirective implements ControlValueAccessor {
 
   constructor(private elementRef: ElementRef) {}
 
+  writeValue(obj: any): void {
+    this.range.value = obj;
+  }
+
   registerOnChange(fn: (_: number | null) => void): void {
     this.onChange = (value) => {
       fn(isNil(value) ? null : parseFloat(value));
@@ -35,10 +39,6 @@ export class RangeValueAccessorDirective implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.range.disabled = isDisabled;
-  }
-
-  writeValue(obj: any): void {
-    this.range.value = obj;
   }
 
   private get range() {

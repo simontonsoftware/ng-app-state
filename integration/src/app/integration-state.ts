@@ -11,7 +11,4 @@ export class IntegrationState {
   month = '1980-11';
   week = '1980-W45';
   time = '10:30';
-  email = 'username@example.com';
-  color = '#82f0b4';
-  url = 'https://github.com/simontonsoftware/ng-app-state';
 }

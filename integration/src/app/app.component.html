@@ -1,12 +1,18 @@
 <input [nasModel]="store('freeText')">
 <br>
-<input type="text" [nasModel]="store('freeText')">
+<input type="text" [nasModel]="store('freeText')"> Text
 <br>
-<input type="search" [nasModel]="store('freeText')">
+<input type="search" [nasModel]="store('freeText')"> Search
 <br>
-<input type="tel" [nasModel]="store('freeText')">
+<input type="tel" [nasModel]="store('freeText')"> Tel
 <br>
-<input type="password" [nasModel]="store('freeText')">
+<input type="password" [nasModel]="store('freeText')"> Password
+<br>
+<input type="email" [nasModel]="store('freeText')"> Email
+<br>
+<input type="url" [nasModel]="store('freeText')"> Url
+<br>
+<input type="color" [nasModel]="store('freeText')">
 <br>
 <textarea [nasModel]="store('freeText')"></textarea>
 
@@ -65,30 +71,6 @@
 <br>
 <input type="time" [nasModel]="store('time')">
 <button (click)="propagateTime()">Propagate</button>
-
-<hr>
-
-<input type="email" [nasModel]="store('email')">
-<br>
-<input [nasModel]="store('email')">
-
-<hr>
-
-<input type="email" [nasModel]="store('email')">
-<br>
-<input [nasModel]="store('email')">
-
-<hr>
-
-<input type="color" [nasModel]="store('color')">
-<br>
-<input [nasModel]="store('color')">
-
-<hr>
-
-<input type="url" [nasModel]="store('url')">
-<br>
-<input [nasModel]="store('url')">
 
 <hr>
 
