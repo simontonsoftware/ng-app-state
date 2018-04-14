@@ -34,7 +34,10 @@ export class RadioValueAccessorDirective implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    this.button.checked = this.button.value === obj;
+    // delay because as the component is being initialized `button.value` might not be set yet
+    Promise.resolve().then(() => {
+      this.button.checked = this.button.value === obj;
+    });
   }
 
   private get button() {

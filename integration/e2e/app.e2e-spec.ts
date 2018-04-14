@@ -48,7 +48,7 @@ describe('ng-app-state E2E Tests', () => {
     return element(by.css(css));
   }
 
-  describe('free text inputs', () => {
+  describe('free text controls (and color)', () => {
     function textarea() {
       return element(by.css('textarea'));
     }
@@ -82,10 +82,11 @@ describe('ng-app-state E2E Tests', () => {
       );
       expect(await getInput('email').getAttribute('value')).toEqual(stripped);
       expect(await getInput('url').getAttribute('value')).toEqual(stripped);
+      expect(await textarea().getAttribute('value')).toEqual(value);
+
       expect(await getInput('color').getAttribute('value')).toEqual(
         isColor ? value : '#000000',
       );
-      expect(await textarea().getAttribute('value')).toEqual(value);
     }
 
     it('work', async () => {
@@ -99,6 +100,7 @@ describe('ng-app-state E2E Tests', () => {
       await testControl('email', 'email@input.com');
       await testControl('url', 'http://www.input.com/url');
       await testControl('', '#123456', { isColor: true });
+      await testControl(textarea(), 'textarea\nvalue');
 
       // https://stackoverflow.com/q/36402624/1836506
       browser.executeScript(`
@@ -107,12 +109,10 @@ describe('ng-app-state E2E Tests', () => {
         input.dispatchEvent(new Event('input'));
       `);
       await expectValue('#654321', { isColor: true });
-
-      await testControl(textarea(), 'textarea\nvalue');
     });
   });
 
-  describe('number inputs', () => {
+  describe('number controls', () => {
     async function expectValue(value: string) {
       expect(await getInput('number').getAttribute('value')).toEqual(value);
       expect(await getInput('range').getAttribute('value')).toEqual(
@@ -133,6 +133,38 @@ describe('ng-app-state E2E Tests', () => {
         .dragAndDrop(await getInput('range'), { x: -99, y: 0 })
         .perform();
       await expectValue('0');
+    });
+  });
+
+  describe('choose one controls', () => {
+    const cities = ['San Francisco', 'Nairobi', 'Gulu'];
+
+    function getDropdown() {
+      return element(by.css('select:not([multiple])'));
+    }
+
+    function getRadio(value: string) {
+      return element(by.css(`input[type="radio"][value="${value}"]`));
+    }
+
+    async function expectValue(value: string) {
+      expect(await getDropdown().getAttribute('value')).toEqual(value);
+      for (const city of cities) {
+        const radio = getRadio(city);
+        expect(await radio.getAttribute('checked')).toEqual(
+          city === value ? 'true' : null!,
+        );
+      }
+    }
+
+    it('work', async () => {
+      await expectValue('Nairobi');
+
+      await element(by.cssContainingText('option', 'San Francisco')).click();
+      await expectValue('San Francisco');
+
+      await getRadio('Gulu').click();
+      await expectValue('Gulu');
     });
   });
 });
