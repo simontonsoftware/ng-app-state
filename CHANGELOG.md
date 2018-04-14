@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v4.3.0...v5.0.0) (2018-04-14)
+
+
+* Add [nasModel] to bind form controls directly to store objects ([8849965](https://github.com/simontonsoftware/ng-app-state/commit/8849965)), closes [#6](https://github.com/simontonsoftware/ng-app-state/issues/6)
+
+
+### BREAKING CHANGES
+
+* requires `micro-dash` 3.3.0, up from `3.0.0`.
+
+
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/simontonsoftware/ng-app-state/compare/v4.2.0...v4.3.0) (2018-04-11)
 
