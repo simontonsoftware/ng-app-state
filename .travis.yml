@@ -5,6 +5,8 @@ node_js:
   - "6"
 os:
   - linux
+addons:
+  chrome: stable
 before_install:
   # Use a virtual display.
   - export DISPLAY=:99.0
@@ -15,6 +17,7 @@ install:
   - yarn
 script:
   - yarn coverage
+  - yarn integration
 after_success:
   - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
 notifications:
