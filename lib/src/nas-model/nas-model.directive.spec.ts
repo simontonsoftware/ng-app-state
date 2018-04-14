@@ -24,6 +24,20 @@ import { NasModelModule } from './nas-model.module';
 describe('value accessors', () => {
   let fixture: ComponentFixture<any>;
 
+  function detectChanges() {
+    fixture.detectChanges();
+  }
+
+  function query(css: string) {
+    return queryAll(css)[0];
+  }
+
+  function queryAll(css: string) {
+    return fixture.debugElement
+      .queryAll(By.css(css))
+      .map((el) => el.nativeElement);
+  }
+
   function initTest<C, S>(
     component: Type<C>,
     storeType: Type<S>,
@@ -59,19 +73,19 @@ describe('value accessors', () => {
           const store = initTest(CityComponent, CityStore);
           const cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'Buffalo' }];
           store.set({ cities, selectedCity: cities[1] });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
-          const nycOption = fixture.debugElement.queryAll(By.css('option'))[1];
+          const select = query('select');
+          const nycOption = queryAll('option')[1];
 
           // model -> view
-          expect(select.nativeElement.value).toEqual('1: Object');
-          expect(nycOption.nativeElement.selected).toBe(true);
+          expect(select.value).toEqual('1: Object');
+          expect(nycOption.selected).toBe(true);
 
-          select.nativeElement.value = '2: Object';
-          dispatchEvent(select.nativeElement, 'change');
-          fixture.detectChanges();
+          select.value = '2: Object';
+          dispatchEvent(select, 'change');
+          detectChanges();
           tick();
 
           // view -> model
@@ -88,7 +102,7 @@ describe('value accessors', () => {
             cities,
             selectedCity: cities[1],
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           const newCity = { name: 'Buffalo' };
@@ -96,13 +110,13 @@ describe('value accessors', () => {
             cities: [...cities, newCity],
             selectedCity: newCity,
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
-          const buffalo = fixture.debugElement.queryAll(By.css('option'))[2];
-          expect(select.nativeElement.value).toEqual('2: Object');
-          expect(buffalo.nativeElement.selected).toBe(true);
+          const select = query('select');
+          const buffalo = queryAll('option')[2];
+          expect(select.value).toEqual('2: Object');
+          expect(buffalo.selected).toBe(true);
         }),
       );
 
@@ -115,19 +129,19 @@ describe('value accessors', () => {
             cities,
             selectedCity: cities[1],
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
-          expect(select.nativeElement.value).toEqual('1: Object');
+          const select = query('select');
+          expect(select.value).toEqual('1: Object');
 
           store('cities').mutateUsing((state) => {
             state.pop();
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          expect(select.nativeElement.value).not.toEqual('1: Object');
+          expect(select.value).not.toEqual('1: Object');
         }),
       );
 
@@ -140,17 +154,17 @@ describe('value accessors', () => {
             cities,
             selectedCity: cities[0],
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           store('selectedCity').set(cities[2]);
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
-          const secondNYC = fixture.debugElement.queryAll(By.css('option'))[2];
-          expect(select.nativeElement.value).toEqual('2: Object');
-          expect(secondNYC.nativeElement.selected).toBe(true);
+          const select = query('select');
+          const secondNYC = queryAll('option')[2];
+          expect(select.value).toEqual('2: Object');
+          expect(secondNYC.selected).toBe(true);
         }),
       );
 
@@ -164,20 +178,20 @@ describe('value accessors', () => {
             cities: [{ name: 'SF' }, { name: 'NYC' }],
             selectedCity: null,
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
+          const select = query('select');
 
-          select.nativeElement.value = '2: Object';
-          dispatchEvent(select.nativeElement, 'change');
-          fixture.detectChanges();
+          select.value = '2: Object';
+          dispatchEvent(select, 'change');
+          detectChanges();
           tick();
           expect(store.state().selectedCity['name']).toEqual('NYC');
 
-          select.nativeElement.value = '0: null';
-          dispatchEvent(select.nativeElement, 'change');
-          fixture.detectChanges();
+          select.value = '0: null';
+          dispatchEvent(select, 'change');
+          detectChanges();
           tick();
           expect(store.state().selectedCity).toEqual(null!);
         }),
@@ -193,13 +207,13 @@ describe('value accessors', () => {
             selectedCity: { id: 1, name: 'SF' },
             cities: [{ id: 1, name: 'SF' }, { id: 2, name: 'LA' }],
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const select = fixture.debugElement.query(By.css('select'));
-          const sfOption = fixture.debugElement.query(By.css('option'));
-          expect(select.nativeElement.value).toEqual('0: Object');
-          expect(sfOption.nativeElement.selected).toBe(true);
+          const select = query('select');
+          const sfOption = query('option');
+          expect(select.value).toEqual('0: Object');
+          expect(sfOption.selected).toBe(true);
         }),
       );
 
@@ -213,29 +227,29 @@ describe('value accessors', () => {
             selectedCity: { id: 1, name: 'SF' },
             cities: [{ id: 1, name: 'SF' }, { id: 2, name: 'NY' }],
           });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           // Option IDs start out as 0 and 1, so setting the select value to "1: Object"
           // will select the second option (NY).
-          const select = fixture.debugElement.query(By.css('select'));
-          select.nativeElement.value = '1: Object';
-          dispatchEvent(select.nativeElement, 'change');
-          fixture.detectChanges();
+          const select = query('select');
+          select.value = '1: Object';
+          dispatchEvent(select, 'change');
+          detectChanges();
 
           expect(store.state().selectedCity).toEqual({ id: 2, name: 'NY' });
 
           store('cities').set([{ id: 1, name: 'SF' }, { id: 2, name: 'NY' }]);
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           // Now that the options array has been re-assigned, new option instances will
           // be created by ngFor. These instances will have different option IDs, subsequent
           // to the first: 2 and 3. For the second option to stay selected, the select
           // value will need to have the ID of the current second option: 3.
-          const nyOption = fixture.debugElement.queryAll(By.css('option'))[1];
-          expect(select.nativeElement.value).toEqual('3: Object');
-          expect(nyOption.nativeElement.selected).toBe(true);
+          const nyOption = queryAll('option')[1];
+          expect(select.value).toEqual('3: Object');
+          expect(nyOption.selected).toBe(true);
         }),
       );
     });
@@ -255,7 +269,7 @@ describe('value accessors', () => {
       });
 
       const detectChangesAndTick = (): void => {
-        fixture.detectChanges();
+        detectChanges();
         tick();
       };
 
@@ -265,21 +279,21 @@ describe('value accessors', () => {
       };
 
       const selectOptionViaUI = (valueString: string): void => {
-        const select = fixture.debugElement.query(By.css('select'));
-        select.nativeElement.value = valueString;
-        dispatchEvent(select.nativeElement, 'change');
+        const select = query('select');
+        select.value = valueString;
+        dispatchEvent(select, 'change');
         detectChangesAndTick();
       };
 
       const assertOptionElementSelectedState = (
         selectedStates: boolean[],
       ): void => {
-        const options = fixture.debugElement.queryAll(By.css('option'));
+        const options = queryAll('option');
         if (options.length !== selectedStates.length) {
           throw 'the selected state values to assert does not match the number of options';
         }
         for (let i = 0; i < selectedStates.length; i++) {
-          expect(options[i].nativeElement.selected).toBe(selectedStates[i]);
+          expect(options[i].selected).toBe(selectedStates[i]);
         }
       };
 
@@ -329,13 +343,13 @@ describe('value accessors', () => {
           cities,
           selectedCities: [cities[0]],
         });
-        fixture.detectChanges();
+        detectChanges();
         tick();
 
-        const select = fixture.debugElement.query(By.css('select'));
-        const sfOption = fixture.debugElement.query(By.css('option'));
-        expect(select.nativeElement.value).toEqual('0: Object');
-        expect(sfOption.nativeElement.selected).toBe(true);
+        const select = query('select');
+        const sfOption = query('option');
+        expect(select.value).toEqual('0: Object');
+        expect(sfOption.selected).toBe(true);
       }),
     );
   });
@@ -347,20 +361,20 @@ describe('value accessors', () => {
         fakeAsync(() => {
           const store = initTest(MenuComponent, MenuStore);
           store('food').set('fish');
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           // model -> view
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(true);
+          const inputs = queryAll('input');
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(true);
 
-          dispatchEvent(inputs[0].nativeElement, 'change');
+          dispatchEvent(inputs[0], 'change');
           tick();
 
           // view -> model
           expect(store.state().food).toEqual('chicken');
-          expect(inputs[1].nativeElement.checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(false);
         }),
       );
 
@@ -369,23 +383,23 @@ describe('value accessors', () => {
         fakeAsync(() => {
           const store = initTest(MenuComponent, MenuStore);
           store.assign({ food: 'fish', drink: 'sprite' });
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(true);
-          expect(inputs[2].nativeElement.checked).toEqual(false);
-          expect(inputs[3].nativeElement.checked).toEqual(true);
+          const inputs = queryAll('input');
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(true);
+          expect(inputs[2].checked).toEqual(false);
+          expect(inputs[3].checked).toEqual(true);
 
-          dispatchEvent(inputs[0].nativeElement, 'change');
+          dispatchEvent(inputs[0], 'change');
           tick();
 
           expect(store.state().food).toEqual('chicken');
           expect(store.state().drink).toEqual('sprite');
-          expect(inputs[1].nativeElement.checked).toEqual(false);
-          expect(inputs[2].nativeElement.checked).toEqual(false);
-          expect(inputs[3].nativeElement.checked).toEqual(true);
+          expect(inputs[1].checked).toEqual(false);
+          expect(inputs[2].checked).toEqual(false);
+          expect(inputs[3].checked).toEqual(true);
         }),
       );
 
@@ -393,14 +407,14 @@ describe('value accessors', () => {
         'should support initial undefined value',
         fakeAsync(() => {
           initTest(MenuComponent, MenuStore);
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(false);
-          expect(inputs[2].nativeElement.checked).toEqual(false);
-          expect(inputs[3].nativeElement.checked).toEqual(false);
+          const inputs = queryAll('input');
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(false);
+          expect(inputs[2].checked).toEqual(false);
+          expect(inputs[3].checked).toEqual(false);
         }),
       );
 
@@ -409,17 +423,17 @@ describe('value accessors', () => {
         fakeAsync(() => {
           const store = initTest(MenuComponent, MenuStore);
           store('food').set('chicken');
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const form = fixture.debugElement.query(By.css('form'));
-          form.nativeElement.reset();
-          fixture.detectChanges();
+          const form = query('form');
+          form.reset();
+          detectChanges();
           tick();
 
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(false);
+          const inputs = queryAll('input');
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(false);
         }),
       );
 
@@ -428,26 +442,26 @@ describe('value accessors', () => {
         fakeAsync(() => {
           const store = initTest(MenuComponent, MenuStore);
           store('food').set('chicken');
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           store('food').set(null!);
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
-          const inputs = fixture.debugElement.queryAll(By.css('input'));
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(false);
+          const inputs = queryAll('input');
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(false);
 
           store('food').set('chicken');
-          fixture.detectChanges();
+          detectChanges();
           tick();
 
           store('food').set(undefined!);
-          fixture.detectChanges();
+          detectChanges();
           tick();
-          expect(inputs[0].nativeElement.checked).toEqual(false);
-          expect(inputs[1].nativeElement.checked).toEqual(false);
+          expect(inputs[0].checked).toEqual(false);
+          expect(inputs[1].checked).toEqual(false);
         }),
       );
 
@@ -461,14 +475,14 @@ describe('value accessors', () => {
       //     tick();
       //
       //     const fixture = initComponent(NasModelRadioForm);
-      //     fixture.detectChanges();
+      //     detectChanges();
       //     tick();
       //
-      //     const inputs = fixture.debugElement.queryAll(By.css('input'));
-      //     expect(inputs[0].nativeElement.checked).toEqual(true);
-      //     expect(inputs[1].nativeElement.checked).toEqual(false);
-      //     expect(inputs[2].nativeElement.checked).toEqual(false);
-      //     expect(inputs[3].nativeElement.checked).toEqual(false);
+      //     const inputs = queryAll('input');
+      //     expect(inputs[0].checked).toEqual(true);
+      //     expect(inputs[1].checked).toEqual(false);
+      //     expect(inputs[2].checked).toEqual(false);
+      //     expect(inputs[3].checked).toEqual(false);
       //   }),
       // );
     });
@@ -483,18 +497,20 @@ describe('value accessors', () => {
 
           // model -> view
           store.set(4);
-          fixture.detectChanges();
+          detectChanges();
           tick();
-          const input = fixture.debugElement.query(By.css('input'));
-          expect(input.nativeElement.value).toBe('4');
-          fixture.detectChanges();
+          const input = query('input');
+          expect(input.value).toBe('4');
+          detectChanges();
           tick();
           const newVal = '4';
-          input.triggerEventHandler('input', { target: { value: newVal } });
+          fixture.debugElement
+            .query(By.css('input'))
+            .triggerEventHandler('input', { target: { value: newVal } });
           tick();
 
           // view -> model
-          fixture.detectChanges();
+          detectChanges();
           expect(typeof store.state()).toBe('number');
         }),
       );
@@ -511,19 +527,17 @@ describe('value accessors', () => {
           });
 
           store('name').set('Nancy');
-          fixture.detectChanges();
+          detectChanges();
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
+            detectChanges();
             fixture.whenStable().then(() => {
               // model -> view
-              const customInput = fixture.debugElement.query(
-                By.css('[name="custom"]'),
-              );
-              expect(customInput.nativeElement.value).toEqual('Nancy');
+              const customInput = query('[name="custom"]');
+              expect(customInput.value).toEqual('Nancy');
 
-              customInput.nativeElement.value = 'Carson';
-              dispatchEvent(customInput.nativeElement, 'input');
-              fixture.detectChanges();
+              customInput.value = 'Carson';
+              dispatchEvent(customInput, 'input');
+              detectChanges();
 
               // view -> model
               expect(store.state().name).toEqual('Carson');
