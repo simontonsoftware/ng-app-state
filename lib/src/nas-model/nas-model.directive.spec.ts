@@ -22,20 +22,33 @@ import { ngAppStateReducer } from '../meta-reducer';
 import { NasModelModule } from './nas-model.module';
 
 describe('value accessors', () => {
-  function initTest<T>(
-    component: Type<T>,
-    ...directives: Type<any>[]
-  ): ComponentFixture<T> {
+  let fixture: ComponentFixture<any>;
+
+  function initTest<C, S>(
+    component: Type<C>,
+    storeType: Type<S>,
+    {
+      extraDirectives = [] as Array<Type<any>>,
+      template = '',
+      beforeCreate = () => {},
+    } = {},
+  ) {
+    if (template) {
+      TestBed.overrideComponent(component, { set: { template } });
+    }
     TestBed.configureTestingModule({
-      declarations: [component, ...directives],
+      declarations: [component, ...extraDirectives],
       imports: [
         FormsModule,
         StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
         NasModelModule,
       ],
-      providers: [AnyStore, CityStore, MenuStore, MultipleCityStore, NameStore],
+      providers: [storeType],
     });
-    return TestBed.createComponent(component);
+
+    beforeCreate();
+    fixture = TestBed.createComponent<C>(component);
+    return TestBed.get(storeType) as S;
   }
 
   describe('select controls', () => {
@@ -43,14 +56,9 @@ describe('value accessors', () => {
       it(
         'with option values that are objects',
         fakeAsync(() => {
-          const fixture = initTest(NasModelSelectForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore);
           const cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'Buffalo' }];
-          store.set({
-            cities,
-            selectedCity: cities[1],
-          });
+          store.set({ cities, selectedCity: cities[1] });
           fixture.detectChanges();
           tick();
 
@@ -74,9 +82,7 @@ describe('value accessors', () => {
       it(
         'when new options are added',
         fakeAsync(() => {
-          const fixture = initTest(NasModelSelectForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore);
           const cities = [{ name: 'SF' }, { name: 'NYC' }];
           store.set({
             cities,
@@ -103,9 +109,7 @@ describe('value accessors', () => {
       it(
         'when options are removed',
         fakeAsync(() => {
-          const fixture = initTest(NasModelSelectForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore);
           const cities = [{ name: 'SF' }, { name: 'NYC' }];
           store.set({
             cities,
@@ -130,9 +134,7 @@ describe('value accessors', () => {
       it(
         'when option values have same content, but different identities',
         fakeAsync(() => {
-          const fixture = initTest(NasModelSelectForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore);
           const cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'NYC' }];
           store.set({
             cities,
@@ -155,9 +157,9 @@ describe('value accessors', () => {
       it(
         'should work with null option',
         fakeAsync(() => {
-          const fixture = initTest(NasModelSelectWithNullForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore, {
+            template: citySelectWithNullTemplate,
+          });
           store.set({
             cities: [{ name: 'SF' }, { name: 'NYC' }],
             selectedCity: null,
@@ -184,9 +186,9 @@ describe('value accessors', () => {
       it(
         'should compare options using provided compareWith function',
         fakeAsync(() => {
-          const fixture = initTest(NgModelSelectWithCustomCompareFnForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore, {
+            template: citySelectWithCustomCompareFnTemplate,
+          });
           store.set({
             selectedCity: { id: 1, name: 'SF' },
             cities: [{ id: 1, name: 'SF' }, { id: 2, name: 'LA' }],
@@ -204,9 +206,9 @@ describe('value accessors', () => {
       it(
         'should support re-assigning the options array with compareWith',
         fakeAsync(() => {
-          const fixture = initTest(NgModelSelectWithCustomCompareFnForm);
-          const store: CityStore = TestBed.get(CityStore);
-
+          const store = initTest(CityComponent, CityStore, {
+            template: citySelectWithCustomCompareFnTemplate,
+          });
           store.set({
             selectedCity: { id: 1, name: 'SF' },
             cities: [{ id: 1, name: 'SF' }, { id: 2, name: 'NY' }],
@@ -241,12 +243,10 @@ describe('value accessors', () => {
 
   describe('select multiple controls', () => {
     describe('in template-driven forms', () => {
-      let fixture: ComponentFixture<NasModelSelectMultipleForm>;
       let store: MultipleCityStore;
 
       beforeEach(() => {
-        fixture = initTest(NasModelSelectMultipleForm);
-        store = TestBed.get(MultipleCityStore);
+        store = initTest(MultipleCityComponent, MultipleCityStore);
         store('cities').set([
           { name: 'SF' },
           { name: 'NYC' },
@@ -321,9 +321,9 @@ describe('value accessors', () => {
     it(
       'should compare options using provided compareWith function',
       fakeAsync(() => {
-        const fixture = initTest(NasModelSelectMultipleWithCustomCompareFnForm);
-        const store: MultipleCityStore = TestBed.get(MultipleCityStore);
-
+        const store = initTest(MultipleCityComponent, MultipleCityStore, {
+          template: multipleCityWithCustomCompareFnTemplate,
+        });
         const cities = [{ id: 1, name: 'SF' }, { id: 2, name: 'LA' }];
         store.assign({
           cities,
@@ -345,8 +345,7 @@ describe('value accessors', () => {
       it(
         'should support basic functionality',
         fakeAsync(() => {
-          const fixture = initTest(NasModelRadioForm);
-          const store: MenuStore = TestBed.get(MenuStore);
+          const store = initTest(MenuComponent, MenuStore);
           store('food').set('fish');
           fixture.detectChanges();
           tick();
@@ -368,8 +367,7 @@ describe('value accessors', () => {
       it(
         'should support multiple named <type=radio> groups',
         fakeAsync(() => {
-          const fixture = initTest(NasModelRadioForm);
-          const store: MenuStore = TestBed.get(MenuStore);
+          const store = initTest(MenuComponent, MenuStore);
           store.assign({ food: 'fish', drink: 'sprite' });
           fixture.detectChanges();
           tick();
@@ -394,7 +392,7 @@ describe('value accessors', () => {
       it(
         'should support initial undefined value',
         fakeAsync(() => {
-          const fixture = initTest(NasModelRadioForm);
+          initTest(MenuComponent, MenuStore);
           fixture.detectChanges();
           tick();
 
@@ -409,8 +407,7 @@ describe('value accessors', () => {
       it(
         'should support resetting properly',
         fakeAsync(() => {
-          const fixture = initTest(NasModelRadioForm);
-          const store: MenuStore = TestBed.get(MenuStore);
+          const store = initTest(MenuComponent, MenuStore);
           store('food').set('chicken');
           fixture.detectChanges();
           tick();
@@ -429,8 +426,7 @@ describe('value accessors', () => {
       it(
         'should support setting value to null and undefined',
         fakeAsync(() => {
-          const fixture = initTest(NasModelRadioForm);
-          const store: MenuStore = TestBed.get(MenuStore);
+          const store = initTest(MenuComponent, MenuStore);
           store('food').set('chicken');
           fixture.detectChanges();
           tick();
@@ -454,6 +450,27 @@ describe('value accessors', () => {
           expect(inputs[1].nativeElement.checked).toEqual(false);
         }),
       );
+
+      // TODO: find a way to make this fail when there is no delay in `RadioValueAccessor.writeValue`
+      // it(
+      //   'starts with the correct value',
+      //   fakeAsync(() => {
+      //     initModule(NasModelRadioForm);
+      //     const store: MenuStore = TestBed.get(MenuStore);
+      //     store('food').set('chicken');
+      //     tick();
+      //
+      //     const fixture = initComponent(NasModelRadioForm);
+      //     fixture.detectChanges();
+      //     tick();
+      //
+      //     const inputs = fixture.debugElement.queryAll(By.css('input'));
+      //     expect(inputs[0].nativeElement.checked).toEqual(true);
+      //     expect(inputs[1].nativeElement.checked).toEqual(false);
+      //     expect(inputs[2].nativeElement.checked).toEqual(false);
+      //     expect(inputs[3].nativeElement.checked).toEqual(false);
+      //   }),
+      // );
     });
   });
 
@@ -462,8 +479,7 @@ describe('value accessors', () => {
       it(
         'with basic use case',
         fakeAsync(() => {
-          const fixture = initTest(NgModelRangeForm);
-          const store: AnyStore = TestBed.get(AnyStore);
+          const store = initTest(AnyComponent, AnyStore);
 
           // model -> view
           store.set(4);
@@ -490,8 +506,9 @@ describe('value accessors', () => {
       it(
         'should support standard writing to view and model',
         async(() => {
-          const fixture = initTest(NgModelCustomWrapper, NgModelCustomComp);
-          const store: NameStore = TestBed.get(NameStore);
+          const store = initTest(NameComponent, NameStore, {
+            extraDirectives: [InnerNameComponent],
+          });
 
           store('name').set('Nancy');
           fixture.detectChanges();
@@ -518,8 +535,22 @@ describe('value accessors', () => {
   });
 });
 
+function dispatchEvent(domElement: EventTarget, type: string) {
+  domElement.dispatchEvent(new Event(type));
+}
+
+class StoreComponent<T extends object> {
+  store: AppStore<T>;
+  compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
+    o1 && o2 ? o1.id === o2.id : o1 === o2;
+
+  constructor(store: AppStore<T>) {
+    this.store = store.withCaching();
+  }
+}
+
 //
-// State/Store Definitions
+// Select City
 //
 
 class CityState {
@@ -534,6 +565,42 @@ class CityStore extends AppStore<CityState> {
   }
 }
 
+const citySelectWithNullTemplate = `
+  <select [nasModel]="store('selectedCity')">
+    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+      {{c.name}}
+    </option>
+    <option [ngValue]="null">Unspecified</option>
+  </select>
+`;
+const citySelectWithCustomCompareFnTemplate = `
+  <select [nasModel]="store('selectedCity')" [compareWith]="compareFn">
+    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+      {{c.name}}
+    </option>
+  </select>
+`;
+
+@Component({
+  selector: 'city',
+  template: `
+    <select [nasModel]="store('selectedCity')">
+      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+        {{c.name}}
+      </option>
+    </select>
+  `,
+})
+class CityComponent extends StoreComponent<CityState> {
+  constructor(store: CityStore) {
+    super(store);
+  }
+}
+
+//
+// Select Multiple Cities
+//
+
 class MultipleCityState {
   selectedCities: any[] = [];
   cities: any[] = [];
@@ -545,6 +612,38 @@ class MultipleCityStore extends AppStore<MultipleCityState> {
     super(store, 'mulitpleCityStore', new MultipleCityState());
   }
 }
+
+const multipleCityWithCustomCompareFnTemplate = `
+  <select
+    multiple
+    [nasModel]="store('selectedCities')"
+    [compareWith]="compareFn"
+  >
+    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+      {{c.name}}
+    </option>
+  </select>
+`;
+
+@Component({
+  selector: 'multiple-city',
+  template: `
+    <select multiple [nasModel]="store('selectedCities')">
+      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
+        {{c.name}}
+      </option>
+    </select>
+  `,
+})
+class MultipleCityComponent extends StoreComponent<MultipleCityState> {
+  constructor(store: MultipleCityStore) {
+    super(store);
+  }
+}
+
+//
+// Radio Button Menu
+//
 
 class MenuState {
   food: string;
@@ -558,12 +657,47 @@ class MenuStore extends AppStore<MenuState> {
   }
 }
 
+@Component({
+  selector: 'menu',
+  template: `
+    <form>
+      <input type="radio" [nasModel]="store('food')" value="chicken">
+      <input type="radio" [nasModel]="store('food')" value="fish">
+      <input type="radio" [nasModel]="store('drink')" value="cola">
+      <input type="radio" [nasModel]="store('drink')" value="sprite">
+    </form>
+  `,
+})
+class MenuComponent extends StoreComponent<MenuState> {
+  constructor(store: MenuStore) {
+    super(store);
+  }
+}
+
+//
+// Any
+//
+
 @Injectable()
 class AnyStore extends AppStore<any> {
   constructor(store: Store<any>) {
     super(store, 'anyStore', undefined);
   }
 }
+
+@Component({
+  selector: 'any',
+  template: '<input type="range" [nasModel]="store">',
+})
+class AnyComponent extends StoreComponent<any> {
+  constructor(store: AnyStore) {
+    super(store);
+  }
+}
+
+//
+// Name
+//
 
 class NameState {
   name: string;
@@ -577,147 +711,39 @@ class NameStore extends AppStore<NameState> {
   }
 }
 
-//
-// Component Definitions
-//
-
 @Component({
-  selector: 'ng-model-select-form',
+  selector: 'ng-model-custom-wrapper',
   template: `
-    <select [nasModel]="store('selectedCity')">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
+    <inner-name [nasModel]="store('name')" [disabled]="isDisabled"></inner-name>
   `,
 })
-class NasModelSelectForm {
-  store: CityStore;
+export class NameComponent extends StoreComponent<NameState> {
+  isDisabled = false;
 
-  constructor(store: CityStore) {
-    this.store = store.withCaching();
+  constructor(store: NameStore) {
+    super(store);
   }
 }
 
 @Component({
-  selector: 'ng-model-select-null-form',
+  selector: 'inner-name',
   template: `
-    <select [nasModel]="store('selectedCity')">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-      <option [ngValue]="null">Unspecified</option>
-    </select>
-  `,
-})
-class NasModelSelectWithNullForm {
-  store: CityStore;
-
-  constructor(store: CityStore) {
-    this.store = store.withCaching();
-  }
-}
-
-@Component({
-  selector: 'ng-model-select-compare-with',
-  template: `
-    <select [nasModel]="store('selectedCity')" [compareWith]="compareFn">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
-  `,
-})
-class NgModelSelectWithCustomCompareFnForm {
-  store: CityStore;
-  compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
-    o1 && o2 ? o1.id === o2.id : o1 === o2;
-
-  constructor(store: CityStore) {
-    this.store = store.withCaching();
-  }
-}
-
-@Component({
-  selector: 'ng-model-select-multiple-compare-with',
-  template: `
-    <select
-      multiple
-      [nasModel]="store('selectedCities')"
-      [compareWith]="compareFn"
+    <input
+      name="custom"
+      [(ngModel)]="model"
+      (ngModelChange)="changeFn($event)"
+      [disabled]="isDisabled"
     >
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
-  `,
-})
-class NasModelSelectMultipleWithCustomCompareFnForm {
-  store: MultipleCityStore;
-  compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
-    o1 && o2 ? o1.id === o2.id : o1 === o2;
-
-  constructor(store: MultipleCityStore) {
-    this.store = store.withCaching();
-  }
-}
-
-@Component({
-  selector: 'ng-model-select-multiple-form',
-  template: `
-    <select multiple [nasModel]="store('selectedCities')">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
-  `,
-})
-class NasModelSelectMultipleForm {
-  store: MultipleCityStore;
-
-  constructor(store: MultipleCityStore) {
-    this.store = store.withCaching();
-  }
-}
-
-@Component({
-  selector: 'ng-model-range-form',
-  template: '<input type="range" [nasModel]="store">',
-})
-class NgModelRangeForm {
-  constructor(public store: AnyStore) {}
-}
-
-@Component({
-  selector: 'ng-model-radio-form',
-  template: `
-    <form>
-      <input type="radio" [nasModel]="store('food')" value="chicken">
-      <input type="radio" [nasModel]="store('food')" value="fish">
-      <input type="radio" [nasModel]="store('drink')" value="cola">
-      <input type="radio" [nasModel]="store('drink')" value="sprite">
-      <input type="reset">
-    </form>
-  `,
-})
-class NasModelRadioForm {
-  store: MenuStore;
-
-  constructor(store: MenuStore) {
-    this.store = store.withCaching();
-  }
-}
-
-@Component({
-  selector: 'ng-model-custom-comp',
-  template: `
-    <input name="custom" [(ngModel)]="model" (ngModelChange)="changeFn($event)" [disabled]="isDisabled">
   `,
   providers: [
-    { provide: NG_VALUE_ACCESSOR, multi: true, useExisting: NgModelCustomComp },
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: InnerNameComponent,
+    },
   ],
 })
-export class NgModelCustomComp implements ControlValueAccessor {
+export class InnerNameComponent implements ControlValueAccessor {
   model: string;
   @Input('disabled') isDisabled = false;
   changeFn: (value: any) => void;
@@ -735,25 +761,4 @@ export class NgModelCustomComp implements ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.isDisabled = isDisabled;
   }
-}
-
-@Component({
-  selector: 'ng-model-custom-wrapper',
-  template: `
-    <form>
-      <ng-model-custom-comp [nasModel]="store('name')" [disabled]="isDisabled"></ng-model-custom-comp>
-    </form>
-  `,
-})
-export class NgModelCustomWrapper {
-  store: NameStore;
-  isDisabled = false;
-
-  constructor(store: NameStore) {
-    this.store = store.withCaching();
-  }
-}
-
-function dispatchEvent(domElement: EventTarget, type: string) {
-  domElement.dispatchEvent(new Event(type));
 }
