@@ -24,9 +24,11 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
       // other libraries
-      'rxjs':                      'npm:rxjs',
+      '@ngrx/store': 'npm:@ngrx/store/bundles/store.umd.js',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-      'ng-app-state': 'npm:ng-app-state/bundles/ng-app-state.umd.js'
+      'ng-app-state': 'npm:ng-app-state/bundles/ng-app-state.umd.js',
+      'micro-dash': 'npm:micro-dash/bundles/micro-dash.umd.js',
+      'rxjs':                      'npm:rxjs',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

@@ -1,2 +1,95 @@
-<my-lib></my-lib>
-<h3>Meaning is: {{meaning}}</h3>
+<input [nasModel]="store('freeText')">
+<br>
+<input type="text" [nasModel]="store('freeText')">
+<br>
+<input type="search" [nasModel]="store('freeText')">
+<br>
+<input type="tel" [nasModel]="store('freeText')">
+<br>
+<input type="password" [nasModel]="store('freeText')">
+<br>
+<textarea [nasModel]="store('freeText')"></textarea>
+
+<hr>
+
+<input type="number" [nasModel]="store('number')"> &lt;-- stores a string
+<br>
+<input type="range" [nasModel]="store('number')">
+
+<hr>
+
+<select [nasModel]="store('chooseOne')">
+  <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+</select>
+<ng-container *ngFor="let city of cities">
+  <br>
+  <label>
+    <input type="radio" [value]="city" [nasModel]="store('chooseOne')">
+    {{city}}
+  </label>
+</ng-container>
+
+<hr>
+
+<select multiple [nasModel]="store('chooseMany')">
+  <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+</select>
+<br>
+<button (click)="chooseToCheck()">v</button>
+<button (click)="checkToChoose()">^</button>
+<ng-container *ngFor="let city of cities">
+  <br>
+  <label>
+    <input
+      type="checkbox"
+      [value]="city"
+      [nasModel]="store('checkMany')(city)"
+    >
+    {{city}}
+  </label>
+</ng-container>
+
+<hr>
+
+<input type="datetime-local" [nasModel]="store('datetime')">
+<button (click)="propagateDatetime()">Propagate</button>
+<br>
+<input type="date" [nasModel]="store('date')">
+<button (click)="propagateDate()">Propagate</button>
+<br>
+<input type="month" [nasModel]="store('month')">
+<button (click)="propagateMonth()">Propagate</button>
+<br>
+<input type="week" [nasModel]="store('week')">
+<button (click)="propagateWeek()">Propagate</button>
+<br>
+<input type="time" [nasModel]="store('time')">
+<button (click)="propagateTime()">Propagate</button>
+
+<hr>
+
+<input type="email" [nasModel]="store('email')">
+<br>
+<input [nasModel]="store('email')">
+
+<hr>
+
+<input type="email" [nasModel]="store('email')">
+<br>
+<input [nasModel]="store('email')">
+
+<hr>
+
+<input type="color" [nasModel]="store('color')">
+<br>
+<input [nasModel]="store('color')">
+
+<hr>
+
+<input type="url" [nasModel]="store('url')">
+<br>
+<input [nasModel]="store('url')">
+
+<hr>
+
+<pre>{{ stateString$ | async }}</pre>
