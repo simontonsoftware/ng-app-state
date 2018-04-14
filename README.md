@@ -141,6 +141,44 @@ export class MyAppComponent {
 }
 ```
 
+## Template Driven Forms
+This library includes the `[nasModel]` directive that you can use in place of `[(ngModel)]` to bind form controls directly to store objects. For example, to edit the current user's name in the example above:
+
+```ts
+@Component({ template: `<input [nasModel]="nameStore">` })
+class AccountSettingsComponent {
+  nameStore: StoreObject<string>;
+
+  constructor(myStore: MyStore) {
+    this.nameStore = myStore('currentUser')('name');
+  }
+}
+```
+
+`[nasModel]` is tested to work with all standard form controls. Except where noted, they all bind to `StoreObject<string>` objects.
+- `<input type="checkbox">` - binds to `StoreObject<boolean>`
+- `<input type="color">`
+- `<input type="date">`
+- `<input type="datetime-local">`
+- `<input type="email">`
+- `<input type="month">`
+- `<input type="number">` - binds to `StoreObject<number>`
+- `<input type="password">`
+- `<input type="radio">`
+- `<input type="range">` - binds to `StoreObject<number>`
+- `<input type="search">`
+- `<input type="tel">`
+- `<input type="text">`
+- `<input type="time">`
+- `<input type="url">`
+- `<input type="week">`
+- `<input>`
+- `<select multiple>` - binds to `StoreObject<string[]>`
+- `<select>`
+- `<textarea>`
+
+To gain access to `[nasModel]`, add `NasModelModule` to the list of imports in your module.
+
 ## Compatibility with `ngrx/store`
 `ng-app-state` is entirely compatible with all features of `ngrx/store`, `ngrx/store-devtools`, `ngrx/effects`, and any other libraries in the ecosystem. Both can even manage and access the same parts of the store.
 
