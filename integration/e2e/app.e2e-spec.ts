@@ -1,5 +1,7 @@
 import { browser, element, by, ElementFinder, Key } from 'protractor';
 
+const cities = ['San Francisco', 'Nairobi', 'Gulu'];
+
 describe('ng-app-state E2E Tests', () => {
   beforeEach(() => browser.get(''));
 
@@ -137,8 +139,6 @@ describe('ng-app-state E2E Tests', () => {
   });
 
   describe('choose one controls', () => {
-    const cities = ['San Francisco', 'Nairobi', 'Gulu'];
-
     function getDropdown() {
       return element(by.css('select:not([multiple])'));
     }
@@ -150,8 +150,7 @@ describe('ng-app-state E2E Tests', () => {
     async function expectValue(value: string) {
       expect(await getDropdown().getAttribute('value')).toEqual(value);
       for (const city of cities) {
-        const radio = getRadio(city);
-        expect(await radio.getAttribute('checked')).toEqual(
+        expect(await getRadio(city).getAttribute('checked')).toEqual(
           city === value ? 'true' : null!,
         );
       }
@@ -165,6 +164,36 @@ describe('ng-app-state E2E Tests', () => {
 
       await getRadio('Gulu').click();
       await expectValue('Gulu');
+    });
+  });
+
+  describe('choose many controls', () => {
+    function getOption(value: string) {
+      return element(by.cssContainingText('select[multiple] option', value));
+    }
+
+    function getCheck(value: string) {
+      return element(by.css(`input[type="checkbox"][value="${value}"]`));
+    }
+
+    async function expectValues(values: string[]) {
+      for (const city of cities) {
+        const expected = values.includes(city) ? 'true' : null!;
+        expect(await getOption(city).getAttribute('checked')).toEqual(expected);
+        expect(await getCheck(city).getAttribute('checked')).toEqual(expected);
+      }
+    }
+
+    fit('work', async () => {
+      await expectValues(['Nairobi', 'Gulu']);
+
+      await getOption('Gulu').click();
+      await element(by.cssContainingText('button', 'v')).click();
+      await expectValues(['Nairobi']);
+
+      await getCheck('Nairobi').click();
+      await element(by.cssContainingText('button', '^')).click();
+      await expectValues([]);
     });
   });
 });
