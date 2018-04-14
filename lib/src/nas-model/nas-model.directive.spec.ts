@@ -38,6 +38,10 @@ describe('value accessors', () => {
       .map((el) => el.nativeElement);
   }
 
+  function initSingleValueTest(template: string) {
+    return initTest(SingleValueComponent, SingleValueStore, { template });
+  }
+
   function initTest<C, S>(
     component: Type<C>,
     storeType: Type<S>,
@@ -64,6 +68,113 @@ describe('value accessors', () => {
     fixture = TestBed.createComponent<C>(component);
     return TestBed.get(storeType) as S;
   }
+
+  it('should support <input> without type', () => {
+    const store = initSingleValueTest(`<input [nasModel]="store">`);
+    detectChanges();
+
+    // model -> view
+    const input = query('input');
+    expect(input.value).toEqual('old');
+
+    input.value = 'new';
+    dispatchEvent(input, 'input');
+
+    // view -> model
+    expect(store.state()).toEqual('new');
+  });
+
+  it('should support <input type=text>', () => {
+    const store = initSingleValueTest(`<input type="text" [nasModel]="store">`);
+    detectChanges();
+
+    // model -> view
+    const input = query('input');
+    expect(input.value).toEqual('old');
+
+    input.value = 'new';
+    dispatchEvent(input, 'input');
+
+    // view -> model
+    expect(store.state()).toEqual('new');
+  });
+
+  it('should support <textarea>', () => {
+    const store = initSingleValueTest(
+      `<textarea [nasModel]="store"></textarea>`,
+    );
+    detectChanges();
+
+    // model -> view
+    const textarea = query('textarea');
+    expect(textarea.value).toEqual('old');
+
+    textarea.value = 'new';
+    dispatchEvent(textarea, 'input');
+
+    // view -> model
+    expect(store.state()).toEqual('new');
+  });
+
+  it('should support <type=checkbox>', () => {
+    const store = initSingleValueTest(
+      `<input type="checkbox" [nasModel]="store">`,
+    );
+    store.set(true);
+    detectChanges();
+
+    // model -> view
+    const input = query('input');
+    expect(input.checked).toBe(true);
+
+    input.checked = false;
+    dispatchEvent(input, 'change');
+
+    // view -> model
+    expect(store.state()).toBe(false);
+  });
+
+  describe('should support <type=number>', () => {
+    let store: SingleValueStore;
+
+    beforeEach(() => {
+      store = initSingleValueTest(`<input type="number" [nasModel]="store">`);
+      store.set(10);
+      fixture.detectChanges();
+    });
+
+    it('with basic use case', () => {
+      // model -> view
+      const input = query('input');
+      expect(input.value).toEqual('10');
+
+      input.value = '20';
+      dispatchEvent(input, 'input');
+
+      // view -> model
+      expect(store.state()).toEqual(20);
+    });
+
+    it('when value is cleared in the UI', () => {
+      const input = query('input');
+      input.value = '';
+      dispatchEvent(input, 'input');
+
+      expect(store.state()).toEqual(null);
+
+      input.value = '0';
+      dispatchEvent(input, 'input');
+
+      expect(store.state()).toEqual(0);
+    });
+
+    it('when value is cleared programmatically', () => {
+      store.set(null);
+
+      const input = query('input');
+      expect(input.value).toEqual('');
+    });
+  });
 
   describe('select controls', () => {
     describe('in template-driven forms', () => {
@@ -493,7 +604,9 @@ describe('value accessors', () => {
       it(
         'with basic use case',
         fakeAsync(() => {
-          const store = initTest(AnyComponent, AnyStore);
+          const store = initTest(SingleValueComponent, SingleValueStore, {
+            template: `<input type="range" [nasModel]="store">`,
+          });
 
           // model -> view
           store.set(4);
@@ -560,6 +673,24 @@ class StoreComponent<T extends object> {
 
   constructor(store: AppStore<T>) {
     this.store = store.withCaching();
+  }
+}
+
+//
+// Single Value
+//
+
+@Injectable()
+class SingleValueStore extends AppStore<any> {
+  constructor(store: Store<any>) {
+    super(store, 'singleValueStore', 'old');
+  }
+}
+
+@Component({ selector: 'single-value' })
+class SingleValueComponent extends StoreComponent<any> {
+  constructor(store: SingleValueStore) {
+    super(store);
   }
 }
 
@@ -684,27 +815,6 @@ class MenuStore extends AppStore<MenuState> {
 })
 class MenuComponent extends StoreComponent<MenuState> {
   constructor(store: MenuStore) {
-    super(store);
-  }
-}
-
-//
-// Any
-//
-
-@Injectable()
-class AnyStore extends AppStore<any> {
-  constructor(store: Store<any>) {
-    super(store, 'anyStore', undefined);
-  }
-}
-
-@Component({
-  selector: 'any',
-  template: '<input type="range" [nasModel]="store">',
-})
-class AnyComponent extends StoreComponent<any> {
-  constructor(store: AnyStore) {
     super(store);
   }
 }
