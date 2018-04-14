@@ -14,6 +14,32 @@ describe('ng-app-state E2E Tests', () => {
       });
   });
 
+  async function clearAndEnterValue(
+    control: string | ElementFinder,
+    value: string,
+  ) {
+    control = getControl(control);
+    await clearValue(control);
+    await control.sendKeys(value);
+  }
+
+  async function clearValue(control: string | ElementFinder) {
+    control = getControl(control);
+
+    // https://github.com/angular/protractor/issues/4343#issuecomment-350106755
+    await control.sendKeys(Key.chord(Key.CONTROL, 'a'));
+    await control.sendKeys(Key.BACK_SPACE);
+    await control.clear();
+  }
+
+  function getControl(control: string | ElementFinder) {
+    if (typeof control === 'string') {
+      return getInput(control);
+    } else {
+      return control;
+    }
+  }
+
   function getInput(type: string) {
     let css = 'input';
     if (type) {
@@ -31,26 +57,18 @@ describe('ng-app-state E2E Tests', () => {
       isColor?: boolean;
     }
 
-    async function enterAndExpect(
+    async function testControl(
       control: string | ElementFinder,
       value: string,
       options?: ExpectFreeTextOptions,
     ) {
-      if (typeof control === 'string') {
-        control = getInput(control);
-      }
-
-      // https://github.com/angular/protractor/issues/4343#issuecomment-350106755
-      await control.sendKeys(Key.chord(Key.CONTROL, 'a'));
-      await control.sendKeys(Key.BACK_SPACE);
-      await control.clear();
-      await expectValues('');
-
-      await control.sendKeys(value);
-      await expectValues(value, options);
+      await clearValue(control);
+      await expectValue('');
+      await clearAndEnterValue(control, value);
+      await expectValue(value, options);
     }
 
-    async function expectValues(
+    async function expectValue(
       value: string,
       { isColor = false }: ExpectFreeTextOptions = {},
     ) {
@@ -70,16 +88,17 @@ describe('ng-app-state E2E Tests', () => {
       expect(await textarea().getAttribute('value')).toEqual(value);
     }
 
-    it('works', async () => {
-      await expectValues('initial text');
-      await enterAndExpect('', 'default input');
-      await enterAndExpect('text', 'text input');
-      await enterAndExpect('search', 'search input');
-      await enterAndExpect('tel', 'tel input');
-      await enterAndExpect('password', 'password input');
-      await enterAndExpect('email', 'email@input.com');
-      await enterAndExpect('url', 'http://www.input.com/url');
-      await enterAndExpect('', '#123456', { isColor: true });
+    it('work', async () => {
+      await expectValue('initial text');
+
+      await testControl('', 'default input');
+      await testControl('text', 'text input');
+      await testControl('search', 'search input');
+      await testControl('tel', 'tel input');
+      await testControl('password', 'password input');
+      await testControl('email', 'email@input.com');
+      await testControl('url', 'http://www.input.com/url');
+      await testControl('', '#123456', { isColor: true });
 
       // https://stackoverflow.com/q/36402624/1836506
       browser.executeScript(`
@@ -87,9 +106,33 @@ describe('ng-app-state E2E Tests', () => {
         input.value = '#654321';
         input.dispatchEvent(new Event('input'));
       `);
-      await expectValues('#654321', { isColor: true });
+      await expectValue('#654321', { isColor: true });
 
-      await enterAndExpect(textarea(), 'textarea\nvalue');
+      await testControl(textarea(), 'textarea\nvalue');
+    });
+  });
+
+  describe('number inputs', () => {
+    async function expectValue(value: string) {
+      expect(await getInput('number').getAttribute('value')).toEqual(value);
+      expect(await getInput('range').getAttribute('value')).toEqual(
+        value || '50',
+      );
+    }
+
+    it('work', async () => {
+      await expectValue('42');
+
+      await clearValue('number');
+      await expectValue('');
+      await getInput('number').sendKeys('75');
+      await expectValue('75');
+
+      await browser
+        .actions()
+        .dragAndDrop(await getInput('range'), { x: -99, y: 0 })
+        .perform();
+      await expectValue('0');
     });
   });
 });
