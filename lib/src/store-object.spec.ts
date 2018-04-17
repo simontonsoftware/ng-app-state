@@ -174,6 +174,29 @@ describe('StoreObject', () => {
     });
   });
 
+  describe('.inBatch()', () => {
+    it('causes mutations to run within the given batch', () => {
+      let fires = 0;
+      store.$.subscribe(() => {
+        ++fires;
+      });
+      expect(fires).toBe(1);
+
+      const counterStore = store('counter');
+      const nestedStore = store('nested');
+      store.batch((batch) => {
+        counterStore.inBatch(batch).set(3);
+        nestedStore
+          .inBatch(batch)('state')
+          .set(6);
+        expect(fires).toBe(1);
+      });
+
+      expect(fires).toBe(2);
+      expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
+    });
+  });
+
   describe('.set()', () => {
     it('stores the exact object given', () => {
       const before = store.state().nested;

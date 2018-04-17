@@ -185,7 +185,7 @@ To gain access to `[nasModel]`, add `NasModelModule` to the list of imports in y
 ## Comparison to `ngrx/store`
 The main difference you'll see with `ng-app-state` is that you do not define reducers or actions (or the string constants to tie them together). For full examples:
 - View the [full diff](https://github.com/simontonsoftware/ng-app-state/compare/unmodified-counter-demo...b9c72c04767cc5b9bbcc90921d80230227ffae4c) of the Counter app between `ngrx/store` and `ng-app-state`.
-- For a meatier example, check out the [migrated example-app](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/blob/master/README.md). It shows 3 more migrations of differing complexities for each of the 3 modules in [ngrx's example-app](https://github.com/ngrx/platform/blob/master/example-app/README.md). Put together, the full diff sheds about 500 lines compared to the original.
+- For a meatier example, check out the [migrated example-app](https://github.com/simontonsoftware/ngrx-example-app-to-ng-app-state/blob/master/README.md). It shows 3 more migrations of differing complexities for each of the 3 modules in [ngrx's example-app](https://github.com/ngrx/platform/blob/master/example-app/README.md). Put together, the full diff sheds about 700 lines compared to the original.
 
 ## Style Guide
 - Define your state using classes instead of interfaces, and when possible make `new StateObject()` come with the default values for all its properties.

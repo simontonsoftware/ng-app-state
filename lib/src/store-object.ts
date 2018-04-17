@@ -54,7 +54,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * store.batch((batch) => {
    *   batch.assign({ key1: value1 });
    *   batch('key2').delete();
-   *   batch('key3').merge({ key4: value4 });
+   *   batch('key3').set({ key4: value4 });
    * });
    * ```
    */
@@ -62,6 +62,20 @@ export class StoreObject<T> extends ExtensibleFunction {
     const batch = new BatchAction();
     func(new StoreObject(this.store, this.path, batch));
     this.dispatcher.dispatch(batch);
+  }
+
+  /**
+   * Returns a copy of this store object that will operate within the given batch. E.g.:
+   * ```ts
+   * const existingStoreObject: StoreObject<string>;
+   * store.batch((batch) => {
+   *   batch('key1').set('a new value');
+   *   existingStoreObject.inBatch(batch).set('a second value');
+   * });
+   * ```
+   */
+  public inBatch(batch: StoreObject<any>) {
+    return new StoreObject<T>(this.store, this.path, batch.dispatcher);
   }
 
   /**
