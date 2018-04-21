@@ -176,13 +176,6 @@ export class StoreObject<T> extends ExtensibleFunction {
   public caches() {
     return this._withCaching;
   }
-
-  /**
-   * A convenience method to dispatch non-`ng-app-state` actions. This exists simply so you do not have to inject `Store` in case you are using something like `@ngrx/effects`.
-   */
-  public dispatch(action: Action) {
-    this.store.dispatch(action);
-  }
 }
 
 function maybeMemoize(fn: Function, withCaching: boolean) {

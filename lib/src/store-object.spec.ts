@@ -27,9 +27,7 @@ describe('StoreObject', () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    inject([Store], (s: Store<any>) => {
-      backingStore = s;
-    })();
+    backingStore = TestBed.get(Store);
     store = new AppStore(backingStore, 'testKey', new State());
   });
 
@@ -385,29 +383,6 @@ describe('StoreObject', () => {
           .withCaching(false)
           .caches(),
       ).toBe(false);
-    });
-  });
-
-  describe('.dispatch()', () => {
-    it('forwards actions on to ngrx', () => {
-      let callCount = 0;
-      backingStore.addReducer('testKey', (state = {}, action) => {
-        if (action.type === 'the action') {
-          ++callCount;
-        }
-        return state;
-      });
-      store.dispatch({ type: 'the action' });
-      expect(callCount).toBe(1);
-
-      store('nested').dispatch({ type: 'the action' });
-      expect(callCount).toBe(2);
-
-      store('counter').batch((batch) => {
-        batch.dispatch({ type: 'the action' });
-        expect(callCount).toBe(3);
-      });
-      expect(callCount).toBe(3);
     });
   });
 

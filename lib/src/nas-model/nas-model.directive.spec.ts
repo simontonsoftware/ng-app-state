@@ -19,6 +19,7 @@ import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
 import { AppStore } from '../app-store';
 import { ngAppStateReducer } from '../meta-reducer';
+import { StoreObject } from '../store-object';
 import { NasModelModule } from './nas-model.module';
 
 describe('value accessors', () => {
@@ -667,7 +668,7 @@ function dispatchEvent(domElement: EventTarget, type: string) {
 }
 
 class StoreComponent<T extends object> {
-  store: AppStore<T>;
+  store: StoreObject<T>;
   compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
     o1 && o2 ? o1.id === o2.id : o1 === o2;
 
