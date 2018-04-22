@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v5.1.0...v6.0.0) (2018-04-22)
+
+
+### Features
+
+* **AppStore:** add `.action$` ([28923fe](https://github.com/simontonsoftware/ng-app-state/commit/28923fe))
+
+
+### BREAKING CHANGES
+
+* **AppStore:** `.dispatch()` moved from `StoreObject` to `AppState`
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v5.0.0...v5.1.0) (2018-04-17)
 
