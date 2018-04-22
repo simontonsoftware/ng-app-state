@@ -4,6 +4,7 @@ import {
   Function2,
   Function3,
   Function4,
+  isEqual,
   memoize,
   omit,
 } from 'micro-dash';
@@ -175,6 +176,13 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public caches() {
     return this._withCaching;
+  }
+
+  /**
+   * @returns whether the given `StoreObject` operates on the same slice of the store as this object.
+   */
+  public refersToSameStateAs(other: StoreObject<T>) {
+    return isEqual(this.path, other.path);
   }
 }
 

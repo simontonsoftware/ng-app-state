@@ -386,6 +386,31 @@ describe('StoreObject', () => {
     });
   });
 
+  describe('.refersToSameStateAs()', () => {
+    it('works', () => {
+      expect(store.refersToSameStateAs(store)).toBe(true);
+      expect(
+        store('counter').refersToSameStateAs(store('nested')('state')),
+      ).toBe(false);
+      expect(
+        store('nested')('left').refersToSameStateAs(store('nested')('left')),
+      ).toBe(true);
+      expect(
+        store('nested')('left').refersToSameStateAs(store('nested')('right')),
+      ).toBe(false);
+      expect(
+        store.refersToSameStateAs(
+          new AppStore(backingStore, 'testKey', new State()),
+        ),
+      ).toBe(true);
+      expect(
+        store.refersToSameStateAs(
+          new AppStore(backingStore, 'testKey2', new State()),
+        ),
+      ).toBe(false);
+    });
+  });
+
   function getGlobalState() {
     let value: any;
     backingStore.pipe(take(1)).subscribe((v) => {
