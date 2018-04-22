@@ -18,8 +18,8 @@ import { isNil } from 'micro-dash';
   ],
 })
 export class RangeValueAccessorDirective implements ControlValueAccessor {
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange: (_: any) => void;
+  onTouched: () => void;
 
   constructor(private elementRef: ElementRef) {}
 
@@ -29,7 +29,7 @@ export class RangeValueAccessorDirective implements ControlValueAccessor {
 
   registerOnChange(fn: (_: number | null) => void): void {
     this.onChange = (value) => {
-      fn(isNil(value) ? null : parseFloat(value));
+      fn(parseFloat(value));
     };
   }
 

@@ -1,7 +1,3 @@
-/*
- * Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
- */
-
 import { Component, Injectable, Input, Type } from '@angular/core';
 import {
   async,
@@ -22,53 +18,59 @@ import { ngAppStateReducer } from '../meta-reducer';
 import { StoreObject } from '../store-object';
 import { NasModelModule } from './nas-model.module';
 
+let fixture: ComponentFixture<any>;
+
+function detectChanges() {
+  fixture.detectChanges();
+}
+
+function query(css: string) {
+  return queryAll(css)[0];
+}
+
+function queryAll(css: string) {
+  return fixture.debugElement
+    .queryAll(By.css(css))
+    .map((el) => el.nativeElement);
+}
+
+function initSingleValueTest(template: string) {
+  return initTest(SingleValueComponent, SingleValueStore, { template });
+}
+
+function dispatchEvent(domElement: EventTarget, type: string) {
+  domElement.dispatchEvent(new Event(type));
+}
+
+function initTest<C, S>(
+  component: Type<C>,
+  storeType: Type<S>,
+  {
+    extraDirectives = [] as Array<Type<any>>,
+    template = '',
+    beforeCreate = () => {},
+  } = {},
+) {
+  if (template) {
+    TestBed.overrideComponent(component, { set: { template } });
+  }
+  TestBed.configureTestingModule({
+    declarations: [component, ...extraDirectives],
+    imports: [
+      FormsModule,
+      StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
+      NasModelModule,
+    ],
+    providers: [storeType],
+  });
+
+  beforeCreate();
+  fixture = TestBed.createComponent<C>(component);
+  return TestBed.get(storeType) as S;
+}
+
 describe('value accessors', () => {
-  let fixture: ComponentFixture<any>;
-
-  function detectChanges() {
-    fixture.detectChanges();
-  }
-
-  function query(css: string) {
-    return queryAll(css)[0];
-  }
-
-  function queryAll(css: string) {
-    return fixture.debugElement
-      .queryAll(By.css(css))
-      .map((el) => el.nativeElement);
-  }
-
-  function initSingleValueTest(template: string) {
-    return initTest(SingleValueComponent, SingleValueStore, { template });
-  }
-
-  function initTest<C, S>(
-    component: Type<C>,
-    storeType: Type<S>,
-    {
-      extraDirectives = [] as Array<Type<any>>,
-      template = '',
-      beforeCreate = () => {},
-    } = {},
-  ) {
-    if (template) {
-      TestBed.overrideComponent(component, { set: { template } });
-    }
-    TestBed.configureTestingModule({
-      declarations: [component, ...extraDirectives],
-      imports: [
-        FormsModule,
-        StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
-        NasModelModule,
-      ],
-      providers: [storeType],
-    });
-
-    beforeCreate();
-    fixture = TestBed.createComponent<C>(component);
-    return TestBed.get(storeType) as S;
-  }
+  // Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
 
   it('should support <input> without type', () => {
     const store = initSingleValueTest(`<input [nasModel]="store">`);
@@ -663,9 +665,33 @@ describe('value accessors', () => {
   });
 });
 
-function dispatchEvent(domElement: EventTarget, type: string) {
-  domElement.dispatchEvent(new Event(type));
-}
+// `nasModel` is tested pretty thoroughly above, by the tests adapted from angular's suite. Here we hit a few more cases to complete code coverage.
+describe('nasModel', () => {
+  it(
+    'can bind to different store objects over time',
+    fakeAsync(() => {
+      const store = initTest(MenuComponent, MenuStore, {
+        template: `<input [nasModel]="textStore">`,
+      });
+      store.assign({ food: 'chicken', drink: 'coke' });
+      const input = query('input');
+
+      fixture.componentInstance.textStore = store('food');
+      detectChanges();
+      expect(input.value).toEqual('chicken');
+      input.value = 'pork';
+      dispatchEvent(input, 'input');
+
+      fixture.componentInstance.textStore = store('drink');
+      detectChanges();
+      expect(input.value).toEqual('coke');
+
+      fixture.componentInstance.textStore = store('food');
+      detectChanges();
+      expect(input.value).toEqual('pork');
+    }),
+  );
+});
 
 class StoreComponent<T extends object> {
   store: StoreObject<T>;

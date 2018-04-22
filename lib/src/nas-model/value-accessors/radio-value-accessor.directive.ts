@@ -16,8 +16,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class RadioValueAccessorDirective implements ControlValueAccessor {
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange: (_: any) => void;
+  onTouched: () => void;
 
   constructor(private elementRef: ElementRef) {}
 

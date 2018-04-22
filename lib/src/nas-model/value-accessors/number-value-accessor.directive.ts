@@ -18,8 +18,8 @@ import { isNil } from 'micro-dash';
   ],
 })
 export class NumberValueAccessorDirective implements ControlValueAccessor {
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange: (_: any) => void;
+  onTouched: () => void;
 
   constructor(private elementRef: ElementRef) {}
 
