@@ -690,6 +690,30 @@ describe('nasModel', () => {
       expect(input.value).toEqual('pork');
     }),
   );
+
+  it(
+    'warns about inefficient template bindings',
+    fakeAsync(() => {
+      const warn = spyOn(console, 'warn');
+
+      const store = initSingleValueTest(`<input [nasModel]="store('inner')">`);
+      detectChanges();
+
+      detectChanges();
+      expect(warn).not.toHaveBeenCalled();
+      detectChanges();
+      expect(warn).not.toHaveBeenCalled();
+
+      fixture.componentInstance.store = store; // undo `.withCaching()`
+      detectChanges();
+      expect(warn).toHaveBeenCalledTimes(1);
+      detectChanges();
+      expect(warn).toHaveBeenCalledTimes(2);
+      expect(warn).toHaveBeenCalledWith(
+        'nasModel was updated with a new store object that is equivalent to the old one. Cache the value bound to nasModel for better performance, e.g. using `StoreObject.withCaching()`.',
+      );
+    }),
+  );
 });
 
 class StoreComponent<T extends object> {

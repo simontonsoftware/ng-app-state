@@ -1,7 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Integration Start" type="js.build_tools.npm" factoryName="npm">
     <package-json value="$PROJECT_DIR$/integration/package.json" />
-    <command value="start" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
     <node-interpreter value="project" />
     <envs />
     <method />

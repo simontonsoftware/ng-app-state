@@ -3,7 +3,7 @@ import { ControlValueAccessor } from '@angular/forms';
 
 export abstract class BaseValueAccessor<T extends HTMLElement>
   implements ControlValueAccessor {
-  onChangeFn: (_: any) => void;
+  onChangeFn: (value: any) => void;
   onTouchedFn: () => void;
 
   private elementRef: ElementRef;
@@ -12,9 +12,9 @@ export abstract class BaseValueAccessor<T extends HTMLElement>
     this.elementRef = injector.get(ElementRef);
   }
 
-  abstract writeValue(obj: any): void;
+  abstract writeValue(value: any): void;
 
-  registerOnChange(fn: (_: any) => void) {
+  registerOnChange(fn: (value: any) => void) {
     this.onChangeFn = fn;
   }
 
