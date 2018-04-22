@@ -69,9 +69,8 @@ function initTest<C, S>(
   return TestBed.get(storeType) as S;
 }
 
+// Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
 describe('value accessors', () => {
-  // Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
-
   it('should support <input> without type', () => {
     const store = initSingleValueTest(`<input [nasModel]="store">`);
     detectChanges();

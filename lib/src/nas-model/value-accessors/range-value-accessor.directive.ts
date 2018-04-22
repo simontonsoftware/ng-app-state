@@ -1,13 +1,13 @@
-import { Directive, ElementRef, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isNil } from 'micro-dash';
+import { Directive, forwardRef, Injector } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseInputValueAccessor } from './base-input-value-accessor';
 
 @Directive({
   selector: 'input[type=range][nasModel]',
   host: {
     '(change)': 'onChange($event.target.value)',
     '(input)': 'onChange($event.target.value)',
-    '(blur)': 'onTouched()',
+    '(blur)': 'onTouchedFn()',
   },
   providers: [
     {
@@ -17,31 +17,12 @@ import { isNil } from 'micro-dash';
     },
   ],
 })
-export class RangeValueAccessorDirective implements ControlValueAccessor {
-  onChange: (_: any) => void;
-  onTouched: () => void;
-
-  constructor(private elementRef: ElementRef) {}
-
-  writeValue(obj: any): void {
-    this.range.value = obj;
+export class RangeValueAccessorDirective extends BaseInputValueAccessor {
+  constructor(injector: Injector) {
+    super(injector);
   }
 
-  registerOnChange(fn: (_: number | null) => void): void {
-    this.onChange = (value) => {
-      fn(parseFloat(value));
-    };
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.range.disabled = isDisabled;
-  }
-
-  private get range() {
-    return this.elementRef.nativeElement as HTMLInputElement;
+  onChange(value: string) {
+    this.onChangeFn(parseFloat(value));
   }
 }

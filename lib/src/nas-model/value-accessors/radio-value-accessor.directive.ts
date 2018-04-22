@@ -1,11 +1,12 @@
-import { Directive, ElementRef, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Directive, forwardRef, Injector } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseInputValueAccessor } from './base-input-value-accessor';
 
 @Directive({
   selector: 'input[type=radio][nasModel]',
   host: {
-    '(change)': 'onChange($event.target.value)',
-    '(blur)': 'onTouched()',
+    '(change)': 'onChangeFn($event.target.value)',
+    '(blur)': 'onTouchedFn()',
   },
   providers: [
     {
@@ -15,32 +16,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class RadioValueAccessorDirective implements ControlValueAccessor {
-  onChange: (_: any) => void;
-  onTouched: () => void;
-
-  constructor(private elementRef: ElementRef) {}
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.button.disabled = isDisabled;
+export class RadioValueAccessorDirective extends BaseInputValueAccessor {
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   writeValue(obj: any): void {
     // delay because as the component is being initialized `button.value` might not be set yet
     Promise.resolve().then(() => {
-      this.button.checked = this.button.value === obj;
+      this.element.checked = this.element.value === obj;
     });
-  }
-
-  private get button() {
-    return this.elementRef.nativeElement as HTMLInputElement;
   }
 }
