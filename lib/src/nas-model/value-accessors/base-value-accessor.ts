@@ -4,9 +4,10 @@ import { ControlValueAccessor } from '@angular/forms';
 export abstract class BaseValueAccessor<T extends HTMLElement>
   implements ControlValueAccessor {
   onChangeFn: (value: any) => void;
-  onTouchedFn: () => void;
 
   private elementRef: ElementRef;
+
+  onTouchedFn = () => {};
 
   constructor(injector: Injector) {
     this.elementRef = injector.get(ElementRef);

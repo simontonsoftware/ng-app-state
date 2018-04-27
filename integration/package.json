@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "install:lib": "rimraf node_modules/ng-app-state && yarn --check-files",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",

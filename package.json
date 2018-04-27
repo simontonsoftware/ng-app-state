@@ -17,6 +17,7 @@
     "clean": "rimraf out-tsc dist/*",
     "prebuild": "yarn run clean",
     "build": "node build.js",
+    "postbuild": "cd integration && yarn install:lib",
     "serve": "lite-server -c=bs-config.json",
     "build-test": "tsc -p lib/tsconfig.spec.json",
     "build-test:watch": "tsc -p lib/tsconfig.spec.json -w",
