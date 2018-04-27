@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.1.1"></a>
+## [6.1.1](https://github.com/simontonsoftware/ng-app-state/compare/v6.1.0...v6.1.1) (2018-04-27)
+
+
+### Bug Fixes
+
+* **nasModel:** certain controls threw an error on blur ([4435274](https://github.com/simontonsoftware/ng-app-state/commit/4435274))
+
+
+
 <a name="6.1.0"></a>
 # [6.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v6.0.0...v6.1.0) (2018-04-22)
 
