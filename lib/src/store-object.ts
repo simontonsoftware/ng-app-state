@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operators/take';
 import { BatchAction } from './actions/batch-action';
 import { FunctionAction } from './actions/function-action';
+import { TreeBasedObservableFactory } from './tree-based-observable-factory';
 import { ExtensibleFunction } from './utils/extensible-function';
 
 export interface StoreObject<T> {
@@ -25,15 +26,20 @@ export class StoreObject<T> extends ExtensibleFunction {
   private _$: Observable<T>;
 
   protected constructor(
-    protected store: Store<any>,
+    private observableFactory: TreeBasedObservableFactory,
     private path: string[],
     private dispatcher: { dispatch(action?: Action): void },
     private _withCaching = false,
   ) {
     super(
       maybeMemoize(
-        (prop: string) =>
-          new StoreObject(store, [...path, prop], dispatcher, _withCaching),
+        (prop: keyof T) =>
+          new StoreObject(
+            observableFactory,
+            [...path, prop],
+            dispatcher,
+            _withCaching,
+          ),
         _withCaching,
       ),
     );
@@ -44,7 +50,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public get $(): Observable<T> {
     if (!this._$) {
-      this._$ = (this.store.select as any)(...this.path);
+      this._$ = this.observableFactory.get<T>(this.path);
     }
     return this._$;
   }
@@ -61,7 +67,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public batch(func: (state: StoreObject<T>) => void) {
     const batch = new BatchAction();
-    func(new StoreObject(this.store, this.path, batch));
+    func(new StoreObject(this.observableFactory, this.path, batch));
     this.dispatcher.dispatch(batch);
   }
 
@@ -76,7 +82,11 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public inBatch(batch: StoreObject<any>) {
-    return new StoreObject<T>(this.store, this.path, batch.dispatcher);
+    return new StoreObject<T>(
+      this.observableFactory,
+      this.path,
+      batch.dispatcher,
+    );
   }
 
   /**
@@ -101,7 +111,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    */
   public delete() {
     new StoreObject(
-      this.store,
+      this.observableFactory,
       this.path.slice(0, -1),
       this.dispatcher,
     ).setUsing(omit, this.path[this.path.length - 1]);
@@ -168,7 +178,12 @@ export class StoreObject<T> extends ExtensibleFunction {
    * This method does not modify the current store object; it returns a new one with the given setting.
    */
   public withCaching(value = true): StoreObject<T> {
-    return new StoreObject(this.store, this.path, this.dispatcher, value);
+    return new StoreObject(
+      this.observableFactory,
+      this.path,
+      this.dispatcher,
+      value,
+    );
   }
 
   /**

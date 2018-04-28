@@ -27,7 +27,7 @@
     "coverage": "karma start karma-coverage.conf.js --single-run --browsers Chrome",
     "pretest:once": "yarn build-test",
     "test:once": "karma start karma.conf.js --single-run --browsers Chrome",
-    "preintegration": "yarn build && cd integration && yarn --check-files",
+    "preintegration": "yarn build",
     "integration": "cd integration && yarn e2e",
     "lint": "tslint ./lib/**/*.ts -t verbose",
     "release": "standard-version && yarn run build"
