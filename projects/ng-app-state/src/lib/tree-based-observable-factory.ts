@@ -1,5 +1,5 @@
 import { isNil, ObjectWith } from 'micro-dash';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   map,

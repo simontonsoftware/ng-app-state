@@ -1,6 +1,5 @@
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 import { TreeBasedObservableFactory } from './tree-based-observable-factory';
 import { StoreObject } from './store-object';
 

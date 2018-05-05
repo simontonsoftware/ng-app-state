@@ -7,7 +7,7 @@ import {
   Self,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { StoreObject } from '../store-object';
 
 @Directive({ selector: '[nasModel]' })

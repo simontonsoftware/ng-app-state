@@ -1,6 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { StoreObject } from '../store-object';
 
 export type UndoOrRedo = 'undo' | 'redo';

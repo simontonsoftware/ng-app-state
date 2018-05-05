@@ -20,10 +20,11 @@ export class FunctionAction extends AppStateAction {
   protected getNewState<T extends object>(path: string[], oldState: T) {
     if (path.length) {
       if (oldState == null) {
-        throw new Error(
+        console.error(
           this.path.slice(0, -path.length).join('.') +
             ` is null or undefined (during ${this.type})`,
         );
+        return oldState;
       }
 
       const key = path[0];

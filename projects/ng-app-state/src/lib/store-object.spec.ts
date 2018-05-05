@@ -1,9 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { take } from 'rxjs/operators/take';
+import { take } from 'rxjs/operators';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
 import { identity, noop } from 'micro-dash';
+import Spy = jasmine.Spy;
+import createSpy = jasmine.createSpy;
 
 class State {
   counter = 0;
@@ -22,8 +24,10 @@ class InnerState {
 describe('StoreObject', () => {
   let backingStore: Store<any>;
   let store: AppStore<State>;
+  let logError: Spy;
 
   beforeEach(() => {
+    logError = spyOn(console, 'error');
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
@@ -32,19 +36,17 @@ describe('StoreObject', () => {
   });
 
   describe('()', () => {
-    it('gives a useful error when used to modify missing state', () => {
-      expect(() => {
-        store<'optional', InnerState>('optional')('state').set(2);
-      }).toThrowError(
+    it('prints a useful error when used to modify missing state', () => {
+      store<'optional', InnerState>('optional')('state').set(2);
+      expect(logError).toHaveBeenCalledWith(
         'testKey.optional is null or undefined (during [set:] testKey.optional.state)',
       );
     });
 
-    it('gives a useful error even when the root key is missing', () => {
+    it('prints a useful error even when the root key is missing', () => {
       store.delete();
-      expect(() => {
-        store<'optional', InnerState>('optional')('state').set(2);
-      }).toThrowError(
+      store<'optional', InnerState>('optional')('state').set(2);
+      expect(logError).toHaveBeenCalledWith(
         'testKey is null or undefined (during [set:] testKey.optional.state)',
       );
     });
@@ -306,6 +308,15 @@ describe('StoreObject', () => {
       store.setUsing(identity);
       expect(store.state()).toBe(origState);
     });
+
+    it('prints a message and is not called when the state is missing', () => {
+      const op = createSpy();
+      store<'optional', InnerState>('optional')('left').setUsing(op);
+      expect(op).not.toHaveBeenCalled();
+      expect(logError).toHaveBeenCalledWith(
+        'testKey.optional is null or undefined (during [set:] testKey.optional.left)',
+      );
+    });
   });
 
   describe('.mutateUsing()', () => {
@@ -333,11 +344,12 @@ describe('StoreObject', () => {
       });
     });
 
-    it('fails when the state is missing', () => {
-      expect(() => {
-        store<'optional', InnerState>('optional')('left').mutateUsing(noop);
-      }).toThrowError(
-        'testKey.optional is null or undefined (during [mutate:noop] testKey.optional.left)',
+    it('prints a message and is not called when the state is missing', () => {
+      const op = createSpy();
+      store<'optional', InnerState>('optional')('left').mutateUsing(op);
+      expect(op).not.toHaveBeenCalled();
+      expect(logError).toHaveBeenCalledWith(
+        'testKey.optional is null or undefined (during [mutate:] testKey.optional.left)',
       );
     });
   });

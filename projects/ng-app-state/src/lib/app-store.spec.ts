@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { take } from 'rxjs/operators/take';
+import { take } from 'rxjs/operators';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
 

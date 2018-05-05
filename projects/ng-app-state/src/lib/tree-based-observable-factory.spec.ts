@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { noop, ObjectWith } from 'micro-dash';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';

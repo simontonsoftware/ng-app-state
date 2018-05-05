@@ -1,4 +1,4 @@
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import {
   Function1,
   Function2,
@@ -8,8 +8,8 @@ import {
   memoize,
   omit,
 } from 'micro-dash';
-import { Observable } from 'rxjs/Observable';
-import { take } from 'rxjs/operators/take';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { BatchAction } from './actions/batch-action';
 import { FunctionAction } from './actions/function-action';
 import { TreeBasedObservableFactory } from './tree-based-observable-factory';
