@@ -7,18 +7,18 @@ import { identity, noop } from 'micro-dash';
 import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
 
-class State {
-  counter = 0;
-  nested = new InnerState();
-  optional?: InnerState;
-  array?: number[];
-}
-
 class InnerState {
   left?: InnerState;
   right?: InnerState;
 
   constructor(public state = 0) {}
+}
+
+class State {
+  counter = 0;
+  nested = new InnerState();
+  optional?: InnerState;
+  array?: number[];
 }
 
 describe('StoreObject', () => {
@@ -87,7 +87,7 @@ describe('StoreObject', () => {
       expect(lastValue!).toBe(store.state().nested);
       expect(lastValue!).toEqual(new InnerState());
 
-      let newValue = new InnerState(4);
+      const newValue = new InnerState(4);
       store('nested').set(newValue);
       expect(lastValue!).toBe(newValue);
       expect(lastValue!).toEqual(new InnerState(4));

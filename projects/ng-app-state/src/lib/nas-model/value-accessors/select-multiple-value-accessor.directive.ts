@@ -6,6 +6,7 @@ import {
 
 @Directive({
   selector: 'select[multiple][nasModel]',
+  // tslint:disable-next-line:use-host-property-decorator
   host: { '(change)': 'onChange($event.target)', '(blur)': 'onTouched()' },
   providers: [
     {

@@ -16,6 +16,7 @@ import { TreeBasedObservableFactory } from './tree-based-observable-factory';
 import { ExtensibleFunction } from './utils/extensible-function';
 
 export interface StoreObject<T> {
+  // tslint:disable:callable-types
   /**
    * Select a slice of the store to operate on. For example `store('currentUser')` will return a new `StoreObject` that represents the `currentUser` property.
    */

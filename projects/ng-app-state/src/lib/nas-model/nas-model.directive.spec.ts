@@ -15,6 +15,22 @@ import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
 import { AppStore } from '../app-store';
 import { ngAppStateReducer } from '../meta-reducer';
+import {
+  CityComponent,
+  citySelectWithCustomCompareFnTemplate,
+  citySelectWithNullTemplate,
+  CityStore,
+  InnerNameComponent,
+  MenuComponent,
+  MenuStore,
+  MultipleCityComponent,
+  MultipleCityStore,
+  multipleCityWithCustomCompareFnTemplate,
+  NameComponent,
+  NameStore,
+  SingleValueComponent,
+  SingleValueStore,
+} from '../spec-helpers';
 import { StoreObject } from '../store-object';
 import { NasModelModule } from './nas-model.module';
 
@@ -403,7 +419,9 @@ describe('value accessors', () => {
       ): void => {
         const options = queryAll('option');
         if (options.length !== selectedStates.length) {
-          throw 'the selected state values to assert does not match the number of options';
+          throw new Error(
+            'the selected state values to assert does not match the number of options',
+          );
         }
         for (let i = 0; i < selectedStates.length; i++) {
           expect(options[i].selected).toBe(selectedStates[i]);
@@ -634,32 +652,29 @@ describe('value accessors', () => {
 
   describe('custom value accessors', () => {
     describe('in template-driven forms', () => {
-      it(
-        'should support standard writing to view and model',
-        async(() => {
-          const store = initTest(NameComponent, NameStore, {
-            extraDirectives: [InnerNameComponent],
-          });
+      it('should support standard writing to view and model', async(() => {
+        const store = initTest(NameComponent, NameStore, {
+          extraDirectives: [InnerNameComponent],
+        });
 
-          store('name').set('Nancy');
+        store('name').set('Nancy');
+        detectChanges();
+        fixture.whenStable().then(() => {
           detectChanges();
           fixture.whenStable().then(() => {
+            // model -> view
+            const customInput = query('[name="custom"]');
+            expect(customInput.value).toEqual('Nancy');
+
+            customInput.value = 'Carson';
+            dispatchEvent(customInput, 'input');
             detectChanges();
-            fixture.whenStable().then(() => {
-              // model -> view
-              const customInput = query('[name="custom"]');
-              expect(customInput.value).toEqual('Nancy');
 
-              customInput.value = 'Carson';
-              dispatchEvent(customInput, 'input');
-              detectChanges();
-
-              // view -> model
-              expect(store.state().name).toEqual('Carson');
-            });
+            // view -> model
+            expect(store.state().name).toEqual('Carson');
           });
-        }),
-      );
+        });
+      }));
     });
   });
 });
@@ -715,224 +730,3 @@ describe('nasModel', () => {
     }),
   );
 });
-
-class StoreComponent<T extends object> {
-  store: StoreObject<T>;
-  compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
-    o1 && o2 ? o1.id === o2.id : o1 === o2;
-
-  constructor(store: AppStore<T>) {
-    this.store = store.withCaching();
-  }
-}
-
-//
-// Single Value
-//
-
-@Injectable()
-class SingleValueStore extends AppStore<any> {
-  constructor(store: Store<any>) {
-    super(store, 'singleValueStore', 'old');
-  }
-}
-
-@Component({ selector: 'single-value' })
-class SingleValueComponent extends StoreComponent<any> {
-  constructor(store: SingleValueStore) {
-    super(store);
-  }
-}
-
-//
-// Select City
-//
-
-class CityState {
-  selectedCity: any = {};
-  cities: any[] = [];
-}
-
-@Injectable()
-class CityStore extends AppStore<CityState> {
-  constructor(store: Store<any>) {
-    super(store, 'cityStore', new CityState());
-  }
-}
-
-const citySelectWithNullTemplate = `
-  <select [nasModel]="store('selectedCity')">
-    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-      {{c.name}}
-    </option>
-    <option [ngValue]="null">Unspecified</option>
-  </select>
-`;
-const citySelectWithCustomCompareFnTemplate = `
-  <select [nasModel]="store('selectedCity')" [compareWith]="compareFn">
-    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-      {{c.name}}
-    </option>
-  </select>
-`;
-
-@Component({
-  selector: 'city',
-  template: `
-    <select [nasModel]="store('selectedCity')">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
-  `,
-})
-class CityComponent extends StoreComponent<CityState> {
-  constructor(store: CityStore) {
-    super(store);
-  }
-}
-
-//
-// Select Multiple Cities
-//
-
-class MultipleCityState {
-  selectedCities: any[] = [];
-  cities: any[] = [];
-}
-
-@Injectable()
-class MultipleCityStore extends AppStore<MultipleCityState> {
-  constructor(store: Store<any>) {
-    super(store, 'mulitpleCityStore', new MultipleCityState());
-  }
-}
-
-const multipleCityWithCustomCompareFnTemplate = `
-  <select
-    multiple
-    [nasModel]="store('selectedCities')"
-    [compareWith]="compareFn"
-  >
-    <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-      {{c.name}}
-    </option>
-  </select>
-`;
-
-@Component({
-  selector: 'multiple-city',
-  template: `
-    <select multiple [nasModel]="store('selectedCities')">
-      <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
-        {{c.name}}
-      </option>
-    </select>
-  `,
-})
-class MultipleCityComponent extends StoreComponent<MultipleCityState> {
-  constructor(store: MultipleCityStore) {
-    super(store);
-  }
-}
-
-//
-// Radio Button Menu
-//
-
-class MenuState {
-  food: string;
-  drink: string;
-}
-
-@Injectable()
-class MenuStore extends AppStore<MenuState> {
-  constructor(store: Store<any>) {
-    super(store, 'menuStore', new MenuState());
-  }
-}
-
-@Component({
-  selector: 'menu',
-  template: `
-    <form>
-      <input type="radio" [nasModel]="store('food')" value="chicken">
-      <input type="radio" [nasModel]="store('food')" value="fish">
-      <input type="radio" [nasModel]="store('drink')" value="cola">
-      <input type="radio" [nasModel]="store('drink')" value="sprite">
-    </form>
-  `,
-})
-class MenuComponent extends StoreComponent<MenuState> {
-  constructor(store: MenuStore) {
-    super(store);
-  }
-}
-
-//
-// Name
-//
-
-class NameState {
-  name: string;
-  isDisabled = false;
-}
-
-@Injectable()
-class NameStore extends AppStore<NameState> {
-  constructor(store: Store<any>) {
-    super(store, 'nameStore', new NameState());
-  }
-}
-
-@Component({
-  selector: 'ng-model-custom-wrapper',
-  template: `
-    <inner-name [nasModel]="store('name')" [disabled]="isDisabled"></inner-name>
-  `,
-})
-export class NameComponent extends StoreComponent<NameState> {
-  isDisabled = false;
-
-  constructor(store: NameStore) {
-    super(store);
-  }
-}
-
-@Component({
-  selector: 'inner-name',
-  template: `
-    <input
-      name="custom"
-      [(ngModel)]="model"
-      (ngModelChange)="changeFn($event)"
-      [disabled]="isDisabled"
-    >
-  `,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: InnerNameComponent,
-    },
-  ],
-})
-export class InnerNameComponent implements ControlValueAccessor {
-  model: string;
-  @Input('disabled') isDisabled = false;
-  changeFn: (value: any) => void;
-
-  writeValue(value: any) {
-    this.model = value;
-  }
-
-  registerOnChange(fn: (value: any) => void) {
-    this.changeFn = fn;
-  }
-
-  registerOnTouched() {}
-
-  setDisabledState(isDisabled: boolean) {
-    this.isDisabled = isDisabled;
-  }
-}

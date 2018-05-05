@@ -4,10 +4,6 @@ import { BaseInputValueAccessor } from './base-input-value-accessor';
 
 @Directive({
   selector: 'input[type=radio][nasModel]',
-  host: {
-    '(change)': 'onChangeFn($event.target.value)',
-    '(blur)': 'onTouchedFn()',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

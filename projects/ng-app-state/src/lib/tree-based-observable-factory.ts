@@ -50,7 +50,7 @@ export class TreeBasedObservableFactory {
   private decrementSubscribers(path: string[]) {
     let cacheNode = this.rootCacheNode;
     for (const key of path) {
-      let child = cacheNode.children[key];
+      const child = cacheNode.children[key];
       if (!--child.numSubscribers) {
         delete cacheNode.children[key];
         return;
@@ -59,6 +59,7 @@ export class TreeBasedObservableFactory {
     }
   }
 
+  // an instance method so it can be spied on for tests
   private makeCacheNode(observable: Observable<any>): CacheNode {
     return {
       observable,

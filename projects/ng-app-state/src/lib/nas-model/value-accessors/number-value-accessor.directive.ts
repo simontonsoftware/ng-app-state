@@ -5,11 +5,6 @@ import { BaseInputValueAccessor } from './base-input-value-accessor';
 
 @Directive({
   selector: 'input[type=number][nasModel]',
-  host: {
-    '(change)': 'onChange($event.target.value)',
-    '(input)': 'onChange($event.target.value)',
-    '(blur)': 'onTouchedFn()',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -23,8 +18,10 @@ export class NumberValueAccessorDirective extends BaseInputValueAccessor {
     super(injector);
   }
 
-  onChange(value: string) {
-    this.onChangeFn(value === '' ? null : parseFloat(value));
+  registerOnChange(fn: (value: number | null) => void) {
+    this.onChangeFn = (value: string) => {
+      fn(value === '' ? null : parseFloat(value));
+    };
   }
 
   writeValue(value: number): void {
