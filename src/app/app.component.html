@@ -1,20 +1,77 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<input [nasModel]="store('freeText')">
+<br>
+<input type="text" [nasModel]="store('freeText')"> Text
+<br>
+<input type="search" [nasModel]="store('freeText')"> Search
+<br>
+<input type="tel" [nasModel]="store('freeText')"> Tel
+<br>
+<input type="password" [nasModel]="store('freeText')"> Password
+<br>
+<input type="email" [nasModel]="store('freeText')"> Email
+<br>
+<input type="url" [nasModel]="store('freeText')"> Url
+<br>
+<input type="color" [nasModel]="store('freeText')">
+<br>
+<textarea [nasModel]="store('freeText')"></textarea>
 
+<hr>
+
+<input type="number" [nasModel]="store('number')">
+<br>
+<input type="range" [nasModel]="store('number')">
+
+<hr>
+
+<select [nasModel]="store('chooseOne')">
+  <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+</select>
+<ng-container *ngFor="let city of cities">
+  <br>
+  <label>
+    <input type="radio" [value]="city" [nasModel]="store('chooseOne')">
+    {{city}}
+  </label>
+</ng-container>
+
+<hr>
+
+<select multiple [nasModel]="store('chooseMany')">
+  <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+</select>
+<br>
+<button (click)="chooseToCheck()">v</button>
+<button (click)="checkToChoose()">^</button>
+<ng-container *ngFor="let city of cities">
+  <br>
+  <label>
+    <input
+      type="checkbox"
+      [value]="city"
+      [nasModel]="store('checkMany')(city)"
+    >
+    {{city}}
+  </label>
+</ng-container>
+
+<hr>
+
+<input type="datetime-local" [nasModel]="store('datetime')">
+<button (click)="propagateDatetime()">datetime-local flush</button>
+<br>
+<input type="date" [nasModel]="store('date')">
+<button (click)="propagateDate()">date flush</button>
+<br>
+<input type="month" [nasModel]="store('month')">
+<button (click)="propagateMonth()">month flush</button>
+<br>
+<input type="week" [nasModel]="store('week')">
+<button (click)="propagateWeek()">week flush</button>
+<br>
+<input type="time" [nasModel]="store('time')">
+<button (click)="propagateTime()">time flush</button>
+
+<hr>
+
+<pre>{{ stateString$ | async }}</pre>
