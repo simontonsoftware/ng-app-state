@@ -1,10 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Coverage" type="js.build_tools.npm" factoryName="npm">
+  <configuration default="false" name="Lib - Test" type="js.build_tools.npm" factoryName="npm">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="coverage" />
+      <script value="test" />
     </scripts>
+    <arguments value="ng-app-state --source-map --watch=true" />
     <node-interpreter value="project" />
     <envs />
     <method />
