@@ -1,17 +1,11 @@
-import { Directive, forwardRef, Injector } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Directive, Injector } from '@angular/core';
 import { isNil } from 'micro-dash';
 import { BaseInputValueAccessor } from './base-input-value-accessor';
+import { makeProviderDef } from './base-value-accessor';
 
 @Directive({
   selector: 'input[type=number][nasModel]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NumberValueAccessorDirective),
-      multi: true,
-    },
-  ],
+  providers: [makeProviderDef(NumberValueAccessorDirective)],
 })
 export class NumberValueAccessorDirective extends BaseInputValueAccessor {
   constructor(injector: Injector) {

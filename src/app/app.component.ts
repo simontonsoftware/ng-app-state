@@ -83,7 +83,7 @@ export class AppComponent {
     });
   }
 
-  private modDates(type: string, fn: (dest: Date) => void) {
+  private modDates(type: keyof IntegrationState, fn: (dest: Date) => void) {
     this.store.setUsing((state) => {
       let datetime, date, month, week, time;
       if (state[type] === '') {

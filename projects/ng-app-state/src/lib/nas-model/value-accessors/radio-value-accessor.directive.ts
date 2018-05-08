@@ -1,16 +1,10 @@
-import { Directive, forwardRef, Injector } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Directive, Injector } from '@angular/core';
 import { BaseInputValueAccessor } from './base-input-value-accessor';
+import { makeProviderDef } from './base-value-accessor';
 
 @Directive({
   selector: 'input[type=radio][nasModel]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RadioValueAccessorDirective),
-      multi: true,
-    },
-  ],
+  providers: [makeProviderDef(RadioValueAccessorDirective)],
 })
 export class RadioValueAccessorDirective extends BaseInputValueAccessor {
   constructor(injector: Injector) {
