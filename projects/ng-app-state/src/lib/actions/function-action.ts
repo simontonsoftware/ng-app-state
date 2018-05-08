@@ -11,13 +11,13 @@ export class FunctionAction extends AppStateAction {
     super(`${mutates ? 'mutate' : 'set'}:${func.name}`, path);
   }
 
-  public execute<T extends object>(state: T) {
+  public execute<T>(state: T) {
     return this.getNewState(this.path, state);
   }
 
   ///////
 
-  protected getNewState<T extends object>(path: string[], oldState: T) {
+  protected getNewState<T>(path: string[], oldState: T) {
     if (path.length) {
       if (oldState == null) {
         console.error(
@@ -27,7 +27,7 @@ export class FunctionAction extends AppStateAction {
         return oldState;
       }
 
-      const key = path[0];
+      const key = path[0] as keyof T;
       const newState = clone(oldState);
       newState[key] = this.getNewState(path.slice(1), oldState[key]);
       return newState;

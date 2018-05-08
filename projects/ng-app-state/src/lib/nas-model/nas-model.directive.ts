@@ -12,8 +12,8 @@ import { StoreObject } from '../store-object';
 
 @Directive({ selector: '[nasModel]' })
 export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
-  private store: StoreObject<T>;
-  private subscription: Subscription;
+  private store!: StoreObject<T>;
+  private subscription!: Subscription;
   private valueAccessor: ControlValueAccessor;
 
   constructor(

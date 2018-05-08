@@ -3908,8 +3908,8 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
 micro-dash@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-3.4.0.tgz#027d51fe8146064c2579b8395e74726231b6b39c"
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-3.5.0.tgz#79e389229b39bde639bfab62f598051ff1f125d3"
 
 micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"

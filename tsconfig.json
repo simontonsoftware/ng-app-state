@@ -20,6 +20,7 @@
       "ng-app-state": [
         "dist/ng-app-state"
       ]
-    }
+    },
+    "strict": true
   }
 }

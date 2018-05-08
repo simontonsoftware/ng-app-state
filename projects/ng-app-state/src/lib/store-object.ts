@@ -7,6 +7,7 @@ import {
   isEqual,
   memoize,
   omit,
+  last,
 } from 'micro-dash';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -24,7 +25,7 @@ export interface StoreObject<T> {
 }
 
 export class StoreObject<T> extends ExtensibleFunction {
-  private _$: Observable<T>;
+  private _$?: Observable<T>;
 
   protected constructor(
     private observableFactory: TreeBasedObservableFactory,
@@ -111,11 +112,11 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    new StoreObject(
+    new StoreObject<Partial<{[key: string]: T}>>(
       this.observableFactory,
       this.path.slice(0, -1),
       this.dispatcher,
-    ).setUsing(omit, this.path[this.path.length - 1]);
+    ).setUsing<string>(omit, last(this.path));
   }
 
   /**

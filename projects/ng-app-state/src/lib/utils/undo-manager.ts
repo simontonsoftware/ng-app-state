@@ -6,7 +6,7 @@ export type UndoOrRedo = 'undo' | 'redo';
 
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
-  private currentStateIndex: number;
+  private currentStateIndex!: number;
 
   private canUndoSubject = new ReplaySubject<boolean>(1);
   private canRedoSubject = new ReplaySubject<boolean>(1);
