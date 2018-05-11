@@ -183,6 +183,10 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ngrx/store-devtools@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-5.2.0.tgz#2fff916a9aa349375826772b359dbb64b9e5d622"
+
 "@ngrx/store@^5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-5.2.0.tgz#627ed74c9cd95462930485d912a557117b23903e"
@@ -4166,6 +4170,10 @@ ng-packagr@^3.0.0-rc.2:
     stylus "^0.54.5"
     uglify-js "^3.0.7"
     update-notifier "^2.3.0"
+
+ngrx-store-logger@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ngrx-store-logger/-/ngrx-store-logger-0.2.1.tgz#216e99c9527cf3c50862ee2b27fe93fbe8c28671"
 
 no-case@^2.2.0:
   version "2.3.2"
