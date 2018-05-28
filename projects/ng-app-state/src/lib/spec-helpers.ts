@@ -129,8 +129,10 @@ export class MultipleCityComponent extends StoreComponent<MultipleCityState> {
 //
 
 export class MenuState {
-  food: string;
-  drink: string;
+  // prettier-ignore
+  food!: string;
+  // prettier-ignore
+  drink!: string;
 }
 
 @Injectable()
@@ -162,7 +164,8 @@ export class MenuComponent extends StoreComponent<MenuState> {
 //
 
 export class NameState {
-  name: string;
+  // prettier-ignore
+  name!: string;
   isDisabled = false;
 }
 
@@ -207,9 +210,11 @@ export class NameComponent extends StoreComponent<NameState> {
   ],
 })
 export class InnerNameComponent implements ControlValueAccessor {
-  model: string;
+  // prettier-ignore
+  model!: string;
   @Input() disabled = false;
-  changeFn: (value: any) => void;
+  // prettier-ignore
+  changeFn!: (value: any) => void;
 
   writeValue(value: any) {
     this.model = value;

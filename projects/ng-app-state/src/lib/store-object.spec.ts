@@ -1,11 +1,11 @@
-import { inject, TestBed } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
+import { TestBed } from '@angular/core/testing';
+import { Action, Store, StoreModule } from '@ngrx/store';
+import { identity } from 'micro-dash';
 import { take } from 'rxjs/operators';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
-import { identity, noop } from 'micro-dash';
-import Spy = jasmine.Spy;
 import createSpy = jasmine.createSpy;
+import Spy = jasmine.Spy;
 
 class InnerState {
   left?: InnerState;
@@ -39,7 +39,7 @@ describe('StoreObject', () => {
     it('prints a useful error when used to modify missing state', () => {
       store<'optional', InnerState>('optional')('state').set(2);
       expect(logError).toHaveBeenCalledWith(
-        'testKey.optional is null or undefined (during [set:] testKey.optional.state)',
+        'testKey.optional is null or undefined (during [set] testKey.optional.state)',
       );
     });
 
@@ -47,7 +47,7 @@ describe('StoreObject', () => {
       store.delete();
       store<'optional', InnerState>('optional')('state').set(2);
       expect(logError).toHaveBeenCalledWith(
-        'testKey is null or undefined (during [set:] testKey.optional.state)',
+        'testKey is null or undefined (during [set] testKey.optional.state)',
       );
     });
   });
@@ -314,8 +314,23 @@ describe('StoreObject', () => {
       store<'optional', InnerState>('optional')('left').setUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        'testKey.optional is null or undefined (during [set:] testKey.optional.left)',
+        'testKey.optional is null or undefined (during [set] testKey.optional.left)',
       );
+    });
+
+    it('uses the name of the passed-in function in the action', () => {
+      function myCustomFunction(state: State) {
+        return state;
+      }
+
+      let lastEmitted: Action;
+      backingStore.addReducer('testKey', (state = {}, action) => {
+        lastEmitted = action;
+        return state;
+      });
+
+      store.setUsing(myCustomFunction);
+      expect(lastEmitted!.type).toEqual('[set:myCustomFunction] testKey');
     });
   });
 
@@ -349,8 +364,21 @@ describe('StoreObject', () => {
       store<'optional', InnerState>('optional')('left').mutateUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        'testKey.optional is null or undefined (during [mutate:] testKey.optional.left)',
+        'testKey.optional is null or undefined (during [mutate] testKey.optional.left)',
       );
+    });
+
+    it('uses the name of the passed-in function in the action', () => {
+      function myCustomFunction() {}
+
+      let lastEmitted: Action;
+      backingStore.addReducer('testKey', (state = {}, action) => {
+        lastEmitted = action;
+        return state;
+      });
+
+      store.mutateUsing(myCustomFunction);
+      expect(lastEmitted!.type).toEqual('[mutate:myCustomFunction] testKey');
     });
   });
 

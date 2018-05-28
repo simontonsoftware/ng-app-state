@@ -8,7 +8,7 @@ export class FunctionAction extends AppStateAction {
     private func: Function,
     private args: any[],
   ) {
-    super(`${mutates ? 'mutate' : 'set'}:${func.name}`, path);
+    super(buildName(mutates, func), path);
   }
 
   public execute<T>(state: T) {
@@ -38,5 +38,14 @@ export class FunctionAction extends AppStateAction {
     } else {
       return this.func(oldState, ...this.args);
     }
+  }
+}
+
+function buildName(mutates: boolean, func: Function) {
+  const prefix = mutates ? 'mutate' : 'set';
+  if (func.name) {
+    return `${prefix}:${func.name}`;
+  } else {
+    return prefix;
   }
 }
