@@ -20,13 +20,12 @@
     "@angular/platform-browser": "^6.0.0",
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
-    "@ngrx/store": "^5.2.0",
-    "@ngrx/store-devtools": "^5.2.0",
+    "@ngrx/store": "^6.0.1",
+    "@ngrx/store-devtools": "^6.0.1",
     "core-js": "^2.5.4",
     "micro-dash": "^3.4.0",
     "ngrx-store-logger": "^0.2.1",
     "rxjs": "^6.0.0",
-    "rxjs-compat": "^6.1.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
