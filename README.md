@@ -237,8 +237,3 @@ You will likely want to be more selective about which states are pushed into the
 You may also want to tailor which pieces of state are included in undo/redo operations by returning only those portions from `extractUndoState()` (which will change what is passed to `applyUndoState()`).
 
 Consult the documentation in the source of `UndoState` for more options and information.
-
-## Credits
-This project's configuration came from [Angular QuickStart Lib](https://github.com/filipesilva/angular-quickstart-lib) (on [Jul 21, 2017](https://github.com/filipesilva/angular-quickstart-lib/commit/c687d9a3c00c8db5c290f0dfb243172f8dbfdf40)).
-
-The examples, and of course underlying technology, come from [@ngrx/store](https://github.com/ngrx/platform).
