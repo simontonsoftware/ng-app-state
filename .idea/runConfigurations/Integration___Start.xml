@@ -1,11 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Counter - Start" type="js.build_tools.npm" factoryName="npm">
+  <configuration default="false" name="Integration - Start" type="js.build_tools.npm" factoryName="npm">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
       <script value="start" />
     </scripts>
-    <arguments value="counter-demo --port 4202" />
     <node-interpreter value="project" />
     <envs />
     <method />

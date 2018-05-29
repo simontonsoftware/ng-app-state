@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Counter - Start" type="js.build_tools.npm" factoryName="npm">
+  <configuration default="false" name="Lib - Build" type="js.build_tools.npm" factoryName="npm">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="start" />
+      <script value="build" />
     </scripts>
-    <arguments value="counter-demo --port 4202" />
+    <arguments value="ng-app-state" />
     <node-interpreter value="project" />
     <envs />
     <method />
