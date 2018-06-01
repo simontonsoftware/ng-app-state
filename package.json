@@ -1,13 +1,14 @@
 {
   "name": "ng-app-state-platform",
-  "version": "0.0.0",
+  "version": "6.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "publish": "standard-version"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +50,7 @@
     "ng-packagr": "^3.0.0-rc.2",
     "prettier": "^1.12.1",
     "protractor": "~5.3.0",
+    "standard-version": "^4.4.0",
     "ts-node": "~5.0.1",
     "tsickle": ">=0.25.5",
     "tslib": "^1.7.1",

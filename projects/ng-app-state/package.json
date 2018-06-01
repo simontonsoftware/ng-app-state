@@ -1,6 +1,9 @@
 {
   "name": "ng-app-state",
-  "version": "0.0.1",
+  "version": "7.0.0",
+  "author": "Simonton Software",
+  "license": "MIT",
+  "repository": "simontonsoftware/ng-app-state",
   "peerDependencies": {
     "@angular/common": ">=6.0.0 <7.0.0",
     "@angular/core": ">=6.0.0 <7.0.0",
