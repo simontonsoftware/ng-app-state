@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v6.2.0...v7.0.0) (2018-06-01)
+
+
+* Update to Angular 6 (#8) ([61fc7d2](https://github.com/simontonsoftware/ng-app-state/commit/61fc7d2)), closes [#8](https://github.com/simontonsoftware/ng-app-state/issues/8)
+
+
+### BREAKING CHANGES
+
+* Because of changes to underlying libraries, trying to modify state whose ancestor is `undefined` or `null` no longer throws an error. The error is now only printed to the console.
+* requires `@angular >=6.0.0 <7.0.0`
+* requires `@ngrx >=6.0.0 <7.0.0`
+* requires `micro-dash@^3.5.0`
+
+
+
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/simontonsoftware/ng-app-state/compare/v6.1.1...v6.2.0) (2018-04-28)
 

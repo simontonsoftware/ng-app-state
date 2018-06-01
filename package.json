@@ -1,6 +1,6 @@
 {
   "name": "ng-app-state-platform",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish": "standard-version"
+    "publish": "standard-version && yarn build ng-app-state --prod"
   },
   "private": true,
   "dependencies": {
