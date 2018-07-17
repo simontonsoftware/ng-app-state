@@ -18,12 +18,11 @@ cache:
 
 install:
   - yarn
+
 script:
+  - yarn test ng-app-state --code-coverage --watch=false --progress=false --browsers=ChromeHeadlessCI
   - yarn build ng-app-state --prod
-  # Use Chromium instead of Chrome.
-  - export CHROME_BIN=chromium-browser
-  - xvfb-run -a yarn test ng-app-state --code-coverage --watch=false --browsers=ChromeNoSandbox
-  - xvfb-run -a yarn e2e --protractor-config=e2e/protractor-ci.conf.js
+  - yarn e2e --protractor-config=./e2e/protractor-ci.conf.js
 
 after_success:
   - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js

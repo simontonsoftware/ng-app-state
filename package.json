@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish": "standard-version && yarn build ng-app-state --prod"
+    "publish": "standard-version && yarn build ng-app-state --prod && npm publish dist\\ng-app-state"
   },
   "private": true,
   "dependencies": {
