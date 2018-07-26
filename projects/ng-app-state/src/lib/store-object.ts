@@ -112,7 +112,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * ```
    */
   public delete() {
-    new StoreObject<Partial<{[key: string]: T}>>(
+    new StoreObject<Partial<{ [key: string]: T }>>(
       this.observableFactory,
       this.path.slice(0, -1),
       this.dispatcher,
@@ -159,11 +159,7 @@ export class StoreObject<T> extends ExtensibleFunction {
    * Retrieve the current state represented by this store object.
    */
   public state() {
-    let value: T;
-    this.$.pipe(take(1)).subscribe((v) => {
-      value = v;
-    });
-    return value!;
+    return this.observableFactory.getState(this.path);
   }
 
   /**
