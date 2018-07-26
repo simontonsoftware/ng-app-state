@@ -25,7 +25,7 @@ export class AppComponent {
   chooseToCheck() {
     this.store('checkMany').set(
       mapValues(
-        keyBy(this.store.state().chooseMany, (city) => city),
+        keyBy<string>(this.store.state().chooseMany, (city) => city),
         () => true,
       ),
     );

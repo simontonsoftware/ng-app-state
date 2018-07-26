@@ -382,6 +382,30 @@ describe('StoreObject', () => {
     });
   });
 
+  describe('.state()', () => {
+    it('works when there are no subscribers', () => {
+      expect(store.state().nested.state).toBe(0);
+      expect(store('nested').state().state).toBe(0);
+      expect(store('nested')('state').state()).toBe(0);
+
+      store('nested')('state').set(1);
+      expect(store.state().nested.state).toBe(1);
+      expect(store('nested').state().state).toBe(1);
+      expect(store('nested')('state').state()).toBe(1);
+    });
+
+    it('gets the new subvalue even it has a later subscriber (production bug)', () => {
+      let expectedValue: InnerState | undefined;
+      store.$.subscribe(() => {
+        expect(store('optional').state()).toBe(expectedValue);
+      });
+      store('optional').$.subscribe();
+
+      expectedValue = new InnerState();
+      store('optional').set(expectedValue);
+    });
+  });
+
   describe('.withCaching()', () => {
     it('caches descendant stores', () => {
       expect(store('counter')).not.toBe(store('counter'));

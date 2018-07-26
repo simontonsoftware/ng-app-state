@@ -5,9 +5,9 @@
     <scripts>
       <script value="build" />
     </scripts>
-    <arguments value="ng-app-state" />
+    <arguments value="ng-app-state --prod" />
     <node-interpreter value="project" />
     <envs />
-    <method />
+    <method v="2" />
   </configuration>
 </component>
