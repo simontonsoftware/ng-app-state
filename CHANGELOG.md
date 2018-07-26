@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/simontonsoftware/ng-app-state/compare/v7.0.0...v7.0.1) (2018-07-26)
+
+
+### Features
+
+* improve performance of `.state()` in most cases
+
+
+### Bug Fixes
+
+* it was possible to get an outdated state while change handlers were firing
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v6.2.0...v7.0.0) (2018-06-01)
 
