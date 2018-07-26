@@ -158,7 +158,7 @@ export class StoreObject<T> extends ExtensibleFunction {
   /**
    * Retrieve the current state represented by this store object.
    */
-  public state() {
+  public state(): T {
     return this.observableFactory.getState(this.path);
   }
 
