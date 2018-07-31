@@ -9,17 +9,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
     "paths": {
-      "ng-app-state": [
-        "dist/ng-app-state"
-      ]
+      "ng-app-state": ["dist/ng-app-state"]
     },
     "strict": true
   }

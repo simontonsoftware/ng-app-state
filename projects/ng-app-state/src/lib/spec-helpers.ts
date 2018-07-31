@@ -212,7 +212,8 @@ export class NameComponent extends StoreComponent<NameState> {
 export class InnerNameComponent implements ControlValueAccessor {
   // prettier-ignore
   model!: string;
-  @Input() disabled = false;
+  @Input()
+  disabled = false;
   // prettier-ignore
   changeFn!: (value: any) => void;
 
