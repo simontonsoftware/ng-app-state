@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.0"></a>
+
+# [8.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v7.0.2...v8.0.0) (2018-08-01)
+
+### Features
+
+- performance optimization for common use cases ([32d6368](https://github.com/simontonsoftware/ng-app-state/commit/32d6368))
+
+### BREAKING CHANGES
+
+- when `.set()`, `.setUsing()` or `.assign()` do not actually make a change (as determined with `===`), no observables on the store will emit. This is the performance optimization, but is also technically a breaking change for anyone relying on observables to emit unconditionally.
+
 <a name="7.0.2"></a>
 
 ## [7.0.2](https://github.com/simontonsoftware/ng-app-state/compare/v7.0.1...v7.0.2) (2018-07-26)
