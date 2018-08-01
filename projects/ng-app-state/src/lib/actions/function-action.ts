@@ -28,8 +28,14 @@ export class FunctionAction extends AppStateAction {
       }
 
       const key = path[0] as keyof T;
+      const oldChildState = oldState[key];
+      const newChildState = this.getNewState(path.slice(1), oldChildState);
+      if (newChildState === oldChildState) {
+        return oldState;
+      }
+
       const newState = clone(oldState);
-      newState[key] = this.getNewState(path.slice(1), oldState[key]);
+      newState[key] = newChildState;
       return newState;
     } else if (this.mutates) {
       const newState = clone(oldState);

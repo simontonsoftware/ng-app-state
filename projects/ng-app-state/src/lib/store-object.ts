@@ -1,16 +1,16 @@
 import { Action } from '@ngrx/store';
 import {
+  every,
   Function1,
   Function2,
   Function3,
   Function4,
   isEqual,
+  last,
   memoize,
   omit,
-  last,
 } from 'micro-dash';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { BatchAction } from './actions/batch-action';
 import { FunctionAction } from './actions/function-action';
 import { TreeBasedObservableFactory } from './tree-based-observable-factory';
@@ -102,7 +102,13 @@ export class StoreObject<T> extends ExtensibleFunction {
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
   public assign(value: Partial<T>) {
-    this.mutateUsing(Object.assign, value);
+    this.setUsing((state: any) => {
+      if (every(value, (innerValue, key) => state[key] === innerValue)) {
+        return state;
+      } else {
+        return { ...state, ...(value as any) };
+      }
+    });
   }
 
   /**

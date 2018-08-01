@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { identity } from 'micro-dash';
-import { take } from 'rxjs/operators';
+import { cloneDeep, identity, pick } from 'micro-dash';
+import { skip, take } from 'rxjs/operators';
 import { AppStore } from './app-store';
 import { ngAppStateReducer } from './meta-reducer';
 import createSpy = jasmine.createSpy;
@@ -232,6 +232,26 @@ describe('StoreObject', () => {
         nested: new InnerState(),
       });
     });
+
+    it('does nothing when setting to the same value', () => {
+      const startingState = store.state();
+      const stateClone = cloneDeep(startingState);
+      store.$.pipe(skip(1)).subscribe(() => {
+        fail('should not have fired');
+      });
+
+      store.set(startingState);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store('counter').set(startingState.counter);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store('nested').set(startingState.nested);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+    });
   });
 
   describe('.assign()', () => {
@@ -247,6 +267,26 @@ describe('StoreObject', () => {
       expect(before.right).toBeUndefined();
       expect(after.left).toBe(left);
       expect(after.right).toBe(right);
+    });
+
+    it('does nothing when setting to the same value', () => {
+      const startingState = store.state();
+      const stateClone = cloneDeep(startingState);
+      store.$.pipe(skip(1)).subscribe(() => {
+        fail('should not have fired');
+      });
+
+      store.assign(pick(startingState, 'counter', 'nested'));
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store.assign({});
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store('nested').assign(startingState.nested);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
     });
   });
 
@@ -331,6 +371,26 @@ describe('StoreObject', () => {
 
       store.setUsing(myCustomFunction);
       expect(lastEmitted!.type).toEqual('[set:myCustomFunction] testKey');
+    });
+
+    it('does nothing when setting to the same value', () => {
+      const startingState = store.state();
+      const stateClone = cloneDeep(startingState);
+      store.$.pipe(skip(1)).subscribe(() => {
+        fail('should not have fired');
+      });
+
+      store.setUsing(identity);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store('counter').setUsing(identity);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
+
+      store('nested').setUsing(identity);
+      expect(store.state()).toBe(startingState);
+      expect(cloneDeep(store.state())).toEqual(stateClone);
     });
   });
 
