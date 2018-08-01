@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish": "standard-version && yarn build ng-app-state --prod && npm publish dist\\ng-app-state"
+    "release": "yarn build ng-app-state --prod && standard-version --commit-all"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +38,7 @@
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "@types/prettier": "^1.13.2",
     "codelyzer": "~4.2.1",
     "coveralls": "^3.0.1",
     "jasmine-core": "~2.99.1",
@@ -57,5 +58,12 @@
     "tslint": "~5.9.1",
     "tslint-config-prettier": "^1.12.0",
     "typescript": "~2.7.2"
+  },
+  "standard-version": {
+    "scripts": {
+      "postbump": "ts-node standard-version-postbump",
+      "postchangelog": "prettier --write CHANGELOG.md",
+      "precommit": "git add projects/ng-app-state/package.json"
+    }
   }
 }
