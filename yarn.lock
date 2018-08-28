@@ -4264,9 +4264,11 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
-micro-dash@^3.4.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-3.6.0.tgz#ffa240b060c640e408f79d6cc4d0e94e76e2beaa"
+micro-dash@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-4.1.0.tgz#6b69d9440d60ba83d6bc3295fa34ce4240936030"
+  dependencies:
+    tslib "^1.9.0"
 
 micromatch@^2.1.5, micromatch@^2.3.11:
   version "2.3.11"

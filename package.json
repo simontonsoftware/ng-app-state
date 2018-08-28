@@ -24,7 +24,7 @@
     "@ngrx/store": "^6.1.0",
     "@ngrx/store-devtools": "^6.1.0",
     "core-js": "^2.5.4",
-    "micro-dash": "^3.4.0",
+    "micro-dash": "^4.1.0",
     "ngrx-store-logger": "^0.2.1",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
