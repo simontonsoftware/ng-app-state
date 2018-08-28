@@ -38,7 +38,7 @@ export class StoreObject<T> extends ExtensibleFunction {
         (prop: keyof T) =>
           new StoreObject(
             observableFactory,
-            [...path, prop],
+            [...path, prop.toString()],
             dispatcher,
             _withCaching,
           ),
