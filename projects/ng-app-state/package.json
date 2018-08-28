@@ -7,7 +7,7 @@
   "peerDependencies": {
     "@angular/common": ">=6.1.0 <7.0.0",
     "@angular/core": ">=6.1.0 <7.0.0",
-    "@ngrx/store": ">=6.0.0 <7.0.0",
+    "@ngrx/store": ">=6.1.0 <7.0.0",
     "micro-dash": ">=3.5.0 <4.0.0"
   }
 }
