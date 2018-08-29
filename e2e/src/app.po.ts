@@ -1,7 +1,7 @@
-import { browser } from 'protractor';
+import { browser } from "protractor";
 
 export class AppPage {
   navigateTo() {
-    return browser.get('/');
+    return browser.get("/");
   }
 }

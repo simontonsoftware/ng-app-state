@@ -169,10 +169,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace":
-                    "projects/counter-demo/src/environments/environment.ts",
-                  "with":
-                    "projects/counter-demo/src/environments/environment.prod.ts"
+                  "replace": "projects/counter-demo/src/environments/environment.ts",
+                  "with": "projects/counter-demo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

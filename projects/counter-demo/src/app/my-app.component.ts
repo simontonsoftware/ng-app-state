@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { INCREMENT, DECREMENT, RESET } from './counter';
+import { Component } from "@angular/core";
+import { Store, select } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { INCREMENT, DECREMENT, RESET } from "./counter";
 
 interface AppState {
   count: number;
 }
 
 @Component({
-  selector: 'my-app',
+  selector: "my-app",
   template: `
     <button (click)="increment()">Increment</button>
     <div>Current Count: {{ count$ | async }}</div>
@@ -21,7 +21,7 @@ export class MyAppComponent {
   count$: Observable<number>;
 
   constructor(private store: Store<AppState>) {
-    this.count$ = store.pipe(select('count'));
+    this.count$ = store.pipe(select("count"));
   }
 
   increment() {

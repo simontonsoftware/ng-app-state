@@ -1,21 +1,21 @@
-import { TestBed } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
-import { noop, ObjectWith } from 'micro-dash';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { AppStore } from './app-store';
-import { ngAppStateReducer } from './meta-reducer';
-import { StoreObject } from './store-object';
-import { TreeBasedObservableFactory } from './tree-based-observable-factory';
+import { TestBed } from "@angular/core/testing";
+import { Store, StoreModule } from "@ngrx/store";
+import { noop, ObjectWith } from "micro-dash";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { AppStore } from "./app-store";
+import { ngAppStateReducer } from "./meta-reducer";
+import { StoreObject } from "./store-object";
+import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
 
 interface State {
   left?: State;
   right?: State;
 }
 
-const rootKey = 'testKey';
+const rootKey = "testKey";
 
-describe('TreeBasedObservableFactory', () => {
+describe("TreeBasedObservableFactory", () => {
   let store: AppStore<State>;
   let cache: DebugCacheNode;
 
@@ -28,21 +28,21 @@ describe('TreeBasedObservableFactory', () => {
     cache = (store as any).observableFactory.rootCacheNode;
   });
 
-  it('only emits from the exact level of a subscription', () => {
-    subscribeTo('left');
+  it("only emits from the exact level of a subscription", () => {
+    subscribeTo("left");
     expectProfile({ count: 1, left: { count: 1 } });
 
-    subscribeTo('left');
+    subscribeTo("left");
     expectProfile({ count: 1, left: { count: 2 } });
 
-    subscribeTo('right', 'left', 'right');
+    subscribeTo("right", "left", "right");
     expectProfile({
       count: 2,
       left: { count: 2 },
       right: { count: 1, left: { count: 1, right: { count: 1 } } },
     });
 
-    subscribeTo('right', 'left');
+    subscribeTo("right", "left");
     expectProfile({
       count: 2,
       left: { count: 2 },
@@ -51,9 +51,9 @@ describe('TreeBasedObservableFactory', () => {
   });
 
   it(`multicasts through its cache node's observables`, () => {
-    subscribeTo('left');
-    subscribeTo('left', 'left');
-    subscribeTo('right', 'right');
+    subscribeTo("left");
+    subscribeTo("left", "left");
+    subscribeTo("right", "right");
     expectProfile({
       count: 2,
       left: { count: 2, left: { count: 1 } },
@@ -67,28 +67,28 @@ describe('TreeBasedObservableFactory', () => {
       right: { count: 1, right: { count: 1 } },
     });
 
-    store('left').set({ right: {} });
+    store("left").set({ right: {} });
     expectProfile({
       count: 6,
       left: { count: 4, left: { count: 1 } },
       right: { count: 1, right: { count: 1 } },
     });
 
-    store<'left', State>('left')('left').set({});
+    store<"left", State>("left")("left").set({});
     expectProfile({
       count: 8,
       left: { count: 6, left: { count: 2 } },
       right: { count: 1, right: { count: 1 } },
     });
 
-    store('right').set({ left: {} });
+    store("right").set({ left: {} });
     expectProfile({
       count: 10,
       left: { count: 6, left: { count: 2 } },
       right: { count: 2, right: { count: 1 } },
     });
 
-    store<'right', State>('right')('right').set({});
+    store<"right", State>("right")("right").set({});
     expectProfile({
       count: 12,
       left: { count: 6, left: { count: 2 } },
@@ -103,13 +103,13 @@ describe('TreeBasedObservableFactory', () => {
     });
   });
 
-  it('cleans up nodes and subscriptions', () => {
+  it("cleans up nodes and subscriptions", () => {
     const fullState = { left: { left: {}, right: {} } };
 
-    const l = subscribeTo('left');
-    const ll1 = subscribeTo('left', 'left');
-    const ll2 = subscribeTo('left', 'left');
-    const lr = subscribeTo('left', 'right');
+    const l = subscribeTo("left");
+    const ll1 = subscribeTo("left", "left");
+    const ll2 = subscribeTo("left", "left");
+    const lr = subscribeTo("left", "right");
     const rootNode = cache.children[rootKey];
     const lNode = rootNode.children.left;
     const llNode = lNode.children.left;
@@ -187,7 +187,7 @@ interface EmitProfile {
 function instrumentFactories() {
   const prototypeAsAny: any = TreeBasedObservableFactory.prototype;
   const nodeFactory = prototypeAsAny.makeCacheNode;
-  spyOn(prototypeAsAny, 'makeCacheNode').and.callFake(
+  spyOn(prototypeAsAny, "makeCacheNode").and.callFake(
     (observable: Observable<any>) => {
       let node: DebugCacheNode;
       observable = observable.pipe(

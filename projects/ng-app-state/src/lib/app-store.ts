@@ -1,7 +1,7 @@
-import { Action, Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
-import { TreeBasedObservableFactory } from './tree-based-observable-factory';
-import { StoreObject } from './store-object';
+import { Action, Store } from "@ngrx/store";
+import { Observable, Subject } from "rxjs";
+import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
+import { StoreObject } from "./store-object";
 
 export class AppStore<T extends object> extends StoreObject<T> {
   private actionSubject = new Subject<Action>();

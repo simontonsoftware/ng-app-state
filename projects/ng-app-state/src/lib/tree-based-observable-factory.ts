@@ -1,5 +1,5 @@
-import { get, ObjectWith } from 'micro-dash';
-import { Observable } from 'rxjs';
+import { get, ObjectWith } from "micro-dash";
+import { Observable } from "rxjs";
 import {
   distinctUntilChanged,
   map,
@@ -7,7 +7,7 @@ import {
   refCount,
   take,
   tap,
-} from 'rxjs/operators';
+} from "rxjs/operators";
 
 export class TreeBasedObservableFactory {
   private readonly rootCacheNode: CacheNode;

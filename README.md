@@ -39,7 +39,7 @@ Define the shape of your application state using typescript classes or interface
 ```ts
 // state/my-state.ts
 
-import { User } from './user';
+import { User } from "./user";
 
 export class MyState {
   public loading = true;
@@ -61,15 +61,15 @@ Then create a subclass of `AppStore`. A single instance of that class will serve
 ```ts
 // state/my-store.service.ts
 
-import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppStore } from 'ng-app-state';
-import { MyState } from './my-state';
+import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { AppStore } from "ng-app-state";
+import { MyState } from "./my-state";
 
 @Injectable()
 export class MyStore extends AppStore<MyState> {
   constructor(store: Store<any>) {
-    super(store, 'myState', new MyState());
+    super(store, "myState", new MyState());
   }
 }
 ```
@@ -81,10 +81,10 @@ Below is a common setup for your root module. Note that the only required part i
 ```ts
 // app.module.ts
 
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ngAppStateReducer } from 'ng-app-state';
-import { MyStore } from './state/my-store';
+import { StoreModule } from "@ngrx/store";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { ngAppStateReducer } from "ng-app-state";
+import { MyStore } from "./state/my-store";
 
 @NgModule({
   imports: [
@@ -110,13 +110,13 @@ export class CounterState {
 @Injectable()
 export class CounterStore extends AppStore<CounterState> {
   constructor(store: Store<any>) {
-    super(store, 'counterState', new CounterState());
+    super(store, "counterState", new CounterState());
   }
 }
 
 // my-app-component.ts
 @Component({
-  selector: 'my-app',
+  selector: "my-app",
   template: `
     <button (click)="increment()">Increment</button>
     <div>Current Count: {{ counterStore.$ | async }}</div>
@@ -129,7 +129,7 @@ export class MyAppComponent {
   counterStore: StoreObject<number>;
 
   constructor(store: CounterStore) {
-    this.counterStore = store('counter');
+    this.counterStore = store("counter");
   }
 
   increment() {
@@ -156,7 +156,7 @@ class AccountSettingsComponent {
   nameStore: StoreObject<string>;
 
   constructor(myStore: MyStore) {
-    this.nameStore = myStore('currentUser')('name');
+    this.nameStore = myStore("currentUser")("name");
   }
 }
 ```
@@ -204,12 +204,12 @@ The main difference you'll see with `ng-app-state` is that you do not define red
 - When obtaining the current state of a nested property, prefer calling `state()` early. E.g.:
   ```ts
   store.state().currentUser.name; // do this
-  store('currentUser')('name').state(); // not this
+  store("currentUser")("name").state(); // not this
   ```
   This allows the use of `!` to easily declare the presence of an intermediate object. E.g.:
   ```ts
   store.state().currentUser!.name; // do this
-  store<'currentUser', User>('currentUser')('name').state(); // not this
+  store<"currentUser", User>("currentUser")("name").state(); // not this
   ```
 
 ## UndoManager

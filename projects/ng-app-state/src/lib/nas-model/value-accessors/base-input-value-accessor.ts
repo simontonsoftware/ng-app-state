@@ -1,16 +1,16 @@
-import { HostListener } from '@angular/core';
-import { BaseValueAccessor } from './base-value-accessor';
+import { HostListener } from "@angular/core";
+import { BaseValueAccessor } from "./base-value-accessor";
 
 export abstract class BaseInputValueAccessor extends BaseValueAccessor<
   HTMLInputElement
 > {
-  @HostListener('change')
-  @HostListener('input')
+  @HostListener("change")
+  @HostListener("input")
   onChange() {
     this.onChangeFn(this.element.value);
   }
 
-  @HostListener('blur')
+  @HostListener("blur")
   onBlur() {
     this.onTouchedFn();
   }

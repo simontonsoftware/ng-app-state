@@ -1,9 +1,9 @@
-import { Directive, Injector } from '@angular/core';
-import { BaseInputValueAccessor } from './base-input-value-accessor';
-import { makeProviderDef } from './base-value-accessor';
+import { Directive, Injector } from "@angular/core";
+import { BaseInputValueAccessor } from "./base-input-value-accessor";
+import { makeProviderDef } from "./base-value-accessor";
 
 @Directive({
-  selector: 'input[type=range][nasModel]',
+  selector: "input[type=range][nasModel]",
   providers: [makeProviderDef(RangeValueAccessorDirective)],
 })
 export class RangeValueAccessorDirective extends BaseInputValueAccessor {

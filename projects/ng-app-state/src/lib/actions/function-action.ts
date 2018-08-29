@@ -1,5 +1,5 @@
-import { clone } from 'micro-dash';
-import { AppStateAction } from './app-state-action';
+import { clone } from "micro-dash";
+import { AppStateAction } from "./app-state-action";
 
 export class FunctionAction extends AppStateAction {
   constructor(
@@ -21,7 +21,7 @@ export class FunctionAction extends AppStateAction {
     if (path.length) {
       if (oldState == null) {
         console.error(
-          this.path.slice(0, -path.length).join('.') +
+          this.path.slice(0, -path.length).join(".") +
             ` is null or undefined (during ${this.type})`,
         );
         return oldState;
@@ -48,7 +48,7 @@ export class FunctionAction extends AppStateAction {
 }
 
 function buildName(mutates: boolean, func: Function) {
-  const prefix = mutates ? 'mutate' : 'set';
+  const prefix = mutates ? "mutate" : "set";
   if (func.name) {
     return `${prefix}:${func.name}`;
   } else {

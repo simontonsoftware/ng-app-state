@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { Action } from "@ngrx/store";
 import {
   every,
   Function1,
@@ -9,12 +9,12 @@ import {
   last,
   memoize,
   omit,
-} from 'micro-dash';
-import { Observable } from 'rxjs';
-import { BatchAction } from './actions/batch-action';
-import { FunctionAction } from './actions/function-action';
-import { TreeBasedObservableFactory } from './tree-based-observable-factory';
-import { ExtensibleFunction } from './utils/extensible-function';
+} from "micro-dash";
+import { Observable } from "rxjs";
+import { BatchAction } from "./actions/batch-action";
+import { FunctionAction } from "./actions/function-action";
+import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
+import { ExtensibleFunction } from "./utils/extensible-function";
 
 export interface StoreObject<T> {
   // tslint:disable:callable-types

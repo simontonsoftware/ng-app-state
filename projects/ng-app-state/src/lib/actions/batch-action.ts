@@ -1,10 +1,10 @@
-import { AppStateAction } from './app-state-action';
+import { AppStateAction } from "./app-state-action";
 
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 
   constructor() {
-    super('batch', []);
+    super("batch", []);
   }
 
   public dispatch(action: AppStateAction) {
