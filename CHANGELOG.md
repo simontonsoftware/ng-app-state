@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0"></a>
+
+# [9.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v8.0.0...v9.0.0) (2018-08-29)
+
+### Chores
+
+- start using s-js-utils ([90f6bcb](https://github.com/simontonsoftware/ng-app-state/commit/90f6bcb))
+- upgrade [@ngrx](https://github.com/ngrx) ([7beaf02](https://github.com/simontonsoftware/ng-app-state/commit/7beaf02))
+- upgrade angular ([478955d](https://github.com/simontonsoftware/ng-app-state/commit/478955d))
+- upgrade micro-dash ([2d49849](https://github.com/simontonsoftware/ng-app-state/commit/2d49849))
+
+### Features
+
+- **UndoManager:** add `.dropCurrentUndoState` and `.undoStack` ([2517dcb](https://github.com/simontonsoftware/ng-app-state/commit/2517dcb))
+
+### BREAKING CHANGES
+
+- requires s-js-utils
+- requires micro-dash >= 4.1.0
+- require @ngrx >= 6.1.0
+- require angular >= 6.1.0
+
 <a name="8.0.0"></a>
 
 # [8.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v7.0.2...v8.0.0) (2018-08-01)
