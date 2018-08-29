@@ -60,14 +60,14 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.stack[this.currentStateIndex] = this.extractUndoState(
       this.store.state(),
     );
-    this.stack.splice(this.currentStateIndex + 1, this.stack.length);
+    this.dropRedoHistory();
 
     while (this.stack.length > 1 && this.isOverSize(this.stack.length)) {
       this.stack.shift();
       --this.currentStateIndex;
     }
 
-    this.fireUndoChanges();
+    this.emitUndoChanges();
   }
 
   /**
@@ -111,6 +111,27 @@ export abstract class UndoManager<StateType, UndoStateType> {
   }
 
   /**
+   * Drops the state from the internal undo stack that would be applied by a call to `.undo()`. This is useful e.g. if making multiple changes in a row that should be collapsed into a single undo state: call this first before pushing the new version.
+   *
+   * @throws Error when there is no such state (i.e. when `canUndo()` returns false)
+   */
+  dropCurrentUndoState() {
+    if (!this.canUndo()) {
+      throw new Error("Nothing to drop");
+    }
+
+    this.currentStateIndex = this.currentStateIndex - 1;
+    this.dropRedoHistory();
+  }
+
+  /**
+   * Returns a view of the internal undo stack, from oldest to newest. Note that this contains states that would be applied by calls to both `.undo()` and `.redo`.
+   */
+  get undoStack() {
+    return this.stack.slice();
+  }
+
+  /**
    * Return the information needed to reconstruct the given state. This will be passed to `applyUndoState()` when the store should be reset to this state.
    */
   protected abstract extractUndoState(state: StateType): UndoStateType;
@@ -127,6 +148,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
     oldState: UndoStateType,
   ): void;
 
+  private dropRedoHistory() {
+    this.stack.splice(this.currentStateIndex + 1, this.stack.length);
+  }
+
   /**
    * Each time a state is added to the history, this method will be called to determine whether the oldest state should be dropped. Override to implement more complex logic than the simple `maxDepth`.
    */
@@ -141,10 +166,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.store.batch((batch) => {
       this.applyUndoState(newState, batch, undoOrRedo, oldState);
     });
-    this.fireUndoChanges();
+    this.emitUndoChanges();
   }
 
-  private fireUndoChanges() {
+  private emitUndoChanges() {
     this.canUndoSubject.next(this.canUndo());
     this.canRedoSubject.next(this.canRedo());
     this.stateSubject.next(this.stack[this.currentStateIndex]);

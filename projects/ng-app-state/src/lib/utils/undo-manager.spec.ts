@@ -290,14 +290,14 @@ describe("UndoManager", () => {
 
     it("does not affect the store", () => {
       undoManager.reset();
-      expectStack(0);
+      expect(store.state().counter).toBe(0);
 
       store("counter").set(1);
       undoManager.reset();
-      expectStack(1);
+      expect(store.state().counter).toBe(1);
 
       undoManager.reset();
-      expectStack(1);
+      expect(store.state().counter).toBe(1);
     });
   });
 
@@ -307,11 +307,12 @@ describe("UndoManager", () => {
       expectStack(0, 0);
 
       store("counter").set(1);
-      undoManager.pushCurrentState();
       expectStack(0, 0, 1);
-
       undoManager.pushCurrentState();
       expectStack(0, 0, 1, 1);
+
+      undoManager.pushCurrentState();
+      expectStack(0, 0, 1, 1, 1);
     });
 
     it("clears the stack after the current index", () => {
@@ -420,6 +421,72 @@ describe("UndoManager", () => {
     });
   });
 
+  describe(".dropCurrentUndoState()", () => {
+    it("drops the current undo state", () => {
+      store("counter").set(1);
+      store("counter").set(2);
+
+      expectStack(0, 1, 2);
+      undoManager.dropCurrentUndoState();
+      expectStack(0, 1);
+      undoManager.dropCurrentUndoState();
+      expectStack(0);
+    });
+
+    it("drops redo history", () => {
+      store("counter").set(1);
+      store("counter").set(2);
+      store("counter").set(3);
+      store("counter").set(4);
+
+      undoManager.undo();
+      undoManager.undo();
+      undoManager.dropCurrentUndoState();
+      expectStack(0, 1);
+    });
+
+    it("does not affect the store", () => {
+      store("counter").set(1);
+      store("counter").set(2);
+
+      undoManager.dropCurrentUndoState();
+      expect(store.state().counter).toBe(2);
+
+      undoManager.dropCurrentUndoState();
+      expect(store.state().counter).toBe(2);
+    });
+
+    it("throws an error if at the beginning of the stack", () => {
+      expect(() => {
+        undoManager.dropCurrentUndoState();
+      }).toThrowError("Nothing to drop");
+
+      store("counter").set(1);
+      undoManager.dropCurrentUndoState();
+      expect(() => {
+        undoManager.dropCurrentUndoState();
+      }).toThrowError("Nothing to drop");
+
+      store("counter").set(2);
+      store("counter").set(3);
+      undoManager.dropCurrentUndoState();
+      undoManager.dropCurrentUndoState();
+      expect(() => {
+        undoManager.dropCurrentUndoState();
+      }).toThrowError("Nothing to drop");
+    });
+  });
+
+  describe(".undoStack()", () => {
+    // most of `.reset()` is tested by other tests that use `expectStack()`
+
+    it("does not allow callers to mutate the internal stack", () => {
+      store("counter").set(1);
+      undoManager.undoStack.splice(0, 9999);
+      expectStack(0, 1);
+    });
+  });
+
   describe("managing stack size", () => {
     it("respects `maxDepth` by default (when given)", () => {
       undoManager = new TestImpl(store, 2);
@@ -473,15 +540,6 @@ describe("UndoManager", () => {
   });
 
   function expectStack(...states: number[]) {
-    while (undoManager.canUndo()) {
-      undoManager.undo();
-    }
-
-    const stack = [store.state().counter];
-    while (undoManager.canRedo()) {
-      undoManager.redo();
-      stack.push(store.state().counter);
-    }
-    expect(stack).toEqual(states);
+    expect(undoManager.undoStack.map((s) => s.counter)).toEqual(states);
   }
 });
