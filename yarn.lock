@@ -5816,6 +5816,12 @@ rxjs@^6.0.0:
   dependencies:
     tslib "^1.9.0"
 
+s-js-utils@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-2.1.0.tgz#7dded68358d021662f674e9fa83de6a8c6a7b45e"
+  dependencies:
+    tslib "^1.9.0"
+
 safe-buffer@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"

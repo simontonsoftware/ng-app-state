@@ -28,6 +28,7 @@
     "micro-dash": "^4.1.0",
     "ngrx-store-logger": "^0.2.1",
     "rxjs": "^6.0.0",
+    "s-js-utils": "^2.1.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

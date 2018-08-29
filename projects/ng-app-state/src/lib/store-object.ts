@@ -11,10 +11,10 @@ import {
   omit,
 } from "micro-dash";
 import { Observable } from "rxjs";
+import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";
 import { FunctionAction } from "./actions/function-action";
 import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
-import { ExtensibleFunction } from "./utils/extensible-function";
 
 export interface StoreObject<T> {
   // tslint:disable:callable-types
@@ -24,7 +24,7 @@ export interface StoreObject<T> {
   <K extends keyof T, V extends T[K]>(attr: K): StoreObject<V>;
 }
 
-export class StoreObject<T> extends ExtensibleFunction {
+export class StoreObject<T> extends CallableObject {
   private _$?: Observable<T>;
 
   protected constructor(
