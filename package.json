@@ -66,7 +66,7 @@
   },
   "standard-version": {
     "scripts": {
-      "postbump": "ts-node standard-version-postbump",
+      "postbump": "ts-node -O \"{\\\"module\\\": \\\"commonjs\\\"}\" standard-version-postbump",
       "postchangelog": "prettier --write CHANGELOG.md",
       "precommit": "git add projects/ng-app-state/package.json"
     }
