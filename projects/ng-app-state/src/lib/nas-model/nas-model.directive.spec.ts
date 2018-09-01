@@ -1,4 +1,4 @@
-import { Component, Injectable, Input, Type } from "@angular/core";
+import { Type } from "@angular/core";
 import {
   async,
   ComponentFixture,
@@ -6,14 +6,9 @@ import {
   TestBed,
   tick,
 } from "@angular/core/testing";
-import {
-  ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { By } from "@angular/platform-browser";
-import { Store, StoreModule } from "@ngrx/store";
-import { AppStore } from "../app-store";
+import { StoreModule } from "@ngrx/store";
 import { ngAppStateReducer } from "../meta-reducer";
 import {
   CityComponent,
@@ -30,8 +25,7 @@ import {
   NameStore,
   SingleValueComponent,
   SingleValueStore,
-} from "../spec-helpers";
-import { StoreObject } from "../store-object";
+} from "../test-helpers";
 import { NasModelModule } from "./nas-model.module";
 
 let fixture: ComponentFixture<any>;

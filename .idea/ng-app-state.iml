@@ -9,7 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/demos/counter/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/demos/example-app/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/docs" />
+      <excludeFolder url="file://$MODULE_DIR$/docs/typedoc" />
       <excludeFolder url="file://$MODULE_DIR$/integration/dist" />
       <excludeFolder url="file://$MODULE_DIR$/integration/out-tsc" />
       <excludeFolder url="file://$MODULE_DIR$/out-tsc" />

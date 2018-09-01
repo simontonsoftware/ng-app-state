@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/simontonsoftware/ng-app-state.svg?branch=master)](https://travis-ci.org/simontonsoftware/ng-app-state) [![Coverage Status](https://coveralls.io/repos/github/simontonsoftware/ng-app-state/badge.svg?branch=master)](https://coveralls.io/github/simontonsoftware/ng-app-state?branch=master)
 
+## API Documentation
+
+Once you are familiar with the basics, it may help to see the [api documentation](https://simontonsoftware.github.io/ng-app-state/typedoc).
+
 ## Introduction
 
 A basic idea behind this library (as well as the underlying `ngrx/store`, and `Redux` on which it is modeled) is to keep all the state of your app in one place, accessible for any component or service to access, modify and subscribe to changes. This has several benefits:
