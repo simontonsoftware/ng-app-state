@@ -2,6 +2,7 @@
   "name": "ng-app-state-platform",
   "version": "9.0.0",
   "scripts": {
+    "postinstall": "ts-node -O \"{\\\"module\\\": \\\"commonjs\\\"}\" work-around-private-annotations",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
