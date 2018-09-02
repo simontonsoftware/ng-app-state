@@ -956,6 +956,9 @@ img { max-width: 100%; }
 			<a href="index.html#ngappstatereducer" class="tsd-kind-icon">ng<wbr>App<wbr>State<wbr>Reducer</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="index.html#pushtostorearray" class="tsd-kind-icon">push<wbr>ToStore<wbr>Array</a>
+		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="index.html#spreadarraystore_" class="tsd-kind-icon">spread<wbr>Array<wbr>Store$</a>
 		</li>
 	</ul>
@@ -1016,6 +1019,7 @@ img { max-width: 100%; }
 							<li class="tsd-kind-function tsd-is-private"><a href="index.html#makeproviderdef" class="tsd-kind-icon">make<wbr>Provider<wbr>Def</a></li>
 							<li class="tsd-kind-function tsd-is-not-exported"><a href="index.html#maybememoize" class="tsd-kind-icon">maybe<wbr>Memoize</a></li>
 							<li class="tsd-kind-function"><a href="index.html#ngappstatereducer" class="tsd-kind-icon">ng<wbr>App<wbr>State<wbr>Reducer</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="index.html#pushtostorearray" class="tsd-kind-icon">push<wbr>ToStore<wbr>Array</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="index.html#spreadarraystore_" class="tsd-kind-icon">spread<wbr>Array<wbr>Store$</a></li>
 						</ul>
 					</section>
@@ -1139,6 +1143,30 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="pushtostorearray" class="tsd-anchor"></a>
+				<h3>push<wbr>ToStore<wbr>Array</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">push<wbr>ToStore<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span>, item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/push-to-store-array.ts#L12">lib/utils/push-to-store-array.ts:12</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds <code>item</code> to the end of the array in <code>store</code>. Returns a store object representing the newly added item.</p>
+							</div>
+							<pre><code class="language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> store: StoreObject&lt;<span class="hljs-built_in">number</span>[]&gt;; <span class="hljs-comment">// assume store starts with [1, 2]</span>
+<span class="hljs-keyword">const</span> added = pushToStoreArray(store, <span class="hljs-number">3</span>); <span class="hljs-comment">// store has [1, 2, 3]</span>
+add.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// store has [1, 2, 17]</span></code></pre>
+						</div>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
 				<a name="spreadarraystore_" class="tsd-anchor"></a>
 				<h3>spread<wbr>Array<wbr>Store$</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
@@ -1253,7 +1281,7 @@ f=/(at|bl|iz)$/,d=new RegExp("([^aeiouylsz])\\1$"),v=new RegExp("^"+o+i+"[^aeiou
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-111611854-3', '');
+        ga('create', 'UA-111611854-4', '');
         ga('send', 'pageview');
     </script>
 </body>
