@@ -4,6 +4,7 @@ import {
   NG_VALUE_ACCESSOR,
 } from "@angular/forms";
 
+/** @private */
 @Directive({
   selector: "input[type=checkbox][nasModel]",
   // tslint:disable-next-line:use-host-property-decorator

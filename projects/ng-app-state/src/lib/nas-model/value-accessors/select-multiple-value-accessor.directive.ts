@@ -4,6 +4,7 @@ import {
   SelectMultipleControlValueAccessor,
 } from "@angular/forms";
 
+/** @private */
 @Directive({
   selector: "select[multiple][nasModel]",
   // tslint:disable-next-line:use-host-property-decorator

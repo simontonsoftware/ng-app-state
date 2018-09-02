@@ -2,6 +2,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { StoreObject } from "../store-object";
 
+/** @private */
 export type UndoOrRedo = "undo" | "redo";
 
 export abstract class UndoManager<StateType, UndoStateType> {

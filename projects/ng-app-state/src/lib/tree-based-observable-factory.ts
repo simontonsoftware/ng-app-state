@@ -9,6 +9,7 @@ import {
   tap,
 } from "rxjs/operators";
 
+/** @private */
 export class TreeBasedObservableFactory {
   private readonly rootCacheNode: CacheNode;
   private lastSeenState: any;

@@ -1,6 +1,7 @@
 import { clone } from "micro-dash";
 import { AppStateAction } from "./app-state-action";
 
+/** @private */
 export class FunctionAction extends AppStateAction {
   constructor(
     path: string[],

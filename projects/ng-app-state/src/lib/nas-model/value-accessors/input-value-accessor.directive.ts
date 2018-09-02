@@ -1,9 +1,7 @@
 import { Directive, forwardRef } from "@angular/core";
 import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
-/**
- * Allows the NasModel directive to
- */
+/** @private */
 @Directive({
   selector:
     "input:not([type=checkbox]):not([type=number]):not([type=radio]):not([type=range])[nasModel],textarea[nasModel]",

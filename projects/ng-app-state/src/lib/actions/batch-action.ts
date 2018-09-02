@@ -1,5 +1,6 @@
 import { AppStateAction } from "./app-state-action";
 
+/** @private */
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 

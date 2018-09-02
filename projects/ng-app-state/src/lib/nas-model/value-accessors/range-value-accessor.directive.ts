@@ -2,6 +2,7 @@ import { Directive, Injector } from "@angular/core";
 import { BaseInputValueAccessor } from "./base-input-value-accessor";
 import { makeProviderDef } from "./base-value-accessor";
 
+/** @private */
 @Directive({
   selector: "input[type=range][nasModel]",
   providers: [makeProviderDef(RangeValueAccessorDirective)],
