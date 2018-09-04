@@ -1,8 +1,8 @@
 import { Component, Injectable, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { AppStore } from "./app-store";
-import { StoreObject } from "./store-object";
+import { AppStore } from "./lib/app-store";
+import { StoreObject } from "./lib/store-object";
 
 class StoreComponent<T extends object> {
   store: StoreObject<T>;

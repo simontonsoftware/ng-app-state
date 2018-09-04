@@ -1,15 +1,8 @@
 import { Type } from "@angular/core";
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from "@angular/core/testing";
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { By } from "@angular/platform-browser";
 import { StoreModule } from "@ngrx/store";
-import { ngAppStateReducer } from "../meta-reducer";
 import {
   CityComponent,
   citySelectWithCustomCompareFnTemplate,
@@ -25,7 +18,8 @@ import {
   NameStore,
   SingleValueComponent,
   SingleValueStore,
-} from "../test-helpers";
+} from "../../test-helpers";
+import { ngAppStateReducer } from "../meta-reducer";
 import { NasModelModule } from "./nas-model.module";
 
 let fixture: ComponentFixture<any>;
