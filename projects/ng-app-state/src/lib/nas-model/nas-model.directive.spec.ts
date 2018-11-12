@@ -1,5 +1,11 @@
 import { Type } from "@angular/core";
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { By } from "@angular/platform-browser";
 import { StoreModule } from "@ngrx/store";

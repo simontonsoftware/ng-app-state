@@ -5,10 +5,10 @@
   "license": "MIT",
   "repository": "simontonsoftware/ng-app-state",
   "peerDependencies": {
-    "@angular/common": ">=6.1.0 <7.0.0",
-    "@angular/core": ">=6.1.0 <7.0.0",
+    "@angular/common": ">=7.0.0 <8.0.0",
+    "@angular/core": ">=7.0.0 <8.0.0",
     "@ngrx/store": ">=6.1.0 <7.0.0",
-    "micro-dash": ">=4.1.0 <5.0.0",
-    "s-js-utils": ">=2.1.0 <3.0.0"
+    "micro-dash": ">=5.0.0 <6.0.0",
+    "s-js-utils": ">=3.0.0 <4.0.0"
   }
 }
