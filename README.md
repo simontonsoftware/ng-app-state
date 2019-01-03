@@ -155,7 +155,11 @@ export class MyAppComponent {
 This library includes the `[nasModel]` directive that you can use in place of `[(ngModel)]` to bind form controls directly to store objects. For example, to edit the current user's name in the example above:
 
 ```ts
-@Component({ template: `<input [nasModel]="nameStore">` })
+@Component({
+  template: `
+    <input [nasModel]="nameStore" />
+  `,
+})
 class AccountSettingsComponent {
   nameStore: StoreObject<string>;
 

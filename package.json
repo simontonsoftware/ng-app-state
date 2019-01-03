@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "docs": "cd docs && typedoc ../projects/ng-app-state/src",
-    "prettier-all": "prettier --write \"**/*.{ts,js,json,md,scss,yml}\"",
+    "prettier-all": "prettier --write \"**/*.{html,js,json,md,scss,ts,yml}\"",
     "release": "standard-version --commit-all && yarn build ng-app-state --prod"
   },
   "private": true,

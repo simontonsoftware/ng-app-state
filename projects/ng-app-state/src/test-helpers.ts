@@ -146,10 +146,10 @@ export class MenuStore extends AppStore<MenuState> {
   selector: "nas-menu",
   template: `
     <form>
-      <input type="radio" [nasModel]="store('food')" value="chicken">
-      <input type="radio" [nasModel]="store('food')" value="fish">
-      <input type="radio" [nasModel]="store('drink')" value="cola">
-      <input type="radio" [nasModel]="store('drink')" value="sprite">
+      <input type="radio" [nasModel]="store('food')" value="chicken" />
+      <input type="radio" [nasModel]="store('food')" value="fish" />
+      <input type="radio" [nasModel]="store('drink')" value="cola" />
+      <input type="radio" [nasModel]="store('drink')" value="sprite" />
     </form>
   `,
 })
@@ -199,7 +199,7 @@ export class NameComponent extends StoreComponent<NameState> {
       [(ngModel)]="model"
       (ngModelChange)="changeFn($event)"
       [disabled]="disabled"
-    >
+    />
   `,
   providers: [
     {
@@ -212,8 +212,7 @@ export class NameComponent extends StoreComponent<NameState> {
 export class InnerNameComponent implements ControlValueAccessor {
   // prettier-ignore
   model!: string;
-  @Input()
-  disabled = false;
+  @Input() disabled = false;
   // prettier-ignore
   changeFn!: (value: any) => void;
 
