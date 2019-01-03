@@ -1,5 +1,15 @@
 import { Action } from "@ngrx/store";
-import { every, isEqual, last, memoize, omit } from "micro-dash";
+import {
+  every,
+  Function1,
+  Function2,
+  Function3,
+  Function4,
+  isEqual,
+  last,
+  memoize,
+  omit,
+} from "micro-dash";
 import { Observable } from "rxjs";
 import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";
@@ -112,7 +122,7 @@ export class StoreObject<T> extends CallableObject {
       this.observableFactory,
       this.path.slice(0, -1),
       this.dispatcher,
-    ).setUsing(omit, last(this.path));
+    ).setUsing<string>(omit, last(this.path));
   }
 
   /**
@@ -120,10 +130,21 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
-  public setUsing<A extends any[]>(
-    func: (state: T, ...args: A) => T,
-    ...args: A
-  ) {
+  // TODO: use this version after tsickle is updated (https://github.com/angular/tsickle/issues/944)
+  // public setUsing<A extends any[]>(
+  //   func: (state: T, ...args: A) => T,
+  //   ...args: A
+  // ) {
+  public setUsing(func: Function1<T, T>): void;
+  public setUsing<A>(func: Function2<T, A, T>, a: A): void;
+  public setUsing<A, B>(func: Function3<T, A, B, T>, a: A, b: B): void;
+  public setUsing<A, B, C>(
+    func: Function4<T, A, B, C, T>,
+    a: A,
+    b: B,
+    c: C,
+  ): void;
+  public setUsing(func: Function, ...args: any[]) {
     this.dispatcher.dispatch(new FunctionAction(this.path, false, func, args));
   }
 
@@ -132,10 +153,21 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate nested objects within the state.
    */
-  public mutateUsing<A extends any[]>(
-    func: (state: T, ...args: A) => void,
-    ...args: A
-  ) {
+  // TODO: use this version after tsickle is updated (https://github.com/angular/tsickle/issues/944)
+  // public mutateUsing<A extends any[]>(
+  //   func: (state: T, ...args: A) => void,
+  //   ...args: A
+  // ) {
+  public mutateUsing(func: Function1<T, void>): void;
+  public mutateUsing<A>(func: Function2<T, A, void>, a: A): void;
+  public mutateUsing<A, B>(func: Function3<T, A, B, void>, a: A, b: B): void;
+  public mutateUsing<A, B, C>(
+    func: Function4<T, A, B, C, void>,
+    a: A,
+    b: B,
+    c: C,
+  ): void;
+  public mutateUsing(func: Function, ...args: any[]) {
     this.dispatcher.dispatch(new FunctionAction(this.path, true, func, args));
   }
 
