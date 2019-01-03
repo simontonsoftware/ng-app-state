@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0"></a>
+
+# [10.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v9.0.0...v10.0.0) (2019-01-03)
+
+### Chores
+
+- upgrade dependencies ([cabc3d4](https://github.com/simontonsoftware/ng-app-state/commit/cabc3d4))
+- upgrade dependencies ([5f7ac53](https://github.com/simontonsoftware/ng-app-state/commit/5f7ac53))
+
+### Features
+
+- add `pushToStoreArray()` ([2fb0a5b](https://github.com/simontonsoftware/ng-app-state/commit/2fb0a5b))
+- add `spreadArrayStore$` ([f6cac7b](https://github.com/simontonsoftware/ng-app-state/commit/f6cac7b))
+
+### BREAKING CHANGES
+
+- requires @ngrx/store 7.0 (up from 6.1)
+- uses Typescript 3.x (up from 2.x)
+- requires Angular 7.x (up from 6.1)
+- requires micro-dash 5.1 (up from 4.1)
+- requires s-js-utils 3.1 (up from 2.1)
+
 <a name="9.0.0"></a>
 
 # [9.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v8.0.0...v9.0.0) (2018-08-29)
