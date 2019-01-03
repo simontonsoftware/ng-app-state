@@ -300,15 +300,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@ngrx/store-devtools@^6.1.0":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-6.1.2.tgz#b9cb8d6bcd7ee0d171dde86c9bdd5e6a5bc5563a"
-  integrity sha512-hvWMKcRIAtAFb2lb4woRenPHPgOiLFjy8R2PtCiw4uP3WrBVB4JHqUuP230/iRMcU5XmySp+LhNqhkk1zsoUqQ==
+"@ngrx/store-devtools@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-7.0.0.tgz#8be35ad8b455019c9ac583c92ad8f0ec0d538c37"
+  integrity sha512-VLYDIiK5uy6SfIh3PUWT8oXNSHtVefRm44h9MMDBBUQphu5fBmGB9wtkFHfVTmw5V9TdZ9KnUTvm5Dlln8VP0A==
 
-"@ngrx/store@^6.1.0":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-6.1.2.tgz#20fb5ab4d79571b804a348093aa11a167fe2946f"
-  integrity sha512-W9MbXrwhIRmN1BlINF9BT+rHR046e1HNk7GqykcDJrK9wW74PJW3aE5iuPb2sTPipBMjPHsXzc73E4U/+OTAyw==
+"@ngrx/store@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-7.0.0.tgz#5472000197c2a388b09afceb2d062cb37b03d334"
+  integrity sha512-fF4A4De/vtQawxGBc1jV5HiLrc/J3NS8A2UDRoD3kLdviDzAlAber6kuj5XmM+xxaI9f9qnUrwOVXr/oPfqoBg==
 
 "@ngtools/json-schema@^1.1.0":
   version "1.1.0"
@@ -4986,10 +4986,10 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
-micro-dash@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-5.0.0.tgz#26c28d0d628fdc064637ae662265cd427e61a0f3"
-  integrity sha512-/g31LHkL4gL6NS5G8O0C/kIHnV0bYYXy5qcVmfa2ySY0jtfFwLWSju+Lxk5sH/RJTtSqnOWreJQjlxUhQxsm7Q==
+micro-dash@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-5.3.0.tgz#f4d570df6e6870e1eceebd34f18cbbed76b4412b"
+  integrity sha512-mTd9KRvYYOc0zsgBr3f5ILdUQt9uXCCzi33H7+ojjlnxGPVo3Pxg86SBvhI7Fow0OCpKeBSA7G1wgt5+v4Jq8w==
   dependencies:
     tslib "^1.9.0"
 
@@ -6759,10 +6759,10 @@ rxjs@6.3.3, rxjs@^6.0.0, rxjs@^6.1.0, rxjs@~6.3.3:
   dependencies:
     tslib "^1.9.0"
 
-s-js-utils@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-3.0.0.tgz#6b6de62d31c1c43835b8ac02828744d0c4e19012"
-  integrity sha512-E6zzER7x4b0dqJTtoQMx4DWbIyJB8+JTIAsxOpIj1af5mR4H2PBkEkN887nCDCmxbIo7teKzPcsXuc95FgDeiQ==
+s-js-utils@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-3.1.1.tgz#9cf58ba3a5cffeb9bcf56da11dc2877d78bbd27d"
+  integrity sha512-edomS4JEgDCKWykEWoLWySZpTQVSAmVV9yw/GRHyBIhixTRAr5B5i0z3vRMDzMIUnBI2CSfF5E1fy2Rg/+Lr6A==
   dependencies:
     tslib "^1.9.0"
 
