@@ -2,6 +2,16 @@
 
 [![Build Status](https://travis-ci.org/simontonsoftware/ng-app-state.svg?branch=master)](https://travis-ci.org/simontonsoftware/ng-app-state) [![Coverage Status](https://coveralls.io/repos/github/simontonsoftware/ng-app-state/badge.svg?branch=master)](https://coveralls.io/github/simontonsoftware/ng-app-state?branch=master)
 
+## Simonton Software Typescript Utils
+
+`ng-app-state` is one library in a suite that is available from Simonton Software. Each one builds on the last, organized by their dependencies:
+
+1. [`micro-dash`](https://github.com/simontonsoftware/micro-dash): A much smaller Lodash
+1. [`s-js-utils`](https://github.com/simontonsoftware/s-js-utils): Miscellaneous utilities written in TypeScript
+1. [`s-rxjs-utils`](https://github.com/simontonsoftware/s-rxjs-utils): Miscellaneous utilities for RxJS
+1. [`s-ng-utils`](https://github.com/simontonsoftware/s-ng-utils): Miscellaneous utilities for Angular
+1. **`ng-app-state`: Object-oriented wrapper around `@ngrx/store`**
+
 ## API Documentation
 
 Once you are familiar with the basics, it may help to see the [api documentation](https://simontonsoftware.github.io/ng-app-state/typedoc).
