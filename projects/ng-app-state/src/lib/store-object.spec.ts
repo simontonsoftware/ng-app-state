@@ -153,6 +153,23 @@ describe("StoreObject", () => {
       store("counter").set(2);
       expect(store.$).toBe(observable);
     });
+
+    // https://github.com/simontonsoftware/ng-app-state/issues/13
+    it("does not emit stale values in the middle of propogating a change (production bug)", () => {
+      let log: Spy | undefined;
+      store.$.subscribe(() => {
+        store("optional").$.subscribe(log);
+      });
+      store("optional").$.subscribe();
+
+      log = jasmine.createSpy();
+      const value = new InnerState();
+      store("optional").set(value);
+
+      console.log(log.calls.allArgs());
+      expect(log).toHaveBeenCalledTimes(1);
+      expect(log).toHaveBeenCalledWith(value);
+    });
   });
 
   describe(".batch()", () => {
