@@ -3,8 +3,8 @@ import { Observable } from "rxjs";
 import {
   distinctUntilChanged,
   map,
-  publishReplay,
-  refCount,
+  share,
+  startWith,
   take,
   tap,
 } from "rxjs/operators";
@@ -57,11 +57,17 @@ export class TreeBasedObservableFactory {
   }
 
   private makeChildObservable(cacheNode: CacheNode, path: string[]) {
-    return cacheNode.observable.pipe(
+    const multicaster = cacheNode.observable.pipe(
       map(() => this.getState(path)),
-      distinctUntilChanged(),
-      publishReplay(1),
-      refCount(),
+      share(),
+    );
+    return new Observable((subscriber) =>
+      multicaster
+        .pipe(
+          startWith(this.getState(path)),
+          distinctUntilChanged(),
+        )
+        .subscribe(subscriber),
     );
   }
 

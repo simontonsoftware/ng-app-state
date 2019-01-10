@@ -166,9 +166,7 @@ describe("StoreObject", () => {
       const value = new InnerState();
       store("optional").set(value);
 
-      console.log(log.calls.allArgs());
-      expect(log).toHaveBeenCalledTimes(1);
-      expect(log).toHaveBeenCalledWith(value);
+      expect(log.calls.allArgs()).toEqual([[value]]);
     });
   });
 
