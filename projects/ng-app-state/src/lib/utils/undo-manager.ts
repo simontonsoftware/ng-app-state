@@ -129,6 +129,13 @@ export abstract class UndoManager<StateType, UndoStateType> {
   }
 
   /**
+   * Returns the current undo state that was most recently pushed or applied. Calls to `undo` will apply the state before this in teh stack, and `redo` will apply the state after this.
+   */
+  get currentUndoState() {
+    return this.stack[this.currentStateIndex];
+  }
+
+  /**
    * Returns a view of the internal undo stack, from oldest to newest. Note that this contains states that would be applied by calls to both `.undo()` and `.redo`.
    */
   get undoStack() {
@@ -153,7 +160,13 @@ export abstract class UndoManager<StateType, UndoStateType> {
   ): void;
 
   /**
-   * Used to determine whether `.pushUndoState()` actually does anything - if the state being pushed is "equal" to the current state according to this method, it will not be pushed. By default this uses `===`; subclasses can override this to tailor the behavior.
+   * Used to determine whether `.pushUndoState()` actually does anything. Override this e.g. to prevent pushing a duplicate undo state using something like this:
+   *
+   * ```ts
+   * protected shouldPush(state: UndoStateType) {
+   *   return equal(state, this.currentUndoState);
+   * }
+   * ```
    */
   protected shouldPush(state: UndoStateType) {
     return true;
@@ -171,9 +184,9 @@ export abstract class UndoManager<StateType, UndoStateType> {
   }
 
   private changeState(change: 1 | -1, undoOrRedo: UndoOrRedo) {
-    const oldState = this.stack[this.currentStateIndex];
+    const oldState = this.currentUndoState;
     this.currentStateIndex += change;
-    const newState = this.stack[this.currentStateIndex];
+    const newState = this.currentUndoState;
     this.store.batch((batch) => {
       this.applyUndoState(newState, batch, undoOrRedo, oldState);
     });

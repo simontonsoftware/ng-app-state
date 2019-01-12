@@ -482,9 +482,31 @@ describe("UndoManager", () => {
     });
   });
 
-  describe(".undoStack()", () => {
-    // most of `.reset()` is tested by other tests that use `expectStack()`
+  describe(".currentUndoState", () => {
+    it("works", () => {
+      expect(undoManager.currentUndoState.counter).toBe(0);
 
+      store("counter").set(1);
+      expect(undoManager.currentUndoState.counter).toBe(1);
+
+      store("counter").set(2);
+      expect(undoManager.currentUndoState.counter).toBe(2);
+
+      undoManager.undo();
+      expect(undoManager.currentUndoState.counter).toBe(1);
+
+      undoManager.undo();
+      expect(undoManager.currentUndoState.counter).toBe(0);
+
+      undoManager.redo();
+      expect(undoManager.currentUndoState.counter).toBe(1);
+
+      undoManager.redo();
+      expect(undoManager.currentUndoState.counter).toBe(2);
+    });
+  });
+
+  describe(".undoStack", () => {
     it("does not allow callers to mutate the internal stack", () => {
       store("counter").set(1);
       undoManager.undoStack.splice(0, 9999);
