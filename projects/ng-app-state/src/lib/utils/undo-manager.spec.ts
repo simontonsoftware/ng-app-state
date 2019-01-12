@@ -7,6 +7,7 @@ import { UndoManager, UndoOrRedo } from "./undo-manager";
 
 class State {
   counter = 0;
+  object?: any;
 }
 
 class TestImpl extends UndoManager<State, State> {
@@ -23,6 +24,10 @@ class TestImpl extends UndoManager<State, State> {
         this.pushCurrentState();
       }
     });
+  }
+
+  shouldPush(state: State) {
+    return super.shouldPush(state);
   }
 
   protected extractUndoState(state: State) {
@@ -484,6 +489,37 @@ describe("UndoManager", () => {
       store("counter").set(1);
       undoManager.undoStack.splice(0, 9999);
       expectStack(0, 1);
+    });
+  });
+
+  describe(".shouldPush()", () => {
+    it("controls whether undo states are actually pushed", () => {
+      undoManager.shouldPush = () => true;
+      undoManager.pushCurrentState();
+      expectStack(0, 0);
+
+      undoManager.shouldPush = () => false;
+      undoManager.pushCurrentState();
+      expectStack(0, 0);
+
+      undoManager.shouldPush = () => true;
+      undoManager.pushCurrentState();
+      expectStack(0, 0, 0);
+
+      undoManager.shouldPush = () => false;
+      undoManager.pushCurrentState();
+      expectStack(0, 0, 0);
+    });
+
+    it("is not used if nothing is yet in the stack", () => {
+      const spy = jasmine.createSpy().and.returnValue(true);
+      undoManager.shouldPush = spy;
+      store("counter").set(1);
+      expect(spy).toHaveBeenCalled();
+      spy.calls.reset();
+
+      undoManager.reset();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 
