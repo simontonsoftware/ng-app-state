@@ -947,6 +947,9 @@ img { max-width: 100%; }
 					<a href="undomanager.html#store" class="tsd-kind-icon">store</a>
 				</li>
 				<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+					<a href="undomanager.html#currentundostate" class="tsd-kind-icon">current<wbr>Undo<wbr>State</a>
+				</li>
+				<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 					<a href="undomanager.html#undostack" class="tsd-kind-icon">undo<wbr>Stack</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
@@ -975,6 +978,9 @@ img { max-width: 100%; }
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="undomanager.html#reset" class="tsd-kind-icon">reset</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a href="undomanager.html#shouldpush" class="tsd-kind-icon">should<wbr>Push</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="undomanager.html#undo" class="tsd-kind-icon">undo</a>
@@ -1060,6 +1066,7 @@ img { max-width: 100%; }
 					<section class="tsd-index-section ">
 						<h3>Accessors</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="undomanager.html#currentundostate" class="tsd-kind-icon">current<wbr>Undo<wbr>State</a></li>
 							<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="undomanager.html#undostack" class="tsd-kind-icon">undo<wbr>Stack</a></li>
 						</ul>
 					</section>
@@ -1075,6 +1082,7 @@ img { max-width: 100%; }
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="undomanager.html#pushcurrentstate" class="tsd-kind-icon">push<wbr>Current<wbr>State</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="undomanager.html#redo" class="tsd-kind-icon">redo</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="undomanager.html#reset" class="tsd-kind-icon">reset</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="undomanager.html#shouldpush" class="tsd-kind-icon">should<wbr>Push</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="undomanager.html#undo" class="tsd-kind-icon">undo</a></li>
 						</ul>
 					</section>
@@ -1178,12 +1186,27 @@ img { max-width: 100%; }
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Accessors</h2>
 			<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+				<a name="currentundostate" class="tsd-anchor"></a>
+				<h3>current<wbr>Undo<wbr>State</h3>
+				<div class="tsd-signature tsd-kind-icon">current<wbr>Undo<wbr>State<span class="tsd-signature-symbol">:</span> </div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L134">lib/utils/undo-manager.ts:134</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Returns the current undo state that was most recently pushed or applied. Calls to <code>undo</code> will apply the state before this in teh stack, and <code>redo</code> will apply the state after this.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 				<a name="undostack" class="tsd-anchor"></a>
 				<h3>undo<wbr>Stack</h3>
 				<div class="tsd-signature tsd-kind-icon">undo<wbr>Stack<span class="tsd-signature-symbol">:</span> </div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L131">lib/utils/undo-manager.ts:131</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L141">lib/utils/undo-manager.ts:141</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1199,20 +1222,20 @@ img { max-width: 100%; }
 				<a name="applyundostate" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> apply<wbr>Undo<wbr>State</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<li class="tsd-signature tsd-kind-icon">apply<wbr>Undo<wbr>State<span class="tsd-signature-symbol">(</span>newState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UndoStateType</span>, batch<span class="tsd-signature-symbol">: </span><a href="storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StateType</span><span class="tsd-signature-symbol">&gt;</span>, undoOrRedo<span class="tsd-signature-symbol">: </span><a href="../index.html#undoorredo" class="tsd-signature-type">UndoOrRedo</a>, oldState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UndoStateType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">apply<wbr>Undo<wbr>State<span class="tsd-signature-symbol">(</span>stateToApply<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UndoStateType</span>, batch<span class="tsd-signature-symbol">: </span><a href="storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StateType</span><span class="tsd-signature-symbol">&gt;</span>, undoOrRedo<span class="tsd-signature-symbol">: </span><a href="../index.html#undoorredo" class="tsd-signature-type">UndoOrRedo</a>, stateToOverwrite<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UndoStateType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L145">lib/utils/undo-manager.ts:145</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L155">lib/utils/undo-manager.ts:155</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Reset the store to the given state.</p>
 							</div>
-							<p>The <code>undoOrRedo</code> and <code>oldState</code> parameters can be useful e.g. if a scroll position is kept in the undo state. In such a case you want to change the scrolling so the user can see what just changed by undoing/redoing. To do that, set the scoll to what it was in <code>oldState</code> when undoing, and to what it is in <code>newState</code> when redoing.</p>
+							<p>The <code>undoOrRedo</code> and <code>stateToOverwrite</code> parameters can be useful e.g. if a scroll position is kept in the undo state. In such a case you want to change the scrolling so the user can see what just changed by undoing/redoing. To do that, set the scoll to what it was in <code>stateToOverwrite</code> when undoing, and to what it is in <code>stateToApply</code> when redoing.</p>
 						</div>
 					</li>
 				</ul>
@@ -1227,7 +1250,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L84">lib/utils/undo-manager.ts:84</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L87">lib/utils/undo-manager.ts:87</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1245,7 +1268,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L77">lib/utils/undo-manager.ts:77</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L80">lib/utils/undo-manager.ts:80</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1263,7 +1286,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L119">lib/utils/undo-manager.ts:119</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L122">lib/utils/undo-manager.ts:122</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1289,7 +1312,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L138">lib/utils/undo-manager.ts:138</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L148">lib/utils/undo-manager.ts:148</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1310,7 +1333,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L159">lib/utils/undo-manager.ts:159</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L182">lib/utils/undo-manager.ts:182</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1353,7 +1376,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L106">lib/utils/undo-manager.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L109">lib/utils/undo-manager.ts:109</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1390,6 +1413,30 @@ img { max-width: 100%; }
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+				<a name="shouldpush" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagProtected">Protected</span> should<wbr>Push</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<li class="tsd-signature tsd-kind-icon">should<wbr>Push<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">UndoStateType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L171">lib/utils/undo-manager.ts:171</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Used to determine whether <code>.pushUndoState()</code> actually does anything. Override this e.g. to prevent pushing a duplicate undo state using something like this:</p>
+							</div>
+							<pre><code class="language-ts"><span class="hljs-keyword">protected</span> shouldPush(state: UndoStateType) {
+  <span class="hljs-keyword">return</span> equal(state, <span class="hljs-keyword">this</span>.currentUndoState);
+}</code></pre>
+						</div>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="undo" class="tsd-anchor"></a>
 				<h3>undo</h3>
@@ -1400,7 +1447,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L93">lib/utils/undo-manager.ts:93</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L96">lib/utils/undo-manager.ts:96</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.0"></a>
+
+# [10.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v10.0.0...v10.1.0) (2019-01-12)
+
+### Bug Fixes
+
+- subscribing during a state change could emit a stale value ([5531886](https://github.com/simontonsoftware/ng-app-state/commit/5531886))
+
+### Features
+
+- **UndoManager:** add `.currentUndoState` ([252fd2d](https://github.com/simontonsoftware/ng-app-state/commit/252fd2d))
+- **UndoManager:** add `.shouldPush()` ([df9198c](https://github.com/simontonsoftware/ng-app-state/commit/df9198c))
+
 <a name="10.0.0"></a>
 
 # [10.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v9.0.0...v10.0.0) (2019-01-03)
