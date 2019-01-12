@@ -255,11 +255,11 @@ class UndoService extends UndoManager<MyAppState, MyAppState> {
   }
 
   protected applyUndoState(
-    newState: MyAppState,
+    stateToApply: MyAppState,
     batch: StoreObject<MyAppState>,
   ) {
     this.skipNextChange = true;
-    batch.set(newState);
+    batch.set(stateToApply);
   }
 }
 ```

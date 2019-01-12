@@ -12,7 +12,7 @@ class State {
 
 class TestImpl extends UndoManager<State, State> {
   lastApplicationUndoOrRedo?: UndoOrRedo;
-  lastApplicationOldState?: State;
+  lastApplicationStateToOverwrite?: State;
   private skipNextChange = true;
 
   constructor(store: AppStore<State>, maxDepth = 0) {
@@ -35,15 +35,15 @@ class TestImpl extends UndoManager<State, State> {
   }
 
   protected applyUndoState(
-    newState: State,
+    stateToApply: State,
     batch: StoreObject<State>,
     undoOrRedo: UndoOrRedo,
-    oldState: State,
+    stateToOverwrite: State,
   ) {
     this.skipNextChange = true;
-    batch.set(newState);
+    batch.set(stateToApply);
     this.lastApplicationUndoOrRedo = undoOrRedo;
-    this.lastApplicationOldState = oldState;
+    this.lastApplicationStateToOverwrite = stateToOverwrite;
   }
 }
 
@@ -347,17 +347,17 @@ describe("UndoManager", () => {
       store("counter").set(1);
       store("counter").set(2);
       expect(undoManager.lastApplicationUndoOrRedo).toBeUndefined();
-      expect(undoManager.lastApplicationOldState).toBeUndefined();
+      expect(undoManager.lastApplicationStateToOverwrite).toBeUndefined();
 
       undoManager.undo();
       expect(store.state()).toEqual({ counter: 1 });
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("undo");
-      expect(undoManager.lastApplicationOldState).toEqual({ counter: 2 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 2 });
 
       undoManager.undo();
       expect(store.state()).toEqual(new State());
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("undo");
-      expect(undoManager.lastApplicationOldState).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 1 });
     });
 
     it("throws an error if at the beginning of the stack", () => {
@@ -391,12 +391,12 @@ describe("UndoManager", () => {
       undoManager.redo();
       expect(store.state()).toEqual({ counter: 1 });
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("redo");
-      expect(undoManager.lastApplicationOldState).toEqual(new State());
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual(new State());
 
       undoManager.redo();
       expect(store.state()).toEqual({ counter: 2 });
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("redo");
-      expect(undoManager.lastApplicationOldState).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 1 });
     });
 
     it("throws an error if at the end of the stack", () => {

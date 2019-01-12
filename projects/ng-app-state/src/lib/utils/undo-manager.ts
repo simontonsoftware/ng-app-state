@@ -150,13 +150,13 @@ export abstract class UndoManager<StateType, UndoStateType> {
   /**
    * Reset the store to the given state.
    *
-   * The `undoOrRedo` and `oldState` parameters can be useful e.g. if a scroll position is kept in the undo state. In such a case you want to change the scrolling so the user can see what just changed by undoing/redoing. To do that, set the scoll to what it was in `oldState` when undoing, and to what it is in `newState` when redoing.
+   * The `undoOrRedo` and `stateToOverwrite` parameters can be useful e.g. if a scroll position is kept in the undo state. In such a case you want to change the scrolling so the user can see what just changed by undoing/redoing. To do that, set the scoll to what it was in `stateToOverwrite` when undoing, and to what it is in `stateToApply` when redoing.
    */
   protected abstract applyUndoState(
-    newState: UndoStateType,
+    stateToApply: UndoStateType,
     batch: StoreObject<StateType>,
     undoOrRedo: UndoOrRedo,
-    oldState: UndoStateType,
+    stateToOverwrite: UndoStateType,
   ): void;
 
   /**
@@ -184,11 +184,11 @@ export abstract class UndoManager<StateType, UndoStateType> {
   }
 
   private changeState(change: 1 | -1, undoOrRedo: UndoOrRedo) {
-    const oldState = this.currentUndoState;
+    const stateToOverwrite = this.currentUndoState;
     this.currentStateIndex += change;
-    const newState = this.currentUndoState;
+    const stateToApply = this.currentUndoState;
     this.store.batch((batch) => {
-      this.applyUndoState(newState, batch, undoOrRedo, oldState);
+      this.applyUndoState(stateToApply, batch, undoOrRedo, stateToOverwrite);
     });
     this.emitUndoChanges();
   }
