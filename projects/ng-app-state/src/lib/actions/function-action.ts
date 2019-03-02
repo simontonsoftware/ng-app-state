@@ -4,12 +4,13 @@ import { AppStateAction } from "./app-state-action";
 /** @private */
 export class FunctionAction extends AppStateAction {
   constructor(
+    name: string,
     path: string[],
     private mutates: boolean,
     private func: Function,
     private args: any[],
   ) {
-    super(buildName(mutates, func), path);
+    super(name, path);
   }
 
   public execute<T>(state: T) {
@@ -48,8 +49,7 @@ export class FunctionAction extends AppStateAction {
   }
 }
 
-function buildName(mutates: boolean, func: Function) {
-  const prefix = mutates ? "mutate" : "set";
+export function buildName(prefix: string, func: Function) {
   if (func.name) {
     return `${prefix}:${func.name}`;
   } else {

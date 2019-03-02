@@ -6,7 +6,8 @@
 <input type="email" [nasModel]="store('freeText')" /> Email <br />
 <input type="url" [nasModel]="store('freeText')" /> Url <br />
 <input type="color" [nasModel]="store('freeText')" /> <br />
-<textarea [nasModel]="store('freeText')"></textarea>
+<textarea [nasModel]="store('freeText')"></textarea> <br />
+<button (click)="store('freeText').delete()">Clear</button>
 
 <hr />
 

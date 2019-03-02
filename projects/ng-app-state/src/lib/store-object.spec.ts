@@ -322,6 +322,18 @@ describe("StoreObject", () => {
       store.delete();
       expect(getGlobalState().testKey).toBe(undefined);
     });
+
+    it("has a type name that is nice for logging", () => {
+      let lastAction: Action;
+      backingStore.addReducer("testKey", (state: any, action) => {
+        lastAction = action;
+        return state;
+      });
+
+      store("nested").delete();
+
+      expect(lastAction!.type).toBe("[delete:nested] testKey");
+    });
   });
 
   describe(".setUsing()", () => {

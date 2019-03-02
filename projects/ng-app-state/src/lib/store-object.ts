@@ -13,7 +13,7 @@ import {
 import { Observable } from "rxjs";
 import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";
-import { FunctionAction } from "./actions/function-action";
+import { buildName, FunctionAction } from "./actions/function-action";
 import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
 
 export interface StoreObject<T> {
@@ -118,11 +118,12 @@ export class StoreObject<T> extends CallableObject {
    * ```
    */
   public delete() {
-    new StoreObject<Partial<{ [key: string]: T }>>(
-      this.observableFactory,
-      this.path.slice(0, -1),
-      this.dispatcher,
-    ).setUsing<string>(omit, last(this.path));
+    let key = last(this.path);
+    this.dispatcher.dispatch(
+      new FunctionAction("delete:" + key, this.path.slice(0, -1), false, omit, [
+        key,
+      ]),
+    );
   }
 
   /**
@@ -145,7 +146,9 @@ export class StoreObject<T> extends CallableObject {
     c: C,
   ): void;
   public setUsing(func: Function, ...args: any[]) {
-    this.dispatcher.dispatch(new FunctionAction(this.path, false, func, args));
+    this.dispatcher.dispatch(
+      new FunctionAction(buildName("set", func), this.path, false, func, args),
+    );
   }
 
   /**
@@ -168,7 +171,15 @@ export class StoreObject<T> extends CallableObject {
     c: C,
   ): void;
   public mutateUsing(func: Function, ...args: any[]) {
-    this.dispatcher.dispatch(new FunctionAction(this.path, true, func, args));
+    this.dispatcher.dispatch(
+      new FunctionAction(
+        buildName("mutate", func),
+        this.path,
+        true,
+        func,
+        args,
+      ),
+    );
   }
 
   /**
