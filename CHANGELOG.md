@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.3"></a>
+
+## [10.1.3](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.2...v10.1.3) (2019-03-17)
+
+### Bug Fixes
+
+- `pushToStoreArray()` threw an error when used in a batch ([1321a2e](https://github.com/simontonsoftware/ng-app-state/commit/1321a2e))
+
 <a name="10.1.2"></a>
 
 ## [10.1.2](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.1...v10.1.2) (2019-03-02)
