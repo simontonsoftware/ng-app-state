@@ -10,10 +10,7 @@ import { StoreObject } from "../store-object";
  * ```
  */
 export function pushToStoreArray<T>(store: StoreObject<T[]>, item: T) {
-  let index: number;
-  store.mutateUsing((state) => {
-    index = state.length;
-    state[index] = item;
-  });
-  return store(index! as any);
+  const itemStore = store(store.state().length);
+  itemStore.set(item);
+  return itemStore;
 }

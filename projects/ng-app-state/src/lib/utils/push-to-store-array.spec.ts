@@ -37,4 +37,12 @@ describe("pushToStoreArray", () => {
     added.set(-12);
     expect(store.state()).toEqual([2, -12]);
   });
+
+  it("works within a batch (production bug)", () => {
+    store.set([]);
+    store.batch((batch) => {
+      pushToStoreArray(batch, 1);
+    });
+    expect(store.state()).toEqual([1]);
+  });
 });
