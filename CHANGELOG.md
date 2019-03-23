@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.4"></a>
+
+## [10.1.4](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.3...v10.1.4) (2019-03-23)
+
+### Bug Fixes
+
+- **UndoManager:** `canUndo$` and `canRedo$` did not emit for changes form `dropCurrentUndoState()` ([021ae68](https://github.com/simontonsoftware/ng-app-state/commit/021ae68))
+
 <a name="10.1.3"></a>
 
 ## [10.1.3](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.2...v10.1.3) (2019-03-17)
