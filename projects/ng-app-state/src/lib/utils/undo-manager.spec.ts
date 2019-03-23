@@ -352,12 +352,16 @@ describe("UndoManager", () => {
       undoManager.undo();
       expect(store.state()).toEqual({ counter: 1 });
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("undo");
-      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 2 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({
+        counter: 2,
+      });
 
       undoManager.undo();
       expect(store.state()).toEqual(new State());
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("undo");
-      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({
+        counter: 1,
+      });
     });
 
     it("throws an error if at the beginning of the stack", () => {
@@ -396,7 +400,9 @@ describe("UndoManager", () => {
       undoManager.redo();
       expect(store.state()).toEqual({ counter: 2 });
       expect(undoManager.lastApplicationUndoOrRedo).toEqual("redo");
-      expect(undoManager.lastApplicationStateToOverwrite).toEqual({ counter: 1 });
+      expect(undoManager.lastApplicationStateToOverwrite).toEqual({
+        counter: 1,
+      });
     });
 
     it("throws an error if at the end of the stack", () => {
@@ -479,6 +485,35 @@ describe("UndoManager", () => {
       expect(() => {
         undoManager.dropCurrentUndoState();
       }).toThrowError("Nothing to drop");
+    });
+
+    it("emits changes on canDo$", () => {
+      store("counter").set(1);
+      store("counter").set(2);
+      store("counter").set(3);
+      store("counter").set(4);
+      const undoStub = jasmine.createSpy("canUndo");
+      const redoStub = jasmine.createSpy("canRedo");
+      undoManager.canUndo$.subscribe(undoStub);
+      undoManager.canRedo$.subscribe(redoStub);
+      expect(undoStub).toHaveBeenCalledTimes(1);
+      expect(redoStub).toHaveBeenCalledTimes(1);
+
+      undoManager.dropCurrentUndoState();
+      expect(undoStub).toHaveBeenCalledTimes(1);
+      expect(redoStub).toHaveBeenCalledTimes(1);
+
+      undoManager.undo();
+      expect(undoStub).toHaveBeenCalledTimes(1);
+      expect(redoStub).toHaveBeenCalledTimes(2);
+
+      undoManager.dropCurrentUndoState();
+      expect(undoStub).toHaveBeenCalledTimes(1);
+      expect(redoStub).toHaveBeenCalledTimes(3);
+
+      undoManager.dropCurrentUndoState();
+      expect(undoStub).toHaveBeenCalledTimes(2);
+      expect(redoStub).toHaveBeenCalledTimes(3);
     });
   });
 

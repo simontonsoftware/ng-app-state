@@ -126,6 +126,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
 
     this.currentStateIndex = this.currentStateIndex - 1;
     this.dropRedoHistory();
+    this.emitUndoChanges();
   }
 
   /**
