@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.5"></a>
+
+## [10.1.5](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.4...v10.1.5) (2019-04-11)
+
+### Features
+
+- improve performance of store mutations with many observers ([5d1dc5d](https://github.com/simontonsoftware/ng-app-state/commit/5d1dc5d))
+
 <a name="10.1.4"></a>
 
 ## [10.1.4](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.3...v10.1.4) (2019-03-23)
