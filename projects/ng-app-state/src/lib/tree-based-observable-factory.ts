@@ -26,34 +26,34 @@ export class TreeBasedObservableFactory {
 
   public get<T>(path: string[]): Observable<T> {
     return new Observable((subscriber) => {
-      const subscription = this.incrementSubscribers(path).subscribe(
-        subscriber,
-      );
+      this.ensureObservableAt(path).subscribe(subscriber);
+      this.incrementSubscribers(path);
       return () => {
-        subscription.unsubscribe();
-        this.decrementSubscribers(path);
+        subscriber.unsubscribe();
+        this.decrementSubscribersAndTrimTree(path);
       };
     });
   }
 
   public getState(path: string[]) {
-    return get(this.getCurrentState(), path);
+    return get(this.getRootState(), path);
+  }
+
+  private ensureObservableAt(path: string[]) {
+    return this.walkPath(path, (node, i) => {
+      const nextKey = path[i + 1];
+      if (!node.children[nextKey]) {
+        node.children[nextKey] = this.makeCacheNode(
+          this.makeChildObservable(node, path.slice(0, i + 2)),
+        );
+      }
+    })!.observable;
   }
 
   private incrementSubscribers(path: string[]) {
-    let cacheNode = this.rootCacheNode;
-    for (let i = 0; i < path.length; ++i) {
-      const key = path[i];
-      let child = cacheNode.children[key];
-      if (!child) {
-        child = cacheNode.children[key] = this.makeCacheNode(
-          this.makeChildObservable(cacheNode, path.slice(0, i + 1)),
-        );
-      }
-      ++child.numSubscribers;
-      cacheNode = child;
-    }
-    return cacheNode.observable;
+    this.walkPath(path, (node) => {
+      ++node.numSubscribers;
+    });
   }
 
   private makeChildObservable(cacheNode: CacheNode, path: string[]) {
@@ -71,7 +71,7 @@ export class TreeBasedObservableFactory {
     );
   }
 
-  private getCurrentState() {
+  private getRootState() {
     if (this.rootCacheNode.numSubscribers) {
       return this.lastSeenState;
     }
@@ -83,25 +83,29 @@ export class TreeBasedObservableFactory {
     return state;
   }
 
-  private decrementSubscribers(path: string[]) {
-    let cacheNode = this.rootCacheNode;
-    for (const key of path) {
-      const child = cacheNode.children[key];
-      if (!--child.numSubscribers) {
-        delete cacheNode.children[key];
-        return;
+  private decrementSubscribersAndTrimTree(path: string[]) {
+    this.walkPath(path, (node, i) => {
+      --node.numSubscribers;
+      const nextNode = node.children[path[i + 1]];
+      if (nextNode && nextNode.numSubscribers === 1) {
+        delete node.children[path[i + 1]];
       }
-      cacheNode = child;
+    });
+  }
+
+  private walkPath(path: string[], fn: (node: CacheNode, i: number) => void) {
+    for (let i = -1, node = this.rootCacheNode; node; ) {
+      fn(node, i);
+      if (++i === path.length) {
+        return node;
+      }
+      node = node.children[path[i]];
     }
   }
 
   // an instance method so it can be spied on for tests
   private makeCacheNode(observable: Observable<any>): CacheNode {
-    return {
-      observable,
-      numSubscribers: 0,
-      children: {},
-    };
+    return { observable, numSubscribers: 0, children: {} };
   }
 }
 

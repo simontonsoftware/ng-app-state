@@ -8,6 +8,7 @@ import { storeLogger } from "ngrx-store-logger";
 import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { IntegrationStore } from "./integration-store";
+import { WidePerformanceComponent } from "./wide-performance.component";
 
 export function logger(reducer: ActionReducer<any>): any {
   return storeLogger({ collapsed: true })(reducer);
@@ -26,7 +27,7 @@ if (!environment.production) {
     StoreDevtoolsModule.instrument(),
     NasModelModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, WidePerformanceComponent],
   providers: [IntegrationStore],
   bootstrap: [AppComponent],
 })
