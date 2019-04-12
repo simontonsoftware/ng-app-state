@@ -12,7 +12,7 @@ class State {
 @Component({
   selector: "app-wide-performance",
   template: `
-    <button (click)="run()">Wide Performance</button> {{ time }} ms <br />
+    <button (click)="run()">Wide Performance</button> {{ time }} ms,
     {{ fires }} fires
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
