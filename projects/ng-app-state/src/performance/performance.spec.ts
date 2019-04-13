@@ -9,7 +9,7 @@ import { runWide, subscribeWide, WideState } from "./wide-performance";
 const depth = 1000;
 const deepIterations = 1000;
 const msPerDeepSubscription = 0.1;
-const msPerDeepIteration = 2;
+const msPerDeepIteration = 5;
 const msPerDeepUnsubscribe = 0.1;
 
 const width = 10000;
