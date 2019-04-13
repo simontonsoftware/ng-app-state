@@ -22,7 +22,6 @@ install:
 script:
   - yarn test ng-app-state --code-coverage --watch=false --progress=false --browsers=ChromeHeadlessCI
   - yarn build ng-app-state --prod
-  - yarn test ng-app-state-platform --watch=false --progress=false --browsers=ChromeHeadlessCI
   - yarn e2e --protractor-config=./e2e/protractor-ci.conf.js
 
 after_success:
