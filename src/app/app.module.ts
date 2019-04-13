@@ -25,7 +25,7 @@ if (!environment.production) {
     BrowserModule,
     FormsModule,
     StoreModule.forRoot({}, { metaReducers }),
-    // StoreDevtoolsModule.instrument(),
+    StoreDevtoolsModule.instrument(),
     NasModelModule,
   ],
   declarations: [
