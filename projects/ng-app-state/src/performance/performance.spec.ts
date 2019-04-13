@@ -8,15 +8,15 @@ import { runWide, subscribeWide, WideState } from "./wide-performance";
 
 const depth = 1000;
 const deepIterations = 1000;
-const msPerDeepSubscription = 0.1;
+const msPerDeepSubscription = 1;
 const msPerDeepIteration = 5;
-const msPerDeepUnsubscribe = 0.1;
+const msPerDeepUnsubscribe = 1;
 
 const width = 10000;
 const wideIterations = 1000;
-const msPerWideSubscription = 0.1;
+const msPerWideSubscription = 1;
 const msPerWideIteration = 5;
-const msPerWideUnsubscribe = 0.1;
+const msPerWideUnsubscribe = 1;
 
 describe("performance", () => {
   let backingStore: Store<any>;
