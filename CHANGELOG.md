@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.6"></a>
+
+## [10.1.6](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.5...v10.1.6) (2019-04-13)
+
+### Bug Fixes
+
+- **docs:** some non-public internals were included in the online docs ([6052e2e](https://github.com/simontonsoftware/ng-app-state/commit/6052e2e))
+
+### Features
+
+- improve performance for very deep states ([b9873dc](https://github.com/simontonsoftware/ng-app-state/commit/b9873dc))
+
 <a name="10.1.5"></a>
 
 ## [10.1.5](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.4...v10.1.5) (2019-04-11)

@@ -908,6 +908,9 @@ img { max-width: 100%; }
 			<a href="numbervalueaccessordirective.html" class="tsd-kind-icon">Number<wbr>Value<wbr>Accessor<wbr>Directive</a>
 		</li>
 		<li class=" tsd-kind-class tsd-is-private">
+			<a href="observablenode.html" class="tsd-kind-icon">Observable<wbr>Node</a>
+		</li>
+		<li class=" tsd-kind-class tsd-is-private">
 			<a href="radiovalueaccessordirective.html" class="tsd-kind-icon">Radio<wbr>Value<wbr>Accessor<wbr>Directive</a>
 		</li>
 		<li class=" tsd-kind-class tsd-is-private">
@@ -987,22 +990,13 @@ img { max-width: 100%; }
 				</li>
 			</ul>
 		</li>
-		<li class=" tsd-kind-interface tsd-is-not-exported">
-			<a href="../interfaces/cachenode.html" class="tsd-kind-icon">Cache<wbr>Node</a>
-		</li>
 		<li class=" tsd-kind-type-alias tsd-is-private">
 			<a href="../index.html#undoorredo" class="tsd-kind-icon">Undo<wbr>OrRedo</a>
 		</li>
 		<li class=" tsd-kind-variable tsd-is-not-exported">
-			<a href="../index.html#context" class="tsd-kind-icon">context</a>
-		</li>
-		<li class=" tsd-kind-variable tsd-is-not-exported">
 			<a href="../index.html#exporteddirectives" class="tsd-kind-icon">exported<wbr>Directives</a>
 		</li>
-		<li class=" tsd-kind-variable tsd-is-not-exported">
-			<a href="../index.html#require" class="tsd-kind-icon">require</a>
-		</li>
-		<li class=" tsd-kind-function">
+		<li class=" tsd-kind-function tsd-is-private">
 			<a href="../index.html#buildname" class="tsd-kind-icon">build<wbr>Name</a>
 		</li>
 		<li class=" tsd-kind-function tsd-is-private">
@@ -1101,7 +1095,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L35">lib/utils/undo-manager.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L35">utils/undo-manager.ts:35</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1118,7 +1112,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">can<wbr>Redo$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;this.canRedoSubject.pipe(distinctUntilChanged(),)</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L26">lib/utils/undo-manager.ts:26</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L26">utils/undo-manager.ts:26</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1133,7 +1127,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">can<wbr>Undo$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;this.canUndoSubject.pipe(distinctUntilChanged(),)</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L19">lib/utils/undo-manager.ts:19</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L19">utils/undo-manager.ts:19</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1148,7 +1142,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">max<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L42">lib/utils/undo-manager.ts:42</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L42">utils/undo-manager.ts:42</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1163,7 +1157,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">state$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">UndoStateType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;this.stateSubject.pipe(distinctUntilChanged(),)</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L33">lib/utils/undo-manager.ts:33</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L33">utils/undo-manager.ts:33</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1178,7 +1172,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <a href="storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StateType</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L41">lib/utils/undo-manager.ts:41</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L41">utils/undo-manager.ts:41</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1191,7 +1185,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">current<wbr>Undo<wbr>State<span class="tsd-signature-symbol">:</span> </div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L135">lib/utils/undo-manager.ts:135</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L135">utils/undo-manager.ts:135</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1206,7 +1200,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">undo<wbr>Stack<span class="tsd-signature-symbol">:</span> </div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L142">lib/utils/undo-manager.ts:142</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L142">utils/undo-manager.ts:142</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1228,7 +1222,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L156">lib/utils/undo-manager.ts:156</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L156">utils/undo-manager.ts:156</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1250,7 +1244,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L87">lib/utils/undo-manager.ts:87</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L87">utils/undo-manager.ts:87</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1268,7 +1262,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L80">lib/utils/undo-manager.ts:80</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L80">utils/undo-manager.ts:80</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1286,7 +1280,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L122">lib/utils/undo-manager.ts:122</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L122">utils/undo-manager.ts:122</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1312,7 +1306,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L149">lib/utils/undo-manager.ts:149</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L149">utils/undo-manager.ts:149</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1333,7 +1327,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L183">lib/utils/undo-manager.ts:183</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L183">utils/undo-manager.ts:183</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1354,7 +1348,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L59">lib/utils/undo-manager.ts:59</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L59">utils/undo-manager.ts:59</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1376,7 +1370,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L109">lib/utils/undo-manager.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L109">utils/undo-manager.ts:109</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1402,7 +1396,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L50">lib/utils/undo-manager.ts:50</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L50">utils/undo-manager.ts:50</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1423,7 +1417,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L172">lib/utils/undo-manager.ts:172</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L172">utils/undo-manager.ts:172</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1447,7 +1441,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L96">lib/utils/undo-manager.ts:96</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/undo-manager.ts#L96">utils/undo-manager.ts:96</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
