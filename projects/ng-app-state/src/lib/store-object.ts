@@ -14,7 +14,7 @@ import { Observable } from "rxjs";
 import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";
 import { buildName, FunctionAction } from "./actions/function-action";
-import { TreeBasedObservableFactory } from "./tree-based-observable-factory";
+import { TreeBasedObservableFactory } from "./tree-based-observable/tree-based-observable-factory";
 
 export interface StoreObject<T> {
   // tslint:disable:callable-types
