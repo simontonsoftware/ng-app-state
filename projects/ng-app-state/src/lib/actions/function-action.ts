@@ -49,6 +49,7 @@ export class FunctionAction extends AppStateAction {
   }
 }
 
+/** @private */
 export function buildName(prefix: string, func: Function) {
   if (func.name) {
     return `${prefix}:${func.name}`;
