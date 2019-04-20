@@ -2,6 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { Action, Store, StoreModule } from "@ngrx/store";
 import { cloneDeep, identity, pick } from "micro-dash";
 import { skip, take } from "rxjs/operators";
+import { expectSingleCallAndReset } from "s-ng-test-utils";
 import { AppStore } from "./app-store";
 import { ngAppStateReducer } from "./ng-app-state-reducer";
 import createSpy = jasmine.createSpy;
@@ -54,29 +55,23 @@ describe("StoreObject", () => {
 
   describe(".$", () => {
     it("fires immediately, and with every change", () => {
-      let rootFires = 0;
-      let counterFires = 0;
-      let nestedFires = 0;
-      store.$.subscribe(() => {
-        ++rootFires;
-      });
-      store("counter").$.subscribe(() => {
-        ++counterFires;
-      });
-      store("nested").$.subscribe(() => {
-        ++nestedFires;
-      });
-      expect(rootFires).toBe(1);
-      expect(counterFires).toBe(1);
-      expect(nestedFires).toBe(1);
+      const rootNext = jasmine.createSpy();
+      const counterNext = jasmine.createSpy();
+      const nestedNext = jasmine.createSpy();
+      store.$.subscribe(rootNext);
+      store("counter").$.subscribe(counterNext);
+      store("nested").$.subscribe(nestedNext);
+      expect(rootNext).toHaveBeenCalledTimes(1);
+      expect(counterNext).toHaveBeenCalledTimes(1);
+      expect(nestedNext).toHaveBeenCalledTimes(1);
 
       store("counter").set(5);
-      expect(rootFires).toBe(2);
-      expect(counterFires).toBe(2);
+      expect(rootNext).toHaveBeenCalledTimes(2);
+      expect(counterNext).toHaveBeenCalledTimes(2);
 
       store("nested")("state").set(15);
-      expect(rootFires).toBe(3);
-      expect(nestedFires).toBe(2);
+      expect(rootNext).toHaveBeenCalledTimes(3);
+      expect(nestedNext).toHaveBeenCalledTimes(2);
     });
 
     it("gives the new value", () => {
@@ -94,55 +89,43 @@ describe("StoreObject", () => {
     });
 
     it("gives undefined when a parent object is deleted", () => {
-      let fires = 0;
-      let lastValue: number | undefined;
-      store<"optional", InnerState>("optional")("state").$.subscribe(
-        (value) => {
-          lastValue = value;
-          ++fires;
-        },
-      );
-      expect(fires).toBe(1);
-      expect(lastValue).toBeUndefined();
+      const next = jasmine.createSpy();
+
+      store<"optional", InnerState>("optional")("state").$.subscribe(next);
+      expectSingleCallAndReset(next, undefined);
 
       store("optional").set(new InnerState(17));
-      expect(fires).toBe(2);
-      expect(lastValue).toBe(17);
+      expectSingleCallAndReset(next, 17);
 
       store("optional").delete();
-      expect(fires).toBe(3);
-      expect(lastValue).toBeUndefined();
+      expectSingleCallAndReset(next, undefined);
     });
 
     it("does not fire when parent objects change", () => {
-      let counterFires = 0;
-      let optionalFires = 0;
-      store("counter").$.subscribe(() => {
-        ++counterFires;
-      });
+      const counterNext = jasmine.createSpy();
+      const optionalNext = jasmine.createSpy();
+      store("counter").$.subscribe(counterNext);
       store<"optional", InnerState>("optional")("state").$.subscribe(
-        (value) => {
-          ++optionalFires;
-        },
+        optionalNext,
       );
-      expect(counterFires).toBe(1);
-      expect(optionalFires).toBe(1);
+      expect(counterNext).toHaveBeenCalledTimes(1);
+      expect(optionalNext).toHaveBeenCalledTimes(1);
 
       store.delete();
-      expect(counterFires).toBe(2);
-      expect(optionalFires).toBe(1);
+      expect(counterNext).toHaveBeenCalledTimes(2);
+      expect(optionalNext).toHaveBeenCalledTimes(1);
 
       store.set(new State());
-      expect(counterFires).toBe(3);
-      expect(optionalFires).toBe(1);
+      expect(counterNext).toHaveBeenCalledTimes(3);
+      expect(optionalNext).toHaveBeenCalledTimes(1);
 
       store.set(new State());
-      expect(counterFires).toBe(3);
-      expect(optionalFires).toBe(1);
+      expect(counterNext).toHaveBeenCalledTimes(3);
+      expect(optionalNext).toHaveBeenCalledTimes(1);
 
       store("optional").set(new InnerState());
-      expect(counterFires).toBe(3);
-      expect(optionalFires).toBe(2);
+      expect(counterNext).toHaveBeenCalledTimes(3);
+      expect(optionalNext).toHaveBeenCalledTimes(2);
     });
 
     // This is important for use in angular templates, so each change detection cycle it gets the same object, so OnPush can work
@@ -166,36 +149,34 @@ describe("StoreObject", () => {
       const value = new InnerState();
       store("optional").set(value);
 
-      expect(log.calls.allArgs()).toEqual([[value]]);
+      expectSingleCallAndReset(log, value);
     });
   });
 
   describe(".batch()", () => {
     it("causes a single update after multiple actions", () => {
-      let fires = 0;
-      store.$.subscribe(() => {
-        ++fires;
-      });
-      expect(fires).toBe(1);
+      const next = jasmine.createSpy();
+
+      store.$.subscribe(next);
+      expect(next).toHaveBeenCalledTimes(1);
 
       store.batch((batch) => {
         batch("counter").set(3);
         batch("nested")("state").set(6);
-        expect(fires).toBe(1);
+        expect(next).toHaveBeenCalledTimes(1);
       });
 
-      expect(fires).toBe(2);
+      expect(next).toHaveBeenCalledTimes(2);
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
   });
 
   describe(".inBatch()", () => {
     it("causes mutations to run within the given batch", () => {
-      let fires = 0;
-      store.$.subscribe(() => {
-        ++fires;
-      });
-      expect(fires).toBe(1);
+      const next = jasmine.createSpy();
+
+      store.$.subscribe(next);
+      expect(next).toHaveBeenCalledTimes(1);
 
       const counterStore = store("counter");
       const nestedStore = store("nested");
@@ -204,10 +185,10 @@ describe("StoreObject", () => {
         nestedStore
           .inBatch(batch)("state")
           .set(6);
-        expect(fires).toBe(1);
+        expect(next).toHaveBeenCalledTimes(1);
       });
 
-      expect(fires).toBe(2);
+      expect(next).toHaveBeenCalledTimes(2);
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
   });

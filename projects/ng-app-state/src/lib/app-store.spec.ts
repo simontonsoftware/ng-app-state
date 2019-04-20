@@ -1,6 +1,7 @@
 import { inject, TestBed } from "@angular/core/testing";
 import { Action, Store, StoreModule } from "@ngrx/store";
 import { take } from "rxjs/operators";
+import { expectSingleCallAndReset } from "s-ng-test-utils";
 import { AppStore } from "./app-store";
 import { ngAppStateReducer } from "./ng-app-state-reducer";
 
@@ -49,21 +50,17 @@ describe("AppStore", () => {
   describe(".action$", () => {
     it("emits (only) events from this store", () => {
       const store1 = new AppStore(backingStore, "s1", {});
-      let lastEmitted1: Action;
-      store1.action$.subscribe((a) => {
-        lastEmitted1 = a;
-      });
+      const store1Next = jasmine.createSpy();
+      store1.action$.subscribe(store1Next);
 
       const store2 = new AppStore(backingStore, "s2", {});
-      let lastEmitted2: Action | undefined;
-      store2.action$.subscribe((a) => {
-        lastEmitted2 = a;
-      });
+      const store2Next = jasmine.createSpy();
+      store2.action$.subscribe(store2Next);
 
       const action = { type: "test action" };
       store1.dispatch(action);
-      expect(lastEmitted1!).toEqual(action);
-      expect(lastEmitted2).toBeUndefined();
+      expectSingleCallAndReset(store1Next, action);
+      expect(store2Next).not.toHaveBeenCalled();
     });
   });
 

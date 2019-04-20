@@ -55,6 +55,7 @@
     "ng-packagr": "^4.2.0",
     "prettier": "^1.15.3",
     "protractor": "~5.4.0",
+    "s-ng-test-utils": "^0.1.0",
     "standard-version": "^4.4.0",
     "ts-node": "~7.0.0",
     "tsickle": ">=0.29.0",

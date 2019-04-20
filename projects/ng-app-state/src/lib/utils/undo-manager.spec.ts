@@ -1,5 +1,6 @@
 import { inject, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
+import { expectSingleCallAndReset } from "s-ng-test-utils";
 import { AppStore } from "../app-store";
 import { ngAppStateReducer } from "../ng-app-state-reducer";
 import { StoreObject } from "../store-object";
@@ -126,167 +127,123 @@ describe("UndoManager", () => {
 
   describe(".canUndo$", () => {
     it("fires (only) when undoability changes", () => {
-      let callCount = 0;
-      let lastValue = false;
-      undoManager.canUndo$.subscribe((value) => {
-        ++callCount;
-        lastValue = value;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toBe(false);
+      const next = jasmine.createSpy();
+
+      undoManager.canUndo$.subscribe(next);
+      expectSingleCallAndReset(next, false);
 
       store("counter").set(1);
-      expect(callCount).toBe(2);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
 
       undoManager.undo();
-      expect(callCount).toBe(3);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
 
       undoManager.redo();
-      expect(callCount).toBe(4);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
 
       store("counter").set(2);
       undoManager.undo();
-      expect(callCount).toBe(4);
+      expect(next).not.toHaveBeenCalled();
 
       undoManager.undo();
-      expect(callCount).toBe(5);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
 
       undoManager.redo();
-      expect(callCount).toBe(6);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
 
       undoManager.reset();
-      expect(callCount).toBe(7);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
     });
 
     it("fires immediately with the current value", () => {
       store("counter").set(1);
+      const next = jasmine.createSpy();
 
-      let callCount = 0;
-      let lastValue = false;
-      undoManager.canUndo$.subscribe((value) => {
-        ++callCount;
-        lastValue = value;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toBe(true);
+      undoManager.canUndo$.subscribe(next);
+      expectSingleCallAndReset(next, true);
 
       undoManager.undo();
-      expect(callCount).toBe(2);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
     });
   });
 
   describe(".canRedo$", () => {
     it("fires (only) when redoability changes", () => {
-      let callCount = 0;
-      let lastValue = false;
-      undoManager.canRedo$.subscribe((value) => {
-        ++callCount;
-        lastValue = value;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toBe(false);
+      const next = jasmine.createSpy();
+
+      undoManager.canRedo$.subscribe(next);
+      expectSingleCallAndReset(next, false);
 
       store("counter").set(1);
-      expect(callCount).toBe(1);
+      expect(next).not.toHaveBeenCalled();
 
       undoManager.undo();
-      expect(callCount).toBe(2);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
 
       undoManager.redo();
-      expect(callCount).toBe(3);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
 
       store("counter").set(2);
-      expect(callCount).toBe(3);
+      expect(next).not.toHaveBeenCalled();
 
       undoManager.undo();
-      expect(callCount).toBe(4);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
 
       undoManager.undo();
       undoManager.redo();
-      expect(callCount).toBe(4);
+      expect(next).not.toHaveBeenCalled();
 
       undoManager.redo();
-      expect(callCount).toBe(5);
-      expect(lastValue).toBe(false);
+      expectSingleCallAndReset(next, false);
 
       undoManager.reset();
-      expect(callCount).toBe(5);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("fires immediately with the current value", () => {
       store("counter").set(1);
+      const next = jasmine.createSpy();
 
-      let callCount = 0;
-      let lastValue = false;
-      undoManager.canRedo$.subscribe((value) => {
-        ++callCount;
-        lastValue = value;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toBe(false);
+      undoManager.canRedo$.subscribe(next);
+      expectSingleCallAndReset(next, false);
 
       undoManager.undo();
-      expect(callCount).toBe(2);
-      expect(lastValue).toBe(true);
+      expectSingleCallAndReset(next, true);
     });
   });
 
   describe(".state$", () => {
     it("fires (only) when the state changes", () => {
-      let callCount = 0;
-      let lastValue = {} as State;
-      undoManager.state$.subscribe((state) => {
-        ++callCount;
-        lastValue = state;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toEqual(new State());
+      const next = jasmine.createSpy();
+
+      undoManager.state$.subscribe(next);
+      expectSingleCallAndReset(next, new State());
 
       store("counter").set(1);
-      expect(callCount).toBe(2);
-      expect(lastValue).toEqual({ counter: 1 });
+      expectSingleCallAndReset(next, { counter: 1 });
 
       undoManager.undo();
-      expect(callCount).toBe(3);
-      expect(lastValue).toEqual(new State());
+      expectSingleCallAndReset(next, new State());
 
       undoManager.redo();
-      expect(callCount).toBe(4);
-      expect(lastValue).toEqual({ counter: 1 });
+      expectSingleCallAndReset(next, { counter: 1 });
 
       store("counter").set(10);
-      expect(callCount).toBe(5);
-      expect(lastValue).toEqual({ counter: 10 });
+      expectSingleCallAndReset(next, { counter: 10 });
 
       undoManager.reset();
-      expect(callCount).toBe(5);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("fires immediately with the current value", () => {
       store("counter").set(1);
+      const next = jasmine.createSpy();
 
-      let callCount = 0;
-      let lastValue = new State();
-      undoManager.state$.subscribe((value) => {
-        ++callCount;
-        lastValue = value;
-      });
-      expect(callCount).toBe(1);
-      expect(lastValue).toEqual({ counter: 1 });
+      undoManager.state$.subscribe(next);
+      expectSingleCallAndReset(next, { counter: 1 });
 
       undoManager.undo();
-      expect(callCount).toBe(2);
-      expect(lastValue).toEqual(new State());
+      expectSingleCallAndReset(next, new State());
     });
   });
 
