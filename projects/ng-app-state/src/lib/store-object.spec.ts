@@ -187,6 +187,19 @@ describe("StoreObject", () => {
       expect(fires).toBe(2);
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
+
+    it("works when nested", () => {
+      store.batch((batch1) => {
+        batch1("counter").set(1);
+        batch1.batch((batch2) => {
+          expect(batch2.state().counter).toBe(1);
+          batch2("counter").set(2);
+          expect(batch2.state().counter).toBe(2);
+        });
+        expect(batch1.state().counter).toBe(2);
+      });
+      expect(store.state().counter).toBe(2);
+    });
   });
 
   describe(".inBatch()", () => {
@@ -479,6 +492,16 @@ describe("StoreObject", () => {
       expect(store.state().nested.state).toBe(1);
       expect(store("nested").state().state).toBe(1);
       expect(store("nested")("state").state()).toBe(1);
+    });
+
+    it("gets the in-progress value of a batch", () => {
+      store.batch((batch) => {
+        store("counter").set(1);
+        expect(store.state().counter).toBe(1);
+
+        store("counter").set(2);
+        expect(store.state().counter).toBe(2);
+      });
     });
 
     it("gets the new subvalue even it has a later subscriber (production bug)", () => {
