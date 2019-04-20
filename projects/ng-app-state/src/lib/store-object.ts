@@ -31,6 +31,7 @@ export class StoreObject<T> extends CallableObject {
     private observableFactory: TreeBasedObservableFactory,
     private path: string[],
     private dispatcher: { dispatch(action?: Action): void },
+    private stateProvider: { getState(path: string[]): any },
     private _withCaching = false,
   ) {
     super(
@@ -38,8 +39,9 @@ export class StoreObject<T> extends CallableObject {
         (prop: keyof T) =>
           new StoreObject(
             observableFactory,
-            [...path, prop.toString()],
+            path.concat(prop.toString()),
             dispatcher,
+            stateProvider,
             _withCaching,
           ),
         _withCaching,
@@ -58,23 +60,28 @@ export class StoreObject<T> extends CallableObject {
   }
 
   /**
-   * Allows batching multiple mutations on this store object so that observers only receive one event. E.g.:
+   * Allows batching multiple mutations on this store object so that observers only receive one event. The batch maintains its own fork of the full global state until it completes, then commits it to the store. Calls to `.state()` on the batch will fetch from the forked state.
+   *
    * ```ts
    * store.batch((batch) => {
    *   batch.assign({ key1: value1 });
    *   batch('key2').delete();
    *   batch('key3').set({ key4: value4 });
+   *
+   *   batch('key1').state(); // returns `value1`
+   *   store('key1').state(); // don't do this. may not return `value1`
    * });
    * ```
    */
   public batch(func: (state: StoreObject<T>) => void) {
-    const batch = new BatchAction();
-    func(new StoreObject(this.observableFactory, this.path, batch));
+    const batch = new BatchAction(this.stateProvider.getState([]));
+    func(new StoreObject(this.observableFactory, this.path, batch, batch));
     this.dispatcher.dispatch(batch);
   }
 
   /**
-   * Returns a copy of this store object that will operate within the given batch. E.g.:
+   * Returns a copy of this store object that will operate within the given batch.
+   *
    * ```ts
    * const existingStoreObject: StoreObject<string>;
    * store.batch((batch) => {
@@ -88,6 +95,7 @@ export class StoreObject<T> extends CallableObject {
       this.observableFactory,
       this.path,
       batch.dispatcher,
+      this.stateProvider,
     );
   }
 
@@ -113,12 +121,13 @@ export class StoreObject<T> extends CallableObject {
 
   /**
    * Removes the state represented by this store object from its parent. E.g. to remove the current user:
+   *
    * ```ts
    * store('currentUser').delete();
    * ```
    */
   public delete() {
-    let key = last(this.path);
+    const key = last(this.path);
     this.dispatcher.dispatch(
       new FunctionAction("delete:" + key, this.path.slice(0, -1), false, omit, [
         key,
@@ -186,7 +195,7 @@ export class StoreObject<T> extends CallableObject {
    * Retrieve the current state represented by this store object.
    */
   public state(): T {
-    return this.observableFactory.getState(this.path);
+    return this.stateProvider.getState(this.path);
   }
 
   /**
@@ -207,6 +216,7 @@ export class StoreObject<T> extends CallableObject {
       this.observableFactory,
       this.path,
       this.dispatcher,
+      this.stateProvider,
       value,
     );
   }
