@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { AppStore } from "../app-store";
-import { ngAppStateReducer } from "../meta-reducer";
+import { ngAppStateReducer } from "../ng-app-state-reducer";
 import { StoreObject } from "../store-object";
 import { pushToStoreArray } from "./push-to-store-array";
 

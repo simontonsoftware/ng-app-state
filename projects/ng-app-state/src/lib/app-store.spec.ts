@@ -2,7 +2,7 @@ import { inject, TestBed } from "@angular/core/testing";
 import { Action, Store, StoreModule } from "@ngrx/store";
 import { take } from "rxjs/operators";
 import { AppStore } from "./app-store";
-import { ngAppStateReducer } from "./meta-reducer";
+import { ngAppStateReducer } from "./ng-app-state-reducer";
 
 describe("AppStore", () => {
   let backingStore: Store<any>;

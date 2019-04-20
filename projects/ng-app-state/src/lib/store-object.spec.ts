@@ -3,7 +3,7 @@ import { Action, Store, StoreModule } from "@ngrx/store";
 import { cloneDeep, identity, pick } from "micro-dash";
 import { skip, take } from "rxjs/operators";
 import { AppStore } from "./app-store";
-import { ngAppStateReducer } from "./meta-reducer";
+import { ngAppStateReducer } from "./ng-app-state-reducer";
 import createSpy = jasmine.createSpy;
 import Spy = jasmine.Spy;
 

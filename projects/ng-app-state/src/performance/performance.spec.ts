@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { AppStore } from "../lib/app-store";
-import { ngAppStateReducer } from "../lib/meta-reducer";
+import { ngAppStateReducer } from "../lib/ng-app-state-reducer";
 import { DeepState, runDeep, subscribeDeep } from "./deep-performance";
 import { runWide, subscribeWide, WideState } from "./wide-performance";
 

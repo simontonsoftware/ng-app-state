@@ -25,7 +25,7 @@ import {
   SingleValueComponent,
   SingleValueStore,
 } from "../../test-helpers";
-import { ngAppStateReducer } from "../meta-reducer";
+import { ngAppStateReducer } from "../ng-app-state-reducer";
 import { NasModelModule } from "./nas-model.module";
 
 let fixture: ComponentFixture<any>;
