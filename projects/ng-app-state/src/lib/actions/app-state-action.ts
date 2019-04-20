@@ -8,5 +8,5 @@ export abstract class AppStateAction implements Action {
     this.type = `[${name}] ${path.join(".")}`;
   }
 
-  abstract execute<T extends Object>(state: T): T;
+  abstract execute<T extends object>(rootState: T): T;
 }

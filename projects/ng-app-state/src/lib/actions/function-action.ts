@@ -13,8 +13,8 @@ export class FunctionAction extends AppStateAction {
     super(name, path);
   }
 
-  public execute<T>(state: T) {
-    return this.getNewState(this.path, state);
+  public execute<T extends object>(rootState: T) {
+    return this.getNewState(this.path, rootState);
   }
 
   ///////
