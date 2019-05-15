@@ -1,6 +1,6 @@
 import { times } from "micro-dash";
 import { Subscription } from "rxjs";
-import { StoreObject } from "../public_api";
+import { StoreObject } from "../public-api";
 import { CounterState } from "./counter-state";
 
 export class WideState {

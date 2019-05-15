@@ -11,7 +11,7 @@
     "e2e": "ng e2e",
     "docs": "cd docs && typedoc ../projects/ng-app-state/src/lib",
     "prettier-all": "prettier --write \"**/*.{html,js,json,md,scss,ts,yml}\"",
-    "release": "yarn docs && git add docs/* && standard-version --commit-all && yarn build ng-app-state --prod"
+    "release": "yarn docs && git add docs/* && standard-version --commit-all && yarn build ng-app-state"
   },
   "private": true,
   "dependencies": {
