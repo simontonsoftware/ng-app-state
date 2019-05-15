@@ -7,6 +7,7 @@ export class FunctionAction extends AppStateAction {
     name: string,
     path: string[],
     private mutates: boolean,
+    // tslint:disable-next-line:ban-types
     private func: Function,
     private args: any[],
   ) {
@@ -50,6 +51,7 @@ export class FunctionAction extends AppStateAction {
 }
 
 /** @private */
+// tslint:disable-next-line:ban-types
 export function buildName(prefix: string, func: Function) {
   if (func.name) {
     return `${prefix}:${func.name}`;

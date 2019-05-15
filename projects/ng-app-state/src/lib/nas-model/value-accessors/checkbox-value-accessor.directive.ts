@@ -7,7 +7,7 @@ import {
 /** @private */
 @Directive({
   selector: "input[type=checkbox][nasModel]",
-  // tslint:disable-next-line:use-host-property-decorator
+  // tslint:disable-next-line:no-host-metadata-property
   host: {
     "(change)": "onChange($event.target.checked)",
     "(blur)": "onTouched()",

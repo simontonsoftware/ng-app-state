@@ -57,7 +57,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * using `redo()` are discarded.
    */
   pushCurrentState() {
-    let nextState = this.extractUndoState(this.store.state());
+    const nextState = this.extractUndoState(this.store.state());
     if (this.currentStateIndex >= 0 && !this.shouldPush(nextState)) {
       return;
     }
