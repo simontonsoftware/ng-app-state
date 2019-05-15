@@ -1,4 +1,4 @@
-import { browser, element, by, ElementFinder, Key } from "protractor";
+import { browser, element, by, ElementFinder, Key, logging } from "protractor";
 import { AppPage } from "./app.po";
 
 const cities = ["San Francisco", "Nairobi", "Gulu"];
@@ -11,15 +11,17 @@ describe("integration App", () => {
     page.navigateTo();
   });
 
-  afterEach(() => {
-    browser
+  afterEach(async () => {
+    // Assert that there are no errors emitted from the browser
+    const logs = await browser
       .manage()
       .logs()
-      .get("browser")
-      .then((browserLog: any[]) => {
-        const errors = browserLog.filter((entry) => entry.level === "ERROR");
-        expect(errors).toEqual([]);
-      });
+      .get(logging.Type.BROWSER);
+    expect(logs).not.toContain(
+      jasmine.objectContaining({
+        level: logging.Level.SEVERE,
+      } as logging.Entry),
+    );
   });
 
   async function clearValue(control: string | ElementFinder) {
