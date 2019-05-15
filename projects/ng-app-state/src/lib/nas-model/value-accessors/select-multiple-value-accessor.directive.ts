@@ -4,7 +4,7 @@ import {
   SelectMultipleControlValueAccessor,
 } from "@angular/forms";
 
-/** @private */
+/** @hidden */
 @Directive({
   selector: "select[multiple][nasModel]",
   // tslint:disable-next-line:no-host-metadata-property

@@ -1,7 +1,7 @@
 import { get } from "micro-dash";
 import { AppStateAction } from "./app-state-action";
 
-/** @private */
+/** @hidden */
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 

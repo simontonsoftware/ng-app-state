@@ -1,7 +1,7 @@
 import { forOwn, ObjectWith, pull } from "micro-dash";
 import { Observable, Subscriber, Subscription } from "rxjs";
 
-/** @private */
+/** @hidden */
 export class ObservableNode extends Observable<any> {
   private value: any;
   private valueChanged = false;
