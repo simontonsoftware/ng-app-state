@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { Action, Store, StoreModule } from "@ngrx/store";
 import { cloneDeep, identity, pick } from "micro-dash";
 import { skip, take } from "rxjs/operators";
-import { expectSingleCallAndReset } from "s-ng-test-utils";
+import { expectSingleCallAndReset } from "s-ng-dev-utils";
 import { AppStore } from "./app-store";
 import { ngAppStateReducer } from "./ng-app-state-reducer";
 import createSpy = jasmine.createSpy;

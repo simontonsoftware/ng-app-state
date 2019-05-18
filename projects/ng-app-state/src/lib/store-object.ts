@@ -1,15 +1,5 @@
 import { Action } from "@ngrx/store";
-import {
-  every,
-  Function1,
-  Function2,
-  Function3,
-  Function4,
-  isEqual,
-  last,
-  memoize,
-  omit,
-} from "micro-dash";
+import { every, isEqual, last, memoize, omit } from "micro-dash";
 import { Observable } from "rxjs";
 import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";

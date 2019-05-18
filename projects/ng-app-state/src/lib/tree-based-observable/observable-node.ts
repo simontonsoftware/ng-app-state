@@ -1,5 +1,6 @@
-import { forOwn, ObjectWith, pull } from "micro-dash";
+import { forOwn, pull } from "micro-dash";
 import { Observable, Subscriber, Subscription } from "rxjs";
+import { ObjectWith } from "s-ng-dev-utils";
 
 /** @hidden */
 export class ObservableNode extends Observable<any> {
