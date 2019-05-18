@@ -14,7 +14,7 @@ export class BatchAction extends AppStateAction {
     this.rootSnapshot = action.execute(this.rootSnapshot);
   }
 
-  public execute<T extends object>(rootState: T) {
+  public execute() {
     return this.rootSnapshot;
   }
 

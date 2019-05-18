@@ -564,7 +564,7 @@ describe("UndoManager", () => {
           super(store, 2);
         }
 
-        protected isOverSize(size: number) {
+        protected isOverSize() {
           if (numToDrop > 0) {
             --numToDrop;
             return true;

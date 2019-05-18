@@ -42,17 +42,15 @@ describe("spreadArrayStore$()", () => {
 
   it("only emits when the length of the array changes", () => {
     store.set([1, 2]);
-    let emitCount = 0;
-    spreadArrayStore$(store).subscribe((stores) => {
-      ++emitCount;
-    });
-    expect(emitCount).toBe(1);
+    const spy = jasmine.createSpy();
+    spreadArrayStore$(store).subscribe(spy);
+    expect(spy).toHaveBeenCalledTimes(1);
 
     store.set([3, 4]);
-    expect(emitCount).toBe(1);
+    expect(spy).toHaveBeenCalledTimes(1);
 
     store.set([5, 6, 7]);
-    expect(emitCount).toBe(2);
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 
   // this makes it nice for use in templates that use OnPush change detection

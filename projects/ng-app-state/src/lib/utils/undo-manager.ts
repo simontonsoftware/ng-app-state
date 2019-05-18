@@ -169,7 +169,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * }
    * ```
    */
-  protected shouldPush(state: UndoStateType) {
+  protected shouldPush(_state: UndoStateType) {
     return true;
   }
 

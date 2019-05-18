@@ -342,7 +342,7 @@ describe("StoreObject", () => {
       expect(store.state().nested.state).toBe(1);
 
       store("nested").setUsing(
-        (state, left, right) => {
+        (_state, left, right) => {
           const newState = new InnerState(2);
           newState.left = left;
           newState.right = right;
@@ -476,7 +476,7 @@ describe("StoreObject", () => {
     });
 
     it("gets the in-progress value of a batch", () => {
-      store.batch((batch) => {
+      store.batch(() => {
         store("counter").set(1);
         expect(store.state().counter).toBe(1);
 

@@ -1,5 +1,5 @@
 import { inject, TestBed } from "@angular/core/testing";
-import { Action, Store, StoreModule } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 import { take } from "rxjs/operators";
 import { expectSingleCallAndReset } from "s-ng-dev-utils";
 import { AppStore } from "./app-store";
@@ -18,7 +18,8 @@ describe("AppStore", () => {
   });
 
   it("uses the given constructor arguments", () => {
-    const store = new AppStore(backingStore, "s", { initial: true });
+    // tslint:disable-next-line:no-unused-expression
+    new AppStore(backingStore, "s", { initial: true });
     expect(getGlobalState()).toEqual({ s: { initial: true } });
   });
 
