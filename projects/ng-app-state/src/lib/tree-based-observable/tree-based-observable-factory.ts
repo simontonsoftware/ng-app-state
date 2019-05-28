@@ -1,7 +1,7 @@
-import { get, noop } from "micro-dash";
+import { get } from "micro-dash";
 import { Observable } from "rxjs";
-import { take, tap } from "rxjs/operators";
-import { ObservableNode } from "./observable-node";
+import { tap } from "rxjs/operators";
+import { ObservableNode } from "./observable-node-2";
 
 /** @hidden */
 export class TreeBasedObservableFactory {
@@ -14,7 +14,6 @@ export class TreeBasedObservableFactory {
           this.root.updateCache(state);
         }),
       ),
-      noop,
     );
   }
 
@@ -23,7 +22,7 @@ export class TreeBasedObservableFactory {
   }
 
   public getState(path: string[]) {
-    const rootState = this.getRootState();
+    const rootState = this.root.getValue();
     return path.length ? get(rootState, path) : rootState;
   }
 
@@ -31,17 +30,8 @@ export class TreeBasedObservableFactory {
     let node = this.root;
     for (const childKey of path) {
       const parent = node;
-      node = parent.ensureChild(childKey, () => {
-        parent.removeChild(childKey);
-      });
+      node = parent.ensureChild(childKey);
     }
     return node;
-  }
-
-  private getRootState() {
-    if (this.root.subscribersAreEmpty()) {
-      this.root.pipe(take(1)).subscribe();
-    }
-    return this.root.getCache();
   }
 }

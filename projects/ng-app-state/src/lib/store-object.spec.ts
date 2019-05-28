@@ -5,8 +5,6 @@ import { skip, take } from "rxjs/operators";
 import { expectSingleCallAndReset } from "s-ng-dev-utils";
 import { AppStore } from "./app-store";
 import { ngAppStateReducer } from "./ng-app-state-reducer";
-import createSpy = jasmine.createSpy;
-import Spy = jasmine.Spy;
 
 class InnerState {
   left?: InnerState;
@@ -25,7 +23,7 @@ class State {
 describe("StoreObject", () => {
   let backingStore: Store<any>;
   let store: AppStore<State>;
-  let logError: Spy;
+  let logError: jasmine.Spy;
 
   beforeEach(() => {
     logError = spyOn(console, "error");
@@ -137,9 +135,27 @@ describe("StoreObject", () => {
       expect(store.$).toBe(observable);
     });
 
+    it("works when a different path was previously subscribed", () => {
+      const nested = new InnerState();
+      nested.left = new InnerState();
+      nested.right = new InnerState();
+      store("nested").set(nested);
+
+      const spy = jasmine.createSpy();
+      store("nested")("left")
+        .$.subscribe(spy)
+        .unsubscribe();
+      expectSingleCallAndReset(spy, nested.left);
+
+      store("nested")("right")
+        .$.subscribe(spy)
+        .unsubscribe();
+      expectSingleCallAndReset(spy, nested.right);
+    });
+
     // https://github.com/simontonsoftware/ng-app-state/issues/13
     it("does not emit stale values in the middle of propogating a change (production bug)", () => {
-      let log: Spy | undefined;
+      let log: jasmine.Spy | undefined;
       store.$.subscribe(() => {
         store("optional").$.subscribe(log);
       });
@@ -150,6 +166,16 @@ describe("StoreObject", () => {
       store("optional").set(value);
 
       expectSingleCallAndReset(log, value);
+    });
+
+    // https://github.com/simontonsoftware/ng-app-state/issues/20
+    it("will work again after being unsubscribed from (production bug)", () => {
+      const counterStore = store("counter");
+      counterStore.$.subscribe().unsubscribe();
+      counterStore.set(3);
+      const spy = jasmine.createSpy();
+      counterStore.$.subscribe(spy);
+      expectSingleCallAndReset(spy, 3);
     });
   });
 
@@ -371,7 +397,7 @@ describe("StoreObject", () => {
     });
 
     it("prints a message and is not called when the state is missing", () => {
-      const op = createSpy();
+      const op = jasmine.createSpy();
       store<"optional", InnerState>("optional")("left").setUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
@@ -441,7 +467,7 @@ describe("StoreObject", () => {
     });
 
     it("prints a message and is not called when the state is missing", () => {
-      const op = createSpy();
+      const op = jasmine.createSpy();
       store<"optional", InnerState>("optional")("left").mutateUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(

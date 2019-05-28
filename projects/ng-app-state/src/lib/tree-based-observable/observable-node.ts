@@ -11,7 +11,7 @@ export class ObservableNode extends Observable<any> {
   private sourceSubscription?: Subscription;
 
   /**
-   * @param source expected to as if from a behavior, and only emit distinct values
+   * @param source expected to act as if from a behavior, and only emit distinct values
    */
   constructor(private _source: Observable<any>, private cleanup: VoidFunction) {
     super();
@@ -43,10 +43,6 @@ export class ObservableNode extends Observable<any> {
     return child;
   }
 
-  getChild(key: string) {
-    return this.children[key];
-  }
-
   removeChild(key: string) {
     delete this.children[key];
   }
@@ -69,6 +65,10 @@ export class ObservableNode extends Observable<any> {
 
   getCache() {
     return this.value;
+  }
+
+  private getChild(key: string) {
+    return this.children[key];
   }
 
   private start() {
