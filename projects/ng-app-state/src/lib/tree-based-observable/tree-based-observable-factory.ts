@@ -1,7 +1,7 @@
 import { get } from "micro-dash";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { ObservableNode } from "./observable-node-2";
+import { ObservableNode } from "./observable-node";
 
 /** @hidden */
 export class TreeBasedObservableFactory {
