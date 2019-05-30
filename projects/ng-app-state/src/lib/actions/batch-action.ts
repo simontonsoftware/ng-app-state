@@ -1,21 +1,24 @@
+import { get } from "micro-dash";
 import { AppStateAction } from "./app-state-action";
 
 /** @private */
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 
-  constructor() {
+  constructor(private rootSnapshot: any) {
     super("batch", []);
   }
 
   public dispatch(action: AppStateAction) {
     this.children.push(action);
+    this.rootSnapshot = action.execute(this.rootSnapshot);
   }
 
   public execute<T extends object>(rootState: T) {
-    return this.children.reduce(
-      (curState, child) => child.execute(curState),
-      rootState,
-    );
+    return this.rootSnapshot;
+  }
+
+  public getState(path: string[]) {
+    return path.length ? get(this.rootSnapshot, path) : this.rootSnapshot;
   }
 }

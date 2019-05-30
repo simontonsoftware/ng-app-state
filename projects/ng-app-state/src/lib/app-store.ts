@@ -4,15 +4,22 @@ import { TreeBasedObservableFactory } from "./tree-based-observable/tree-based-o
 import { StoreObject } from "./store-object";
 
 export class AppStore<T extends object> extends StoreObject<T> {
-  private actionSubject = new Subject<Action>();
-
   /**
    * Emits the actions dispatched through this object.
    */
-  public action$: Observable<Action> = this.actionSubject.asObservable();
+  public action$: Observable<Action>;
 
-  constructor(private store: Store<any>, key: string, initialState: T) {
-    super(new TreeBasedObservableFactory(store), [key], store);
+  private store: Store<any>;
+  private actionSubject: Subject<Action>;
+
+  constructor(store: Store<any>, key: string, initialState: T) {
+    const observableFactory = new TreeBasedObservableFactory(store);
+    super(observableFactory, [key], store, observableFactory);
+
+    this.store = store;
+    this.actionSubject = new Subject<Action>();
+    this.action$ = this.actionSubject.asObservable();
+
     this.set(initialState);
   }
 

@@ -23,7 +23,8 @@ export class TreeBasedObservableFactory {
   }
 
   public getState(path: string[]) {
-    return get(this.getRootState(), path);
+    const rootState = this.getRootState();
+    return path.length ? get(rootState, path) : rootState;
   }
 
   private ensureNodeAt(path: string[]) {
