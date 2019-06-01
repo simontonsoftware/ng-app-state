@@ -85,7 +85,11 @@ export class AppComponent {
 
   private modDates(type: keyof IntegrationState, fn: (dest: Date) => void) {
     this.store.setUsing((state) => {
-      let datetime, date, month, week, time;
+      let datetime;
+      let date;
+      let month;
+      let week;
+      let time;
       if (state[type] === "") {
         datetime = date = month = week = time = "";
       } else {

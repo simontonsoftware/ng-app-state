@@ -140,21 +140,10 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
-  // TODO: use this version after tsickle is updated (https://github.com/angular/tsickle/issues/944)
-  // public setUsing<A extends any[]>(
-  //   func: (state: T, ...args: A) => T,
-  //   ...args: A
-  // ) {
-  public setUsing(func: Function1<T, T>): void;
-  public setUsing<A>(func: Function2<T, A, T>, a: A): void;
-  public setUsing<A, B>(func: Function3<T, A, B, T>, a: A, b: B): void;
-  public setUsing<A, B, C>(
-    func: Function4<T, A, B, C, T>,
-    a: A,
-    b: B,
-    c: C,
-  ): void;
-  public setUsing(func: Function, ...args: any[]) {
+  public setUsing<A extends any[]>(
+    func: (state: T, ...args: A) => T,
+    ...args: A
+  ) {
     this.dispatcher.dispatch(
       new FunctionAction(buildName("set", func), this.path, false, func, args),
     );
@@ -165,21 +154,10 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate nested objects within the state.
    */
-  // TODO: use this version after tsickle is updated (https://github.com/angular/tsickle/issues/944)
-  // public mutateUsing<A extends any[]>(
-  //   func: (state: T, ...args: A) => void,
-  //   ...args: A
-  // ) {
-  public mutateUsing(func: Function1<T, void>): void;
-  public mutateUsing<A>(func: Function2<T, A, void>, a: A): void;
-  public mutateUsing<A, B>(func: Function3<T, A, B, void>, a: A, b: B): void;
-  public mutateUsing<A, B, C>(
-    func: Function4<T, A, B, C, void>,
-    a: A,
-    b: B,
-    c: C,
-  ): void;
-  public mutateUsing(func: Function, ...args: any[]) {
+  public mutateUsing<A extends any[]>(
+    func: (state: T, ...args: A) => void,
+    ...args: A
+  ) {
     this.dispatcher.dispatch(
       new FunctionAction(
         buildName("mutate", func),
@@ -236,6 +214,7 @@ export class StoreObject<T> extends CallableObject {
   }
 }
 
+// tslint:disable-next-line:ban-types
 function maybeMemoize(fn: Function, withCaching: boolean) {
   if (withCaching) {
     return memoize(fn);

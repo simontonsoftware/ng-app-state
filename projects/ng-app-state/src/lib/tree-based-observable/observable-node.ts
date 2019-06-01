@@ -12,10 +12,7 @@ export class ObservableNode extends Observable<any> {
   /**
    * @param source expected to as if from a behavior, and only emit distinct values
    */
-  constructor(
-    private _source: Observable<any>,
-    private cleanup: VoidFunction,
-  ) {
+  constructor(private _source: Observable<any>, private cleanup: VoidFunction) {
     super();
   }
 

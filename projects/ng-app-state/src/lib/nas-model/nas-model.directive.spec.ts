@@ -210,7 +210,7 @@ describe("value accessors", () => {
         tick();
 
         // view -> model
-        expect(store.state().selectedCity["name"]).toEqual("Buffalo");
+        expect(store.state().selectedCity.name).toEqual("Buffalo");
       }));
 
       it("when new options are added", fakeAsync(() => {
@@ -296,7 +296,7 @@ describe("value accessors", () => {
         dispatchEvent(select, "change");
         detectChanges();
         tick();
-        expect(store.state().selectedCity["name"]).toEqual("NYC");
+        expect(store.state().selectedCity.name).toEqual("NYC");
 
         select.value = "0: null";
         dispatchEvent(select, "change");

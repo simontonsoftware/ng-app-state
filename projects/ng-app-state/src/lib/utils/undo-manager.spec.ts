@@ -559,7 +559,7 @@ describe("UndoManager", () => {
 
     it("respects `.isOverSize()` when overridden", () => {
       let numToDrop = 0;
-      undoManager = new class extends TestImpl {
+      undoManager = new (class extends TestImpl {
         constructor() {
           super(store, 2);
         }
@@ -572,7 +572,7 @@ describe("UndoManager", () => {
             return false;
           }
         }
-      }();
+      })();
 
       store("counter").set(1);
       store("counter").set(2);

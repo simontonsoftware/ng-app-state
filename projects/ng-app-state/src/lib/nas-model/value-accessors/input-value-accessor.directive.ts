@@ -5,7 +5,7 @@ import { DefaultValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 @Directive({
   selector:
     "input:not([type=checkbox]):not([type=number]):not([type=radio]):not([type=range])[nasModel],textarea[nasModel]",
-  // tslint:disable-next-line:use-host-property-decorator
+  // tslint:disable-next-line:no-host-metadata-property
   host: {
     "(input)": "$any(this)._handleInput($event.target.value)",
     "(blur)": "onTouched()",
