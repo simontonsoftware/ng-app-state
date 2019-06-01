@@ -4,7 +4,7 @@ import {
   NG_VALUE_ACCESSOR,
 } from "@angular/forms";
 
-/** @private */
+/** @hidden */
 @Directive({
   selector: "input[type=checkbox][nasModel]",
   // tslint:disable-next-line:no-host-metadata-property

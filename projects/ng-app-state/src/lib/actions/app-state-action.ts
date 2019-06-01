@@ -1,6 +1,6 @@
 import { Action } from "@ngrx/store";
 
-/** @private */
+/** @hidden */
 export abstract class AppStateAction implements Action {
   type: string;
 

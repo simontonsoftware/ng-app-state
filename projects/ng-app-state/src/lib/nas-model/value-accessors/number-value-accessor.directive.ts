@@ -3,7 +3,7 @@ import { isNil } from "micro-dash";
 import { BaseInputValueAccessor } from "./base-input-value-accessor";
 import { makeProviderDef } from "./base-value-accessor";
 
-/** @private */
+/** @hidden */
 @Directive({
   selector: "input[type=number][nasModel]",
   providers: [makeProviderDef(NumberValueAccessorDirective)],

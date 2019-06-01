@@ -1,7 +1,7 @@
 import { Directive, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR, SelectControlValueAccessor } from "@angular/forms";
 
-/** @private */
+/** @hidden */
 @Directive({
   selector: "select:not([multiple])[nasModel]",
   // tslint:disable-next-line:no-host-metadata-property

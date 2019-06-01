@@ -1,7 +1,7 @@
 import { clone } from "micro-dash";
 import { AppStateAction } from "./app-state-action";
 
-/** @private */
+/** @hidden */
 export class FunctionAction extends AppStateAction {
   constructor(
     name: string,
@@ -50,7 +50,7 @@ export class FunctionAction extends AppStateAction {
   }
 }
 
-/** @private */
+/** @hidden */
 // tslint:disable-next-line:ban-types
 export function buildName(prefix: string, func: Function) {
   if (func.name) {

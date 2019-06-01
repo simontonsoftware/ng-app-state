@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { take, tap } from "rxjs/operators";
 import { ObservableNode } from "./observable-node";
 
-/** @private */
+/** @hidden */
 export class TreeBasedObservableFactory {
   private readonly root: ObservableNode;
 

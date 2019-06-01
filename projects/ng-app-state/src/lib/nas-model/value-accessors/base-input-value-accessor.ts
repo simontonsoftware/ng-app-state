@@ -1,7 +1,7 @@
 import { HostListener } from "@angular/core";
 import { BaseValueAccessor } from "./base-value-accessor";
 
-/** @private */
+/** @hidden */
 export abstract class BaseInputValueAccessor extends BaseValueAccessor<
   HTMLInputElement
 > {
