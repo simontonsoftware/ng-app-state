@@ -650,10 +650,10 @@ describe("nasModel", () => {
   }));
 
   it("warns about inefficient template bindings", fakeAsync(() => {
-    const warn = spyOn(console, "warn");
-
     const store = initSingleValueTest(`<input [nasModel]="store('inner')">`);
     detectChanges();
+
+    const warn = spyOn(console, "warn");
 
     detectChanges();
     expect(warn).not.toHaveBeenCalled();

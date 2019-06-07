@@ -7,9 +7,9 @@
   "peerDependencies": {
     "@angular/common": ">=8.0.0 <9.0.0",
     "@angular/core": ">=8.0.0 <9.0.0",
-    "@ngrx/store": ">=7.0.0 <8.0.0",
-    "micro-dash": ">=5.3.0 <6.0.0",
+    "@ngrx/store": ">=8.0.0 <9.0.0",
+    "micro-dash": ">=6.0.0 <7.0.0",
     "rxjs": ">=6.4.0 <7.0.0",
-    "s-js-utils": ">=4.0.0 <5.0.0"
+    "s-js-utils": ">=5.0.0 <6.0.0"
   }
 }
