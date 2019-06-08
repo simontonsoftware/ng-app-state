@@ -19,7 +19,7 @@ import { StoreObject } from "../store-object";
  *   @Input() private heroesStore: StoreObject<Array<Hero>>;
  *
  *   ngOnChanges() {
- *     this.heroStores$ = spreadArrayStore(this.herosStore);
+ *     this.heroStores$ = spreadArrayStore(this.heroesStore);
  *   }
  * }
  * ```

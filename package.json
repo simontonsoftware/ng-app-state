@@ -28,6 +28,7 @@
     "ngrx-store-logger": "^0.2.1",
     "rxjs": "~6.4.0",
     "s-js-utils": "^5.0.0",
+    "s-rxjs-utils": "^2.1.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
   },
