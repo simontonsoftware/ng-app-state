@@ -1,6 +1,31 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [11.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.6...v11.0.0) (2019-06-08)
+
+### Bug Fixes
+
+- unsubscribing then resubscribing from the same store object ([49d6ee6](https://github.com/simontonsoftware/ng-app-state/commit/49d6ee6))
+
+### Features
+
+- add `spreadObjectStore$()` ([2fdf4bb](https://github.com/simontonsoftware/ng-app-state/commit/2fdf4bb))
+- Improved batching behavior ([#18](https://github.com/simontonsoftware/ng-app-state/issues/18)) ([2855626](https://github.com/simontonsoftware/ng-app-state/commit/2855626))
+- upgrade dependencies ([49e534a](https://github.com/simontonsoftware/ng-app-state/commit/49e534a))
+- Upgrade dependencies ([323250c](https://github.com/simontonsoftware/ng-app-state/commit/323250c))
+
+### BREAKING CHANGES
+
+- Within a batch, `state` now reflects modifications made within the batch so far, instead of the state before the batch began
+- Within a batch, functions passed to `setUsing` and `mutateUsing` now execute immediately, instead of when the batch completes
+- Uses Typescript 3.4 (up from 3.1)
+- Requires Angular 8 (up from 7)
+- Requires @ngrx/store 8 (up from 7)
+- Requires Rxjs 6.4 (up from 6.3)
+- Requires micro-dash 6 (up from 5.3)
+- Requires s-js-utils 5 (up from 3.1)
+- Requires s-rxjs-utils
 
 <a name="10.1.6"></a>
 
