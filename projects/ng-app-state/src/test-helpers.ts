@@ -1,4 +1,4 @@
-import { Component, Injectable, Input } from "@angular/core";
+import { Component, Injectable } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { AppStore } from "./lib/app-store";
@@ -179,13 +179,13 @@ export class NameStore extends AppStore<NameState> {
 @Component({
   selector: "nas-ng-model-custom-wrapper",
   template: `
-    <nas-inner-name [nasModel]="store('name')" [disabled]="isDisabled">
-    </nas-inner-name>
+    <nas-inner-name
+      [nasModel]="store('name')"
+      [disabled]="store('isDisabled').$ | async"
+    ></nas-inner-name>
   `,
 })
 export class NameComponent extends StoreComponent<NameState> {
-  isDisabled = false;
-
   constructor(store: NameStore) {
     super(store);
   }
@@ -212,7 +212,7 @@ export class NameComponent extends StoreComponent<NameState> {
 export class InnerNameComponent implements ControlValueAccessor {
   // prettier-ignore
   model!: string;
-  @Input() disabled = false;
+  disabled = false;
   // prettier-ignore
   changeFn!: (value: any) => void;
 

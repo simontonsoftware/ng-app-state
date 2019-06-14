@@ -669,4 +669,21 @@ describe("nasModel", () => {
       "nasModel was updated with a new store object that is equivalent to the old one. Cache the value bound to nasModel for better performance, e.g. using `StoreObject.withCaching()`.",
     );
   }));
+
+  it("can control disabledness", fakeAsync(() => {
+    const store = initTest(NameComponent, NameStore, {
+      extraDirectives: [InnerNameComponent],
+    });
+    store.assign({ isDisabled: true });
+    const input = query("input");
+
+    detectChanges();
+    tick(0);
+    expect(input.disabled).toBe(true);
+
+    store.assign({ isDisabled: false });
+    detectChanges();
+    tick(0);
+    expect(input.disabled).toBe(false);
+  }));
 });
