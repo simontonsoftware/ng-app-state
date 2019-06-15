@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0](https://github.com/simontonsoftware/ng-app-state/compare/v11.0.0...v11.1.0) (2019-06-15)
+
+### Features
+
+- `nasModel` has a `disabled` input, just like `ngModel` ([dbbd0a0](https://github.com/simontonsoftware/ng-app-state/commit/dbbd0a0))
+
 ## [11.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v10.1.6...v11.0.0) (2019-06-08)
 
 ### Bug Fixes
