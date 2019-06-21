@@ -42,7 +42,7 @@ export class StoreObject<T> extends CallableObject {
   /**
    * An `Observable` of the state of this store object.
    */
-  public get $(): Observable<T> {
+  get $(): Observable<T> {
     if (!this._$) {
       this._$ = this.observableFactory.get<T>(this.path);
     }
@@ -63,7 +63,7 @@ export class StoreObject<T> extends CallableObject {
    * });
    * ```
    */
-  public batch(func: (state: StoreObject<T>) => void) {
+  batch(func: (state: StoreObject<T>) => void) {
     const batch = new BatchAction(this.stateProvider.getState([]));
     func(new StoreObject(this.observableFactory, this.path, batch, batch));
     this.dispatcher.dispatch(batch);
@@ -80,7 +80,7 @@ export class StoreObject<T> extends CallableObject {
    * });
    * ```
    */
-  public inBatch(batch: StoreObject<any>) {
+  inBatch(batch: StoreObject<any>) {
     return new StoreObject<T>(
       this.observableFactory,
       this.path,
@@ -92,14 +92,14 @@ export class StoreObject<T> extends CallableObject {
   /**
    * Replace the state represented by this store object with the given value.
    */
-  public set(value: T) {
+  set(value: T) {
     this.setUsing(() => value);
   }
 
   /**
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
-  public assign(value: Partial<T>) {
+  assign(value: Partial<T>) {
     this.setUsing((state: any) => {
       if (every(value, (innerValue, key) => state[key] === innerValue)) {
         return state;
@@ -116,7 +116,7 @@ export class StoreObject<T> extends CallableObject {
    * store('currentUser').delete();
    * ```
    */
-  public delete() {
+  delete() {
     const key = last(this.path);
     this.dispatcher.dispatch(
       new FunctionAction("delete:" + key, this.path.slice(0, -1), false, omit, [
@@ -130,7 +130,7 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
-  public setUsing<A extends any[]>(
+  setUsing<A extends any[]>(
     func: (state: T, ...args: A) => T,
     ...args: A
   ) {
@@ -144,7 +144,7 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate nested objects within the state.
    */
-  public mutateUsing<A extends any[]>(
+  mutateUsing<A extends any[]>(
     func: (state: T, ...args: A) => void,
     ...args: A
   ) {
@@ -162,7 +162,7 @@ export class StoreObject<T> extends CallableObject {
   /**
    * Retrieve the current state represented by this store object.
    */
-  public state(): T {
+  state(): T {
     return this.stateProvider.getState(this.path);
   }
 
@@ -179,7 +179,7 @@ export class StoreObject<T> extends CallableObject {
    *
    * This method does not modify the current store object; it returns a new one with the given setting.
    */
-  public withCaching(value = true): StoreObject<T> {
+  withCaching(value = true): StoreObject<T> {
     return new StoreObject(
       this.observableFactory,
       this.path,
@@ -192,14 +192,14 @@ export class StoreObject<T> extends CallableObject {
   /**
    * @return whether or not caching is turned on for this store object. See `.withCaching()` for details.
    */
-  public caches() {
+  caches() {
     return this._withCaching;
   }
 
   /**
    * @returns whether the given `StoreObject` operates on the same slice of the store as this object.
    */
-  public refersToSameStateAs(other: StoreObject<T>) {
+  refersToSameStateAs(other: StoreObject<T>) {
     return isEqual(this.path, other.path);
   }
 }

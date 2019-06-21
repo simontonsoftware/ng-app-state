@@ -7,7 +7,7 @@ export class AppStore<T extends object> extends StoreObject<T> {
   /**
    * Emits the actions dispatched through this object.
    */
-  public action$: Observable<Action>;
+  action$: Observable<Action>;
 
   private store: Store<any>;
   private actionSubject: Subject<Action>;

@@ -17,11 +17,11 @@ export class TreeBasedObservableFactory {
     );
   }
 
-  public get<T>(path: string[]): Observable<T> {
+  get<T>(path: string[]): Observable<T> {
     return this.ensureNodeAt(path);
   }
 
-  public getState(path: string[]) {
+  getState(path: string[]) {
     if (this.root.subscribersAreEmpty()) {
       this.root.pipe(take(1)).subscribe();
     }

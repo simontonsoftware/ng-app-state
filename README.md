@@ -56,8 +56,8 @@ Define the shape of your application state using typescript classes or interface
 import { User } from "./user";
 
 export class MyState {
-  public loading = true;
-  public currentUser?: User;
+  loading = true;
+  currentUser?: User;
 }
 ```
 
@@ -65,8 +65,8 @@ export class MyState {
 // state/user.ts
 
 export class User {
-  public id: string;
-  public name: string;
+  id: string;
+  name: string;
 }
 ```
 
