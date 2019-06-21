@@ -16,7 +16,7 @@ class TestImpl extends UndoManager<State, State> {
   lastApplicationStateToOverwrite?: State;
   private skipNextChange = true;
 
-  constructor(store: AppStore<State>, maxDepth = 0) {
+  constructor(store: AppStore<State>, maxDepth?: number) {
     super(store, maxDepth);
     store.$.subscribe(() => {
       if (this.skipNextChange) {
