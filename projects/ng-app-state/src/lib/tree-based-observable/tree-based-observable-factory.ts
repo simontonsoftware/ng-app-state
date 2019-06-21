@@ -1,6 +1,6 @@
 import { get } from "micro-dash";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { take, tap } from "rxjs/operators";
 import { ObservableNode } from "./observable-node";
 
 /** @hidden */
@@ -22,6 +22,9 @@ export class TreeBasedObservableFactory {
   }
 
   public getState(path: string[]) {
+    if (this.root.subscribersAreEmpty()) {
+      this.root.pipe(take(1)).subscribe();
+    }
     const rootState = this.root.getValue();
     return path.length ? get(rootState, path) : rootState;
   }

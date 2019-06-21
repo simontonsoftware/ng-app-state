@@ -153,6 +153,19 @@ describe("StoreObject", () => {
       expectSingleCallAndReset(spy, nested.right);
     });
 
+    it("works when 2 observable nodes manager to get created for the same branch (code coverage)", () => {
+      const spy = jasmine.createSpy();
+
+      const obs = store("counter").$;
+      const sub = store("counter").$.subscribe();
+      obs.subscribe(spy);
+      expectSingleCallAndReset(spy, 0);
+
+      sub.unsubscribe();
+      store("counter").set(2);
+      expectSingleCallAndReset(spy, 2);
+    });
+
     // https://github.com/simontonsoftware/ng-app-state/issues/13
     it("does not emit stale values in the middle of propogating a change (production bug)", () => {
       let log: jasmine.Spy | undefined;

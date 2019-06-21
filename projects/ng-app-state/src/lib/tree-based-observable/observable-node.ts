@@ -1,6 +1,5 @@
 import { forOwn, pull } from "micro-dash";
 import { Observable, Subscriber, Subscription } from "rxjs";
-import { take } from "rxjs/operators";
 import { ObjectWith } from "s-ng-dev-utils";
 
 /** @hidden */
@@ -62,14 +61,6 @@ export class ObservableNode extends Observable<any> {
   }
 
   getValue() {
-    if (this.subscribersAreEmpty()) {
-      if (this.parent && this.key) {
-        const parentValue: any = this.parent.getValue();
-        return parentValue ? parentValue[this.key] : undefined;
-      }
-
-      this.pipe(take(1)).subscribe();
-    }
     return this.value;
   }
 
