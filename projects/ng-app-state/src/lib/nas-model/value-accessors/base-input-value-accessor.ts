@@ -20,7 +20,7 @@ export abstract class BaseInputValueAccessor extends BaseValueAccessor<
     this.element.value = value;
   }
 
-  setDisabledState(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean) {
     this.element.disabled = isDisabled;
   }
 }

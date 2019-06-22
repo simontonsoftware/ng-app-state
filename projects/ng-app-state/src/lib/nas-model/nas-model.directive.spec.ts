@@ -3,6 +3,7 @@ import {
   async,
   ComponentFixture,
   fakeAsync,
+  flushMicrotasks,
   TestBed,
   tick,
 } from "@angular/core/testing";
@@ -671,19 +672,23 @@ describe("nasModel", () => {
   }));
 
   it("can control disabledness", fakeAsync(() => {
-    const store = initTest(NameComponent, NameStore, {
-      extraDirectives: [InnerNameComponent],
-    });
-    store.assign({ isDisabled: true });
+    const store = initSingleValueTest(`
+      <input
+        type="number"
+        [nasModel]="store('num')"
+        [disabled]="store('disabled').$ | async"
+      />
+    `);
+    store.set({ num: 2, disabled: true });
     const input = query("input");
 
     detectChanges();
-    tick(0);
+    flushMicrotasks();
     expect(input.disabled).toBe(true);
 
-    store.assign({ isDisabled: false });
+    store.assign({ disabled: false });
     detectChanges();
-    tick(0);
+    flushMicrotasks();
     expect(input.disabled).toBe(false);
   }));
 });
