@@ -1,12 +1,11 @@
 import { forOwn, pull } from "micro-dash";
 import { Observable, Subscriber, Subscription } from "rxjs";
-import { ObjectWith } from "s-ng-dev-utils";
 
 /** @hidden */
 export class ObservableNode extends Observable<any> {
   private value: any;
   private valueChanged = false;
-  private children: ObjectWith<Set<ObservableNode>> = {};
+  private children: Record<string, Set<ObservableNode>> = {};
   private subscribers: Array<Subscriber<any>> = [];
   private sourceSubscription?: Subscription;
 

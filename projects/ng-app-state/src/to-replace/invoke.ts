@@ -1,7 +1,6 @@
 import { get, isFunction } from "micro-dash";
-import { Nil } from "s-ng-dev-utils";
 
-export function invoke<T extends object | Nil>(
+export function invoke<T extends object | null | undefined>(
   object: T,
   path: string[],
   ...args: any[]

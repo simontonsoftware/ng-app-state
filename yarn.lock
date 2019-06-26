@@ -4902,10 +4902,10 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
-micro-dash@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-6.0.0.tgz#9473dcd24c714a96d5fd7400a8fa10aecf2328f1"
-  integrity sha512-eVRIkQs6T09GmD9uVAMeOG+1HkTJgLotDWjBkkegJC+YVmQtU4RbJwDnaftFsiaFKjSENzfJNDl7AP+83Oxzow==
+micro-dash@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-6.3.0.tgz#20700ecb7618c84390326d4a8adf87d68f06ebe8"
+  integrity sha512-SEWwU3MCzIBpKpYQSaDc9pNLcLQlxnwzRG2mYOMNNJc1O5ZceDCHQq8GABPzrvAFO6GAMFqqdXcY6v3lAVRXsw==
   dependencies:
     tslib "^1.9.0"
     utility-types "^3.4.1"
@@ -6614,25 +6614,25 @@ rxjs@^6.0.0, rxjs@^6.4.0:
   dependencies:
     tslib "^1.9.0"
 
-s-js-utils@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-5.0.0.tgz#c5780bf0e2384f895d324b96dde43a1cb3714ba4"
-  integrity sha512-DDGd08UvcEcNfTxCoIVo2uiTo/CJb04o4aOs991A1v0gPstB/OQ7kEYdGK6U8BoaZx7g2JbbouTHSr1tXIG4jw==
+s-js-utils@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-5.1.0.tgz#0822c1861e82a751a7007e90c5d4fe00b84a09d6"
+  integrity sha512-jW5h3twOG/31PhhxI2MGvUIXdfUegYEM9vBK/FsH0cq8i+t6qbUanWEdftxr8VzjJrHsHfUBe5VFil7CqzrxDQ==
   dependencies:
     tslib "^1.9.0"
 
-s-ng-dev-utils@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/s-ng-dev-utils/-/s-ng-dev-utils-0.6.0.tgz#2024c665c283d1a987af3ed2246c6d1bc95bb98d"
-  integrity sha512-8ybqlelrMeSfAqkbcszpo2jivpDP+zJnyzxfzgDgAx5uW6nNieucYsaMXEaRhatmIKUdxKa4vYYFIbbecG3qzQ==
+s-ng-dev-utils@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/s-ng-dev-utils/-/s-ng-dev-utils-0.8.0.tgz#5847ddf282029a9a88fd56e8b33a253dd950762c"
+  integrity sha512-/O/clTjxvweUOTyqRAicA0gDaYGXCkVC1H+CEAwpvR2aPDA+y0pRB+QMEOiw7le/3uoEO7j1DTpA6TIXWX7UHQ==
   dependencies:
     tslib "^1.9.0"
     tslint-config-prettier "^1.18.0"
 
-s-rxjs-utils@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/s-rxjs-utils/-/s-rxjs-utils-2.1.0.tgz#d07122bf7047cd59f953be8c8836e9bc0d2c9a9c"
-  integrity sha512-FAxiB54sj8FYPyooyM/Y10uJX2z+0iYyjE65wQiYMbydjqBukBRPmxUaimPT6vGcOj0J5ncuTmO0u17dVU1UzQ==
+s-rxjs-utils@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/s-rxjs-utils/-/s-rxjs-utils-2.2.2.tgz#8f41277e3699c5c9fab88ea0a25141a3ab9c596d"
+  integrity sha512-RJKk+8AngQOOkOOWlL/ZeXR7+/jNtUk58cMVpkce8fxkbaFtPlR+NUXOKqNrHjpKt2x6j5Ya/VO09nxH+0v5dA==
   dependencies:
     tslib "^1.9.0"
 

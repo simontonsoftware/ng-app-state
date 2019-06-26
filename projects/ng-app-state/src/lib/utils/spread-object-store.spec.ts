@@ -1,20 +1,19 @@
 import { TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { ObjectWith } from "s-ng-dev-utils";
 import { AppStore } from "../app-store";
 import { ngAppStateReducer } from "../ng-app-state-reducer";
 import { StoreObject } from "../store-object";
 import { spreadObjectStore$ } from "./spread-object-store";
 
 describe("spreadObjectStore$()", () => {
-  let store: StoreObject<ObjectWith<number>>;
+  let store: StoreObject<Record<string, number>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
     const backingStore = TestBed.get(Store);
-    const state: ObjectWith<number> = { a: 1, b: 2 };
+    const state: Record<string, number> = { a: 1, b: 2 };
     store = new AppStore(backingStore, "testKey", state);
   });
 

@@ -33,7 +33,7 @@ import { StoreObject } from "../store-object";
 export function spreadObjectStore$<T extends object>(
   source: StoreObject<T>,
 ): Observable<Array<StoreObject<T[keyof T]>>> {
-  let lastKeySet: Set<string> | undefined;
+  let lastKeySet: Set<string | keyof T> | undefined;
   return source.$.pipe(
     filter((value) => {
       const keySet = new Set(keys(value));
