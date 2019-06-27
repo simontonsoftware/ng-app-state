@@ -37,13 +37,13 @@ A basic idea behind this library (as well as the underlying `ngrx/store`, and `R
 With npm:
 
 ```sh
-npm install -S ng-app-state @ngrx/store micro-dash
+npm install -S ng-app-state @ngrx/store micro-dash s-js-utils s-rxjs-utils
 ```
 
 With yarn:
 
 ```sh
-yarn add ng-app-state @ngrx/store micro-dash
+yarn add ng-app-state @ngrx/store micro-dash s-js-utils s-rxjs-utils
 ```
 
 ## Setup
