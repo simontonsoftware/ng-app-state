@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.1.2](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.1...v11.1.2) (2019-07-15)
+
+### Bug Fixes
+
+- observables were not emitting properly when the number of subscribers changed mid-emit ([4ad91fa](https://github.com/simontonsoftware/ng-app-state/commit/4ad91fa))
+
 ### [11.1.1](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.0...v11.1.1) (2019-06-26)
 
 ### Bug Fixes
