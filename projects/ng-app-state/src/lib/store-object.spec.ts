@@ -190,6 +190,19 @@ describe("StoreObject", () => {
       counterStore.$.subscribe(spy);
       expectSingleCallAndReset(spy, 3);
     });
+
+    it("works when the number of subscribers changes mid-emit (production bug)", () => {
+      const spy = jasmine.createSpy();
+
+      store("counter")
+        .$.pipe(take(2))
+        .subscribe();
+      store("counter").$.subscribe(spy);
+      expectSingleCallAndReset(spy, 0);
+
+      store("counter").set(1);
+      expectSingleCallAndReset(spy, 1);
+    });
   });
 
   describe(".batch()", () => {

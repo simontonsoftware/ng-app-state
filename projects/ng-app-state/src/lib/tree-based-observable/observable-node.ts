@@ -74,7 +74,7 @@ export class ObservableNode extends Observable<any> {
   }
 
   private emit() {
-    for (const subscriber of this.subscribers) {
+    for (const subscriber of this.subscribers.slice()) {
       subscriber.next(this.value);
     }
   }
