@@ -21,6 +21,10 @@ install:
 
 script:
   - yarn test ng-app-state --code-coverage --watch=false --progress=false --browsers=ChromeHeadlessCI
+
+  - mkdir ~/.dts
+  - yarn dtslint
+
   - yarn build ng-app-state
   - yarn e2e --protractor-config=./e2e/protractor-ci.conf.js
 
