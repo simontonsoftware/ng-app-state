@@ -130,10 +130,7 @@ export class StoreObject<T> extends CallableObject {
    *
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
-  setUsing<A extends any[]>(
-    func: (state: T, ...args: A) => T,
-    ...args: A
-  ) {
+  setUsing<A extends any[]>(func: (state: T, ...args: A) => T, ...args: A) {
     this.dispatcher.dispatch(
       new FunctionAction(buildName("set", func), this.path, false, func, args),
     );
