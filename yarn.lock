@@ -5767,10 +5767,10 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
-micro-dash@^6.3.0:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-6.4.0.tgz#6050f6fb05b71eb711261cfaf9fdac3718ca1e49"
-  integrity sha512-+IiOyiJS9LeS9n1H7PzHBLO3UFy3awpiGy/SVxYyUvQTbh002d3a1JXy1QcX61Va+hxxrxjK9qHbDzXuOnv9Dw==
+micro-dash@~6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/micro-dash/-/micro-dash-6.3.0.tgz#20700ecb7618c84390326d4a8adf87d68f06ebe8"
+  integrity sha512-SEWwU3MCzIBpKpYQSaDc9pNLcLQlxnwzRG2mYOMNNJc1O5ZceDCHQq8GABPzrvAFO6GAMFqqdXcY6v3lAVRXsw==
   dependencies:
     tslib "^1.9.0"
     utility-types "^3.4.1"
@@ -7608,10 +7608,10 @@ rxjs@^6.0.0, rxjs@^6.4.0:
   dependencies:
     tslib "^1.9.0"
 
-s-js-utils@^5.1.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-5.2.0.tgz#2c4c19108818f84cc9f934ec1799da89e641265e"
-  integrity sha512-0Js/q+tbf/ewp26rkJmkAQ7nUXI3qKqfRbh5gTaroJA8L4OVY1gjZ2lzfITWSsmxEcS/xM52juTc0NXgpjOCaQ==
+s-js-utils@~5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/s-js-utils/-/s-js-utils-5.1.0.tgz#0822c1861e82a751a7007e90c5d4fe00b84a09d6"
+  integrity sha512-jW5h3twOG/31PhhxI2MGvUIXdfUegYEM9vBK/FsH0cq8i+t6qbUanWEdftxr8VzjJrHsHfUBe5VFil7CqzrxDQ==
   dependencies:
     tslib "^1.9.0"
 
@@ -7623,10 +7623,10 @@ s-ng-dev-utils@^0.8.0:
     tslib "^1.9.0"
     tslint-config-prettier "^1.18.0"
 
-s-rxjs-utils@^2.2.2:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/s-rxjs-utils/-/s-rxjs-utils-2.3.0.tgz#ba95271eea8da2cac3cbb476727908845fabb0d4"
-  integrity sha512-x/LK2944NWUH8TEZoFaAtTUfL5Akt2GIiSVu7ghBu+6/fKpERHwg7H/LmJiz4VtATFX+nFESPI6aMtpEsMAZwA==
+s-rxjs-utils@~2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/s-rxjs-utils/-/s-rxjs-utils-2.2.2.tgz#8f41277e3699c5c9fab88ea0a25141a3ab9c596d"
+  integrity sha512-RJKk+8AngQOOkOOWlL/ZeXR7+/jNtUk58cMVpkce8fxkbaFtPlR+NUXOKqNrHjpKt2x6j5Ya/VO09nxH+0v5dA==
   dependencies:
     tslib "^1.9.0"
 
