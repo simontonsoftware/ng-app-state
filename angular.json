@@ -247,5 +247,8 @@
       }
     }
   },
-  "defaultProject": "ng-app-state-platform"
+  "defaultProject": "ng-app-state-platform",
+  "cli": {
+    "analytics": "487b298b-384f-4166-8e5c-eb05b346709f"
+  }
 }
