@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.1.3](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.2...v11.1.3) (2020-01-18)
+
+### Bug Fixes
+
+- stale values were possible with multiple stores. Closes [#28](https://github.com/simontonsoftware/ng-app-state/issues/28). ([d94242f](https://github.com/simontonsoftware/ng-app-state/commit/d94242f))
+
 ### [11.1.2](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.1...v11.1.2) (2019-07-15)
 
 ### Bug Fixes
