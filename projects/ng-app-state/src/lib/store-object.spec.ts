@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { Action, Store, StoreModule } from "@ngrx/store";
-import { cloneDeep, identity, pick } from "micro-dash";
+import { cloneDeep, identity, noop, pick } from "micro-dash";
 import { skip, take } from "rxjs/operators";
 import { expectSingleCallAndReset } from "s-ng-dev-utils";
 import { AppStore } from "./app-store";
@@ -233,6 +233,20 @@ describe("StoreObject", () => {
         expect(batch1.state().counter).toBe(2);
       });
       expect(store.state().counter).toBe(2);
+    });
+
+    it("doesn't have that infinite loop with 2 stores (production bug)", () => {
+      // https://github.com/simontonsoftware/ng-app-state/issues/28
+      const store2 = new AppStore<{}>(backingStore, "store2", {});
+      store.$.subscribe(() => {
+        store2.batch(noop);
+      });
+      store2.$.subscribe();
+      store("counter").set(1);
+
+      // the infinite loop was here
+
+      expect(store.state().counter).toBe(1);
     });
   });
 
@@ -546,6 +560,24 @@ describe("StoreObject", () => {
 
       expectedValue = new InnerState();
       store("optional").set(expectedValue);
+    });
+
+    it("works on a second store that subscribed later (production bug)", () => {
+      const store2 = new AppStore(backingStore, "testKey2", new State());
+      let store2value = -1;
+      store.$.subscribe(() => {
+        store2value = store2.state().counter;
+      });
+      store2.$.subscribe();
+
+      store.batch((batch) => {
+        batch("counter").set(3);
+        store2("counter")
+          .inBatch(batch)
+          .set(3);
+      });
+
+      expect(store2value).toBe(3);
     });
   });
 

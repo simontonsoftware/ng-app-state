@@ -3,11 +3,22 @@ import { Observable } from "rxjs";
 import { take, tap } from "rxjs/operators";
 import { ObservableNode } from "./observable-node";
 
+const factories = new WeakMap<Observable<any>, TreeBasedObservableFactory>();
+
 /** @hidden */
 export class TreeBasedObservableFactory {
   private readonly root: ObservableNode;
 
-  constructor(source: Observable<any>) {
+  static getFor(source: Observable<any>) {
+    let factory = factories.get(source);
+    if (!factory) {
+      factory = new TreeBasedObservableFactory(source);
+      factories.set(source, factory);
+    }
+    return factory;
+  }
+
+  private constructor(source: Observable<any>) {
     this.root = new ObservableNode(
       source.pipe(
         tap((state) => {

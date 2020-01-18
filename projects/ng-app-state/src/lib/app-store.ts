@@ -13,7 +13,7 @@ export class AppStore<T extends object> extends StoreObject<T> {
   private actionSubject: Subject<Action>;
 
   constructor(store: Store<any>, key: string, initialState: T) {
-    const observableFactory = new TreeBasedObservableFactory(store);
+    const observableFactory = TreeBasedObservableFactory.getFor(store);
     super(observableFactory, [key], store, observableFactory);
 
     this.store = store;
