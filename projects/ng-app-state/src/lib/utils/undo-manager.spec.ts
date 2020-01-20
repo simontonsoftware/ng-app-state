@@ -16,6 +16,7 @@ class TestImpl extends UndoManager<State, State> {
   lastApplicationUndoOrRedo?: UndoOrRedo;
   lastApplicationStateToOverwrite?: State;
   collectKey?: string;
+  collectDebounce?: number;
   private skipNextChange = true;
 
   constructor(store: AppStore<State>, maxDepth?: number) {
@@ -24,7 +25,10 @@ class TestImpl extends UndoManager<State, State> {
       if (this.skipNextChange) {
         this.skipNextChange = false;
       } else {
-        this.pushCurrentState({ collectKey: this.collectKey });
+        this.pushCurrentState({
+          collectKey: this.collectKey,
+          collectDebounce: this.collectDebounce,
+        });
       }
     });
   }
@@ -250,45 +254,6 @@ describe("UndoManager", () => {
     });
   });
 
-  describe(".setCollectKeyPeriod()", () => {
-    it("sets the duration over which undo states are collected", fakeAsync(() => {
-      undoManager.collectKey = "k";
-
-      undoManager.setCollectKeyPeriod(123);
-      store("counter").set(1);
-      tick(122);
-      store("counter").set(2);
-      tick(123);
-      store("counter").set(3);
-      expectStack(0, 2, 3);
-
-      undoManager.reset();
-      undoManager.setCollectKeyPeriod(456);
-      store("counter").set(4);
-      tick(455);
-      store("counter").set(5);
-      tick(456);
-      store("counter").set(6);
-      expectStack(3, 5, 6);
-
-      tick(456);
-    }));
-
-    it("cleans up a pending debounce", fakeAsync(() => {
-      undoManager.collectKey = "k1";
-      store("counter").set(1);
-
-      undoManager.collectKey = "k2";
-      undoManager.setCollectKeyPeriod(5000);
-      store("counter").set(2);
-      tick(4999);
-      store("counter").set(3);
-      expectStack(0, 1, 3);
-
-      tick(5000);
-    }));
-  });
-
   describe(".reset()", () => {
     // most of `.reset()` is tested within the `.can[Un/Re]do()` blocks above
 
@@ -363,24 +328,6 @@ describe("UndoManager", () => {
       expectStack(0, 3, 5);
     });
 
-    it("resets collected changes after a timeout", fakeAsync(() => {
-      undoManager.collectKey = "k";
-
-      store("counter").set(1);
-      tick(999);
-      store("counter").set(2);
-      tick(1000);
-      store("counter").set(3);
-      tick(999);
-      store("counter").set(4);
-      tick(1000);
-      store("counter").set(5);
-
-      expectStack(0, 2, 4, 5);
-
-      tick(1000);
-    }));
-
     it("resets collected changes with no key", () => {
       undoManager.collectKey = "k1";
       store("counter").set(1);
@@ -396,6 +343,25 @@ describe("UndoManager", () => {
 
       expectStack(0, 2, 3, 4, 6);
     });
+
+    it("can reset collected changes after a timeout", fakeAsync(() => {
+      undoManager.collectKey = "k";
+      undoManager.collectDebounce = 1000;
+
+      store("counter").set(1);
+      tick(999);
+      store("counter").set(2);
+      tick(1000);
+      store("counter").set(3);
+      tick(999);
+      store("counter").set(4);
+      tick(1000);
+      store("counter").set(5);
+
+      expectStack(0, 2, 4, 5);
+
+      tick(1000);
+    }));
 
     it("can drop collected changes when they equate to no change", () => {
       undoManager.collectKey = "k";

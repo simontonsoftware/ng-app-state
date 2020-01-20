@@ -1,6 +1,6 @@
-import { debounce } from "micro-dash";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
+import { Debouncer } from "../../to-replace/debouncer";
 import { StoreObject } from "../store-object";
 
 /** @hidden */
@@ -15,7 +15,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
   private stateSubject = new ReplaySubject<UndoStateType>(1);
 
   private currentCollectKey?: string;
-  private clearCollectKeyAfterDebounce!: ReturnType<typeof debounce>;
+  private collectDebouncer = new Debouncer();
 
   /**
    * An observable that emits the result of `canUndo()` every time that value changes.
@@ -45,20 +45,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
     protected readonly store: StoreObject<StateType>,
     protected maxDepth = 0,
   ) {
-    this.setCollectKeyPeriod(1000);
     this.reset();
-  }
-
-  /**
-   * Sets the length of time over which undo states using the same `collectKey` will be collected (see `.pushUndoState()`). Defaults to 1000 (1 second).
-   */
-  setCollectKeyPeriod(ms: number) {
-    if (this.clearCollectKeyAfterDebounce) {
-      this.clearCollectKeyAfterDebounce.cancel();
-    }
-    this.clearCollectKeyAfterDebounce = debounce(() => {
-      this.currentCollectKey = undefined;
-    }, ms);
   }
 
   /**
@@ -70,12 +57,15 @@ export abstract class UndoManager<StateType, UndoStateType> {
   }
 
   /**
-   * Add the current state to the undo history. Any states that could be reached
-   * using `redo()` are discarded.
+   * Add the current state to the undo history. Any states that could be reached using `redo()` are discarded.
    *
-   * @param collectKey When specified, multiple pushes in a row with the same key will be collected into a single undo state. This is useful e.g. for collecting changes from a text input into larger undo states, rather than undoing one character at a time. After a push with a different key, another undo change, or a timeout, collecting changes will stop and the next push will be in a new undo state. Use `.setCollectKeyPeriod()` to manage the length of the timeout (defaults to 1 second).
+   * @param collectKey When specified, multiple pushes in a row with the same key will be collected into a single undo state. This is useful e.g. for collecting changes from a text input into larger undo states, rather than undoing one character at a time. After a push with a different key or another undo change (like `.undo()` or `.reset()`), collecting will stop and the next push will be in a new undo state.
+   * @param collectDebounce If at least this many milliseconds elapse with no other push, the next one will be to a new undo state regardless of its `collectKey`. Defaults to `undefined`, which sets no such timeout.
    */
-  pushCurrentState({ collectKey = undefined as undefined | string } = {}) {
+  pushCurrentState({
+    collectKey = undefined as undefined | string,
+    collectDebounce = undefined as undefined | number,
+  } = {}) {
     const nextState = this.extractUndoState(this.store.state());
     if (this.currentStateIndex >= 0 && !this.shouldPush(nextState)) {
       return;
@@ -98,7 +88,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
       --this.currentStateIndex;
     }
 
-    this.emitUndoChanges(collectKey);
+    this.emitUndoChanges(collectKey, collectDebounce);
   }
 
   /**
@@ -188,7 +178,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
   ): void;
 
   /**
-   * Used to determine whether `.pushUndoState()` actually does anything. Override this e.g. to prevent pushing a duplicate undo state using something like this:
+   * Used to determine whether `.pushCurrentState()` actually does anything. Override this e.g. to prevent pushing a duplicate undo state using something like this:
    *
    * ```ts
    * protected shouldPush(state: UndoStateType) {
@@ -221,12 +211,16 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.emitUndoChanges();
   }
 
-  private emitUndoChanges(collectKey?: string) {
+  private emitUndoChanges(collectKey?: string, collectDebounce?: number) {
     this.canUndoSubject.next(this.canUndo());
     this.canRedoSubject.next(this.canRedo());
     this.stateSubject.next(this.stack[this.currentStateIndex]);
 
     this.currentCollectKey = collectKey;
-    this.clearCollectKeyAfterDebounce();
+    if (collectDebounce !== undefined) {
+      this.collectDebouncer.run(() => {
+        this.currentCollectKey = undefined;
+      }, collectDebounce);
+    }
   }
 }
