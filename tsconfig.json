@@ -17,8 +17,7 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "ng-app-state": ["dist/ng-app-state"],
-      "ng-app-state/*": ["dist/ng-app-state/*"]
+      "ng-app-state": ["dist/ng-app-state/ng-app-state", "dist/ng-app-state"]
     },
 
     //

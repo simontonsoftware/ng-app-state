@@ -5,11 +5,11 @@
   "license": "MIT",
   "repository": "simontonsoftware/ng-app-state",
   "peerDependencies": {
-    "@angular/common": "^9.0.0-rc.1",
-    "@angular/core": "^9.0.0-rc.1",
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
     "@ngrx/store": ">=8.0.0 <9.0.0",
     "micro-dash": ">=6.3.0 <7.0.0",
-    "rxjs": ">=6.4.0 <7.0.0",
+    "rxjs": ">=6.5.0 <7.0.0",
     "s-js-utils": ">=5.1.0 <6.0.0",
     "s-rxjs-utils": ">=2.2.2 < 3.0.0",
     "tslib": "^1.10.0"
