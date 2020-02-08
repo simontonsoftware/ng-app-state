@@ -11,7 +11,7 @@
     "dtslint": "dtslint --expectOnly --localTs node_modules/typescript/lib projects/ng-app-state/src/typing-tests",
     "docs": "cd docs && typedoc ../projects/ng-app-state/src/lib",
     "prettier-all": "prettier --write \"**/*.{html,js,json,md,scss,ts,yml}\"",
-    "release": "yarn docs && git add docs/* && standard-version --commit-all && yarn build ng-app-state"
+    "release": "yarn docs && git add docs/* && standard-version --commit-all && yarn build --prod ng-app-state"
   },
   "private": true,
   "dependencies": {
