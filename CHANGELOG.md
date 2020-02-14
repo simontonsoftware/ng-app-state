@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.1.4](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.3...v11.1.4) (2020-02-14)
+
+### Bug Fixes
+
+- state changes within a batch were lost when followed by `.inBatch()` then a nested `.batch()`. Closes [#30](https://github.com/simontonsoftware/ng-app-state/issues/30). ([1d2f642](https://github.com/simontonsoftware/ng-app-state/commit/1d2f642))
+
 ### [11.1.3](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.2...v11.1.3) (2020-01-18)
 
 ### Bug Fixes
