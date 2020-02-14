@@ -1,10 +1,16 @@
 import { Action } from "@ngrx/store";
-import { every, isEqual, last, memoize, omit } from "micro-dash";
+import { bindKey, every, isEqual, last, memoize, omit } from "micro-dash";
 import { Observable } from "rxjs";
 import { CallableObject } from "s-js-utils";
 import { BatchAction } from "./actions/batch-action";
 import { buildName, FunctionAction } from "./actions/function-action";
-import { TreeBasedObservableFactory } from "./tree-based-observable/tree-based-observable-factory";
+
+/** @hidden */
+interface Client {
+  getState(path: string[]): any;
+  getState$(path: string[]): Observable<any>;
+  dispatch(action?: Action): void;
+}
 
 export interface StoreObject<T> {
   // tslint:disable:callable-types
@@ -18,22 +24,14 @@ export class StoreObject<T> extends CallableObject {
   private _$?: Observable<T>;
 
   protected constructor(
-    private observableFactory: TreeBasedObservableFactory,
+    private client: Client,
     private path: string[],
-    private dispatcher: { dispatch(action?: Action): void },
-    private stateProvider: { getState(path: string[]): any },
     private _withCaching = false,
   ) {
     super(
       maybeMemoize(
         (prop: keyof T) =>
-          new StoreObject(
-            observableFactory,
-            path.concat(prop.toString()),
-            dispatcher,
-            stateProvider,
-            _withCaching,
-          ),
+          new StoreObject(client, path.concat(prop.toString()), _withCaching),
         _withCaching,
       ),
     );
@@ -44,7 +42,7 @@ export class StoreObject<T> extends CallableObject {
    */
   get $(): Observable<T> {
     if (!this._$) {
-      this._$ = this.observableFactory.get<T>(this.path);
+      this._$ = this.client.getState$(this.path);
     }
     return this._$;
   }
@@ -64,9 +62,18 @@ export class StoreObject<T> extends CallableObject {
    * ```
    */
   batch(func: (state: StoreObject<T>) => void) {
-    const batch = new BatchAction(this.stateProvider.getState([]));
-    func(new StoreObject(this.observableFactory, this.path, batch, batch));
-    this.dispatcher.dispatch(batch);
+    const batch = new BatchAction(this.client.getState([]));
+    func(
+      new StoreObject(
+        {
+          getState: bindKey(batch, "getState"),
+          getState$: this.client.getState$,
+          dispatch: bindKey(batch, "dispatch"),
+        },
+        this.path,
+      ),
+    );
+    this.client.dispatch(batch);
   }
 
   /**
@@ -81,12 +88,7 @@ export class StoreObject<T> extends CallableObject {
    * ```
    */
   inBatch(batch: StoreObject<any>) {
-    return new StoreObject<T>(
-      this.observableFactory,
-      this.path,
-      batch.dispatcher,
-      this.stateProvider,
-    );
+    return new StoreObject<T>(batch.client, this.path);
   }
 
   /**
@@ -118,7 +120,7 @@ export class StoreObject<T> extends CallableObject {
    */
   delete() {
     const key = last(this.path);
-    this.dispatcher.dispatch(
+    this.client.dispatch(
       new FunctionAction("delete:" + key, this.path.slice(0, -1), false, omit, [
         key,
       ]),
@@ -131,7 +133,7 @@ export class StoreObject<T> extends CallableObject {
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
   setUsing<A extends any[]>(func: (state: T, ...args: A) => T, ...args: A) {
-    this.dispatcher.dispatch(
+    this.client.dispatch(
       new FunctionAction(buildName("set", func), this.path, false, func, args),
     );
   }
@@ -145,7 +147,7 @@ export class StoreObject<T> extends CallableObject {
     func: (state: T, ...args: A) => void,
     ...args: A
   ) {
-    this.dispatcher.dispatch(
+    this.client.dispatch(
       new FunctionAction(
         buildName("mutate", func),
         this.path,
@@ -160,7 +162,7 @@ export class StoreObject<T> extends CallableObject {
    * Retrieve the current state represented by this store object.
    */
   state(): T {
-    return this.stateProvider.getState(this.path);
+    return this.client.getState(this.path);
   }
 
   /**
@@ -177,13 +179,7 @@ export class StoreObject<T> extends CallableObject {
    * This method does not modify the current store object; it returns a new one with the given setting.
    */
   withCaching(value = true): StoreObject<T> {
-    return new StoreObject(
-      this.observableFactory,
-      this.path,
-      this.dispatcher,
-      this.stateProvider,
-      value,
-    );
+    return new StoreObject(this.client, this.path, value);
   }
 
   /**
@@ -201,6 +197,7 @@ export class StoreObject<T> extends CallableObject {
   }
 }
 
+/** @hidden */
 // tslint:disable-next-line:ban-types
 function maybeMemoize(fn: Function, withCaching: boolean) {
   if (withCaching) {

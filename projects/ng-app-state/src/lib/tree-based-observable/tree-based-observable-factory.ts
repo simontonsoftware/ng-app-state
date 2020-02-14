@@ -28,7 +28,7 @@ export class TreeBasedObservableFactory {
     );
   }
 
-  get<T>(path: string[]): Observable<T> {
+  getState$(path: string[]): Observable<any> {
     return this.ensureNodeAt(path);
   }
 

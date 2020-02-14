@@ -270,6 +270,19 @@ describe("StoreObject", () => {
       expect(next).toHaveBeenCalledTimes(2);
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
+
+    it("starts nested batches with the correct state (production bug)", () => {
+      store.batch((batch1) => {
+        batch1("counter").set(1);
+        store.inBatch(batch1).batch((batch2) => {
+          expect(batch2.state().counter).toBe(1);
+          batch2("nested")("state").set(2);
+        });
+      });
+      expect(store.state()).toEqual(
+        jasmine.objectContaining({ counter: 1, nested: { state: 2 } }),
+      );
+    });
   });
 
   describe(".set()", () => {
