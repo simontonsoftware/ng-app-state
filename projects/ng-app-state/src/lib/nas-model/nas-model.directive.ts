@@ -7,8 +7,8 @@ import {
   Self,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { invoke } from "micro-dash";
 import { Subscription } from "rxjs";
-import { invoke } from "../../to-replace/invoke";
 import { StoreObject } from "../store-object";
 
 @Directive({ selector: "[nasModel]" })
