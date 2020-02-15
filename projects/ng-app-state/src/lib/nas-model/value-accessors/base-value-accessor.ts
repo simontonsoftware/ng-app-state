@@ -1,13 +1,10 @@
-import { ElementRef, Injector, Provider, Type } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Directive, ElementRef, Injector } from "@angular/core";
+import { ControlValueAccessor } from "@angular/forms";
 import { noop } from "micro-dash";
 
 /** @hidden */
-export function makeProviderDef(type: Type<BaseValueAccessor<any>>): Provider {
-  return { provide: NG_VALUE_ACCESSOR, useExisting: type, multi: true };
-}
-
-/** @hidden */
+@Directive()
+// tslint:disable-next-line:directive-class-suffix
 export abstract class BaseValueAccessor<T extends HTMLElement>
   implements ControlValueAccessor {
   onChangeFn!: (value: any) => void;

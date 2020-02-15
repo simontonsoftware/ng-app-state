@@ -1,18 +1,14 @@
-import { Directive, Injector } from "@angular/core";
+import { Directive } from "@angular/core";
 import { isNil } from "micro-dash";
+import { provideValueAccessor } from "s-ng-utils";
 import { BaseInputValueAccessor } from "./base-input-value-accessor";
-import { makeProviderDef } from "./base-value-accessor";
 
 /** @hidden */
 @Directive({
   selector: "input[type=number][nasModel]",
-  providers: [makeProviderDef(NumberValueAccessorDirective)],
+  providers: [provideValueAccessor(NumberValueAccessorDirective)],
 })
 export class NumberValueAccessorDirective extends BaseInputValueAccessor {
-  constructor(injector: Injector) {
-    super(injector);
-  }
-
   registerOnChange(fn: (value: number | null) => void) {
     this.onChangeFn = (value: string) => {
       fn(value === "" ? null : parseFloat(value));

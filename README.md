@@ -41,7 +41,7 @@ npm install --save ng-app-state @ngrx/store s-ng-utils s-rxjs-utils s-js-utils m
 
 # OR
 
-yarn add s-ng-utils ng-app-state @ngrx/store s-rxjs-utils s-js-utils micro-dash
+yarn add ng-app-state @ngrx/store s-ng-utils s-rxjs-utils s-js-utils micro-dash
 ```
 
 ## Setup
