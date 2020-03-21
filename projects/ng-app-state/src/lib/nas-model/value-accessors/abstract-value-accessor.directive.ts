@@ -4,8 +4,7 @@ import { noop } from "micro-dash";
 
 /** @hidden */
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
-export abstract class BaseValueAccessor<T extends HTMLElement>
+export abstract class AbstractValueAccessorDirective<T extends HTMLElement>
   implements ControlValueAccessor {
   onChangeFn!: (value: any) => void;
   onTouchedFn = noop;
