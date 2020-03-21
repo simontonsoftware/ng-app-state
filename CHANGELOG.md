@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [12.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.4...v12.0.0) (2020-03-21)
+
+### ⚠ BREAKING CHANGES
+
+- requires @ngrx/store 9
+- requires micro-dash 7
+- requires s-js-utils 6
+- requires s-rxjs-utils 3
+- requires s-ng-utils
+
+### Features
+
+- add `collectDebounce` parameter to `UndoManager.pushUndoState()` ([9b57f47](https://github.com/simontonsoftware/ng-app-state/commit/9b57f4762c6397e6cfd0e6b7505fb55b7895d74a))
+- add `collectKey` parameter to `UndoManager.pushUndoState()` ([0b5eb6c](https://github.com/simontonsoftware/ng-app-state/commit/0b5eb6cf0eab226c977f021468b610cf17a4a7e1))
+- upgrade to Angular 9 ([e50afeb](https://github.com/simontonsoftware/ng-app-state/commit/e50afeb79490f3bbe4869d45fdce821b9886d71d))
+
+* upgrade @ngrx/store ([1e386cf](https://github.com/simontonsoftware/ng-app-state/commit/1e386cf31e1e93e810275ff32415cecd2b0f274f))
+* upgrade dependencies ([7a9d917](https://github.com/simontonsoftware/ng-app-state/commit/7a9d91760af0c3aec04dc4edaffdfcb741dde956))
+* upgrade dependencies ([928b83a](https://github.com/simontonsoftware/ng-app-state/commit/928b83a8e9f8b593c33c3626a4f6ede29ab4728b))
+
 ### [11.1.4](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.3...v11.1.4) (2020-02-14)
 
 ### Bug Fixes

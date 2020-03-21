@@ -936,23 +936,11 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="undomanager.html" class="tsd-kind-icon">Undo<wbr>Manager</a>
 		</li>
-		<li class=" tsd-kind-variable tsd-is-not-exported">
-			<a href="../index.html#exporteddirectives" class="tsd-kind-icon">exported<wbr>Directives</a>
-		</li>
-		<li class=" tsd-kind-variable tsd-is-not-exported">
-			<a href="../index.html#factories" class="tsd-kind-icon">factories</a>
-		</li>
-		<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-			<a href="../index.html#invoke" class="tsd-kind-icon">invoke</a>
-		</li>
 		<li class=" tsd-kind-function">
 			<a href="../index.html#ngappstatereducer" class="tsd-kind-icon">ng<wbr>App<wbr>State<wbr>Reducer</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="../index.html#pushtostorearray" class="tsd-kind-icon">push<wbr>ToStore<wbr>Array</a>
-		</li>
-		<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-not-exported">
-			<a href="../index.html#setsareequal" class="tsd-kind-icon">sets<wbr>Are<wbr>Equal</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="../index.html#spreadarraystore_" class="tsd-kind-icon">spread<wbr>Array<wbr>Store$</a>
@@ -989,12 +977,14 @@ img { max-width: 100%; }
 			<h3 class="tsd-before-signature">Callable</h3>
 			<ul class="tsd-signatures tsd-kind-class tsd-has-type-parameter">
 				<li class="tsd-signature tsd-kind-icon">__call&lt;K, V&gt;<span class="tsd-signature-symbol">(</span>attr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<li class="tsd-signature tsd-kind-icon">__call<span class="tsd-signature-symbol">(</span>attr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T[T]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<li class="tsd-signature tsd-kind-icon">__call<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GetSlice</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GetSlice</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 			</ul>
 			<ul class="tsd-descriptions">
 				<li class="tsd-description">
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L15">lib/store-object.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L18">projects/ng-app-state/src/lib/store-object.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1002,6 +992,20 @@ img { max-width: 100%; }
 							<p>Select a slice of the store to operate on. For example <code>store(&#39;currentUser&#39;)</code> will return a new <code>StoreObject</code> that represents the <code>currentUser</code> property.</p>
 						</div>
 					</div>
+				</li>
+				<li class="tsd-description">
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L16">projects/ng-app-state/src/lib/store-object.ts:16</a></li>
+						</ul>
+					</aside>
+				</li>
+				<li class="tsd-description">
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in node_modules/s-js-utils/lib/callable-object.d.ts:2</li>
+						</ul>
+					</aside>
 				</li>
 			</ul>
 		</section>
@@ -1060,7 +1064,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Overrides <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L14">lib/app-store.ts:14</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L14">projects/ng-app-state/src/lib/app-store.ts:14</a></li>
 							</ul>
 						</aside>
 					</li>
@@ -1075,7 +1079,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">action$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L11">lib/app-store.ts:11</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L11">projects/ng-app-state/src/lib/app-store.ts:11</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1090,11 +1094,11 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 				<a name="_" class="tsd-anchor"></a>
 				<h3>$</h3>
-				<div class="tsd-signature tsd-kind-icon">$<span class="tsd-signature-symbol">:</span> </div>
+				<div class="tsd-signature tsd-kind-icon">$<span class="tsd-signature-symbol">:</span></div>
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#_">$</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L43">lib/store-object.ts:43</a></li>
+						<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L46">projects/ng-app-state/src/lib/store-object.ts:46</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1117,7 +1121,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#assign">assign</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L104">lib/store-object.ts:104</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L107">projects/ng-app-state/src/lib/store-object.ts:107</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1139,7 +1143,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#batch">batch</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L64">lib/store-object.ts:64</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L67">projects/ng-app-state/src/lib/store-object.ts:67</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1169,7 +1173,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#caches">caches</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L188">lib/store-object.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L191">projects/ng-app-state/src/lib/store-object.ts:191</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1188,7 +1192,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#delete">delete</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L121">lib/store-object.ts:121</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L124">projects/ng-app-state/src/lib/store-object.ts:124</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1210,7 +1214,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L37">lib/app-store.ts:37</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/app-store.ts#L37">projects/ng-app-state/src/lib/app-store.ts:37</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1232,7 +1236,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#inbatch">inBatch</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L90">lib/store-object.ts:90</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L93">projects/ng-app-state/src/lib/store-object.ts:93</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1259,7 +1263,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#mutateusing">mutateUsing</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L146">lib/store-object.ts:146</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L149">projects/ng-app-state/src/lib/store-object.ts:149</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1282,7 +1286,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#referstosamestateas">refersToSameStateAs</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L195">lib/store-object.ts:195</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L198">projects/ng-app-state/src/lib/store-object.ts:198</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1301,7 +1305,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#set">set</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L97">lib/store-object.ts:97</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L100">projects/ng-app-state/src/lib/store-object.ts:100</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1323,7 +1327,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#setusing">setUsing</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L135">lib/store-object.ts:135</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L138">projects/ng-app-state/src/lib/store-object.ts:138</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1346,7 +1350,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#state">state</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L164">lib/store-object.ts:164</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L167">projects/ng-app-state/src/lib/store-object.ts:167</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1368,7 +1372,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#withcaching">withCaching</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L181">lib/store-object.ts:181</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L184">projects/ng-app-state/src/lib/store-object.ts:184</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1461,7 +1465,7 @@ f=/(at|bl|iz)$/,d=new RegExp("([^aeiouylsz])\\1$"),v=new RegExp("^"+o+i+"[^aeiou
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-111611854-4', '');
+        ga('create', 'UA-111611854-4', 'auto');
         ga('send', 'pageview');
     </script>
 </body>
