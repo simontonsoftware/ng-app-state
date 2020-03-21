@@ -1,6 +1,7 @@
 import { keys } from "micro-dash";
 import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
+import { isSetEqual } from "s-js-utils";
 import { mapAndCacheObjectElements } from "s-rxjs-utils";
 import { StoreObject } from "../store-object";
 
@@ -37,7 +38,7 @@ export function spreadObjectStore$<T extends object>(
   return source.$.pipe(
     filter((value) => {
       const keySet = new Set(keys(value));
-      if (lastKeySet && setsAreEqual(keySet, lastKeySet)) {
+      if (lastKeySet && isSetEqual(keySet, lastKeySet)) {
         return false;
       }
 
@@ -49,18 +50,4 @@ export function spreadObjectStore$<T extends object>(
       (_value, key) => source(key as keyof T),
     ),
   );
-}
-
-function setsAreEqual<T>(s1: Set<T>, s2: Set<T>) {
-  if (s1.size !== s2.size) {
-    return false;
-  }
-
-  for (const item of s1) {
-    if (!s2.has(item)) {
-      return false;
-    }
-  }
-
-  return true;
 }

@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { take, tap } from "rxjs/operators";
 import { ObservableNode } from "./observable-node";
 
+/** @hidden */
 const factories = new WeakMap<Observable<any>, TreeBasedObservableFactory>();
 
 /** @hidden */
