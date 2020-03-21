@@ -1,8 +1,9 @@
-import { HostListener } from "@angular/core";
-import { BaseValueAccessor } from "./base-value-accessor";
+import { Directive, HostListener } from "@angular/core";
+import { AbstractValueAccessorDirective } from "./abstract-value-accessor.directive";
 
 /** @hidden */
-export abstract class BaseInputValueAccessor extends BaseValueAccessor<
+@Directive()
+export abstract class AbstractInputValueAccessorDirective extends AbstractValueAccessorDirective<
   HTMLInputElement
 > {
   @HostListener("change")

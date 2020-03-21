@@ -4,6 +4,10 @@
     "outDir": "../../out-tsc/spec",
     "types": ["jasmine", "node"]
   },
+  // uncomment to test with the old view engine
+  // "angularCompilerOptions": {
+  //   "enableIvy": false
+  // },
   "files": ["src/test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

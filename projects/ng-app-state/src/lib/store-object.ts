@@ -12,7 +12,10 @@ interface Client {
   dispatch(action?: Action): void;
 }
 
-export interface StoreObject<T> {
+/** @hidden */
+type GetSlice<T> = <K extends keyof T>(attr: K) => StoreObject<T[K]>;
+
+export interface StoreObject<T> extends GetSlice<T> {
   // tslint:disable:callable-types
   /**
    * Select a slice of the store to operate on. For example `store('currentUser')` will return a new `StoreObject` that represents the `currentUser` property.
@@ -20,7 +23,7 @@ export interface StoreObject<T> {
   <K extends keyof T, V extends T[K]>(attr: K): StoreObject<V>;
 }
 
-export class StoreObject<T> extends CallableObject {
+export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   private _$?: Observable<T>;
 
   protected constructor(
@@ -199,7 +202,7 @@ export class StoreObject<T> extends CallableObject {
 
 /** @hidden */
 // tslint:disable-next-line:ban-types
-function maybeMemoize(fn: Function, withCaching: boolean) {
+function maybeMemoize<F extends Function>(fn: F, withCaching: boolean): F {
   if (withCaching) {
     return memoize(fn);
   } else {

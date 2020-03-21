@@ -1,5 +1,6 @@
-import { inject, TestBed } from "@angular/core/testing";
+import { fakeAsync, inject, TestBed, tick } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
+import { isEqual } from "micro-dash";
 import { expectSingleCallAndReset } from "s-ng-dev-utils";
 import { AppStore } from "../app-store";
 import { ngAppStateReducer } from "../ng-app-state-reducer";
@@ -14,6 +15,8 @@ class State {
 class TestImpl extends UndoManager<State, State> {
   lastApplicationUndoOrRedo?: UndoOrRedo;
   lastApplicationStateToOverwrite?: State;
+  collectKey?: string;
+  collectDebounce?: number;
   private skipNextChange = true;
 
   constructor(store: AppStore<State>, maxDepth?: number) {
@@ -22,12 +25,16 @@ class TestImpl extends UndoManager<State, State> {
       if (this.skipNextChange) {
         this.skipNextChange = false;
       } else {
-        this.pushCurrentState();
+        this.pushCurrentState({
+          collectKey: this.collectKey,
+          collectDebounce: this.collectDebounce,
+        });
       }
     });
   }
 
   shouldPush(state: State) {
+    // looks pointless, but allows this function to overwritten below
     return super.shouldPush(state);
   }
 
@@ -261,6 +268,16 @@ describe("UndoManager", () => {
       undoManager.reset();
       expect(store.state().counter).toBe(1);
     });
+
+    it("resets collected changes", () => {
+      undoManager.collectKey = "k1";
+      store("counter").set(1);
+
+      undoManager.reset();
+      store("counter").set(2);
+
+      expectStack(1, 2);
+    });
   });
 
   describe(".pushCurrentState()", () => {
@@ -296,6 +313,65 @@ describe("UndoManager", () => {
       undoManager.undo();
       undoManager.pushCurrentState();
       expectStack(0, 0);
+    });
+
+    it("can collect multiple changes into a single undo state", () => {
+      undoManager.collectKey = "k1";
+      store("counter").set(1);
+      store("counter").set(2);
+      store("counter").set(3);
+
+      undoManager.collectKey = "k2";
+      store("counter").set(4);
+      store("counter").set(5);
+
+      expectStack(0, 3, 5);
+    });
+
+    it("resets collected changes with no key", () => {
+      undoManager.collectKey = "k1";
+      store("counter").set(1);
+      store("counter").set(2);
+
+      undoManager.collectKey = undefined;
+      store("counter").set(3);
+      store("counter").set(4);
+
+      undoManager.collectKey = "k1";
+      store("counter").set(5);
+      store("counter").set(6);
+
+      expectStack(0, 2, 3, 4, 6);
+    });
+
+    it("can reset collected changes after a timeout", fakeAsync(() => {
+      undoManager.collectKey = "k";
+      undoManager.collectDebounce = 1000;
+
+      store("counter").set(1);
+      tick(999);
+      store("counter").set(2);
+      tick(1000);
+      store("counter").set(3);
+      tick(999);
+      store("counter").set(4);
+      tick(1000);
+      store("counter").set(5);
+
+      expectStack(0, 2, 4, 5);
+
+      tick(1000);
+    }));
+
+    it("can drop collected changes when they equate to no change", () => {
+      undoManager.collectKey = "k";
+      undoManager.shouldPush = (state) =>
+        !isEqual(state, undoManager.currentUndoState);
+
+      store("counter").set(1);
+      expectStack(0, 1);
+      store("counter").set(0);
+      expectStack(0);
     });
   });
 
@@ -339,6 +415,16 @@ describe("UndoManager", () => {
       expect(() => {
         undoManager.undo();
       }).toThrowError("Cannot undo");
+    });
+
+    it("resets collected changes", () => {
+      undoManager.collectKey = "k1";
+      store("counter").set(1);
+
+      undoManager.undo();
+      store("counter").set(2);
+
+      expectStack(0, 2);
     });
   });
 
@@ -472,6 +558,16 @@ describe("UndoManager", () => {
       expect(undoStub).toHaveBeenCalledTimes(2);
       expect(redoStub).toHaveBeenCalledTimes(3);
     });
+
+    it("resets collected changes", () => {
+      undoManager.collectKey = "k1";
+      store("counter").set(1);
+
+      undoManager.dropCurrentUndoState();
+      store("counter").set(2);
+
+      expectStack(0, 2);
+    });
   });
 
   describe(".currentUndoState", () => {
@@ -534,6 +630,19 @@ describe("UndoManager", () => {
 
       undoManager.reset();
       expect(spy).not.toHaveBeenCalled();
+    });
+
+    it("prevents a non-change from clearing the redo history", () => {
+      store("counter").set(1);
+      undoManager.undo();
+
+      undoManager.shouldPush = () => false;
+      store("counter").set(2);
+      expectStack(0, 1);
+
+      undoManager.shouldPush = () => true;
+      store("counter").set(3);
+      expectStack(0, 3);
     });
   });
 

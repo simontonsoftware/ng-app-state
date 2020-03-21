@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { forEach, keyBy, mapValues, padStart } from "micro-dash";
+import { forEach, padStart } from "micro-dash";
 import { StoreObject } from "ng-app-state";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { mapToObject } from "s-js-utils";
 import { City, IntegrationState } from "./integration-state";
 import { IntegrationStore } from "./integration-store";
 
@@ -24,10 +25,7 @@ export class AppComponent {
 
   chooseToCheck() {
     this.store("checkMany").set(
-      mapValues(
-        keyBy(this.store.state().chooseMany, (city) => city),
-        () => true,
-      ),
+      mapToObject(this.store.state().chooseMany, (city) => [city, true]),
     );
   }
 

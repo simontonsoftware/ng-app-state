@@ -1,17 +1,13 @@
-import { Directive, Injector } from "@angular/core";
-import { BaseInputValueAccessor } from "./base-input-value-accessor";
-import { makeProviderDef } from "./base-value-accessor";
+import { Directive } from "@angular/core";
+import { provideValueAccessor } from "s-ng-utils";
+import { AbstractInputValueAccessorDirective } from "./abstract-input-value-accessor.directive";
 
 /** @hidden */
 @Directive({
   selector: "input[type=range][nasModel]",
-  providers: [makeProviderDef(RangeValueAccessorDirective)],
+  providers: [provideValueAccessor(RangeValueAccessorDirective)],
 })
-export class RangeValueAccessorDirective extends BaseInputValueAccessor {
-  constructor(injector: Injector) {
-    super(injector);
-  }
-
+export class RangeValueAccessorDirective extends AbstractInputValueAccessorDirective {
   registerOnChange(fn: (value: number) => void) {
     this.onChangeFn = (value: string) => {
       fn(parseFloat(value));

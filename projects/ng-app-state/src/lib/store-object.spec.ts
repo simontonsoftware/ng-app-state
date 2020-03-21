@@ -30,7 +30,7 @@ describe("StoreObject", () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    backingStore = TestBed.get(Store);
+    backingStore = TestBed.inject(Store);
     store = new AppStore(backingStore, "testKey", new State());
   });
 
@@ -564,7 +564,7 @@ describe("StoreObject", () => {
       });
     });
 
-    it("gets the new subvalue even it has a later subscriber (production bug)", () => {
+    it("gets the new subvalue even when it has a later subscriber (production bug)", () => {
       let expectedValue: InnerState | undefined;
       store.$.subscribe(() => {
         expect(store("optional").state()).toBe(expectedValue);

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/simontonsoftware/ng-app-state.svg?branch=master)](https://travis-ci.org/simontonsoftware/ng-app-state) [![Coverage Status](https://coveralls.io/repos/github/simontonsoftware/ng-app-state/badge.svg?branch=master)](https://coveralls.io/github/simontonsoftware/ng-app-state?branch=master)
 
-## Simonton Software Typescript Utils
+## Simonton Software Typescript Libraries
 
 `ng-app-state` is one library in a suite that is available from Simonton Software. Each one builds on the last, organized by their dependencies:
 
@@ -34,16 +34,14 @@ A basic idea behind this library (as well as the underlying `ngrx/store`, and `R
 
 ## Installation
 
-With npm:
+Install along with its peer dependencies using:
 
-```sh
-npm install -S ng-app-state @ngrx/store micro-dash s-js-utils s-rxjs-utils
-```
+```shell script
+npm install --save ng-app-state @ngrx/store s-ng-utils s-rxjs-utils s-js-utils micro-dash
 
-With yarn:
+# OR
 
-```sh
-yarn add ng-app-state @ngrx/store micro-dash s-js-utils s-rxjs-utils
+yarn add ng-app-state @ngrx/store s-ng-utils s-rxjs-utils s-js-utils micro-dash
 ```
 
 ## Setup

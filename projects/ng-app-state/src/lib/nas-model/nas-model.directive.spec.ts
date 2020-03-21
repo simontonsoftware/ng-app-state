@@ -77,7 +77,7 @@ function initTest<C, S>(
 
   beforeCreate();
   fixture = TestBed.createComponent<C>(component);
-  return TestBed.get(storeType) as S;
+  return TestBed.inject(storeType);
 }
 
 // Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts

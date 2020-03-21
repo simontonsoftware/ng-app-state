@@ -1,4 +1,3 @@
-import { Observable } from "rxjs";
 import { distinctUntilKeyChanged, map } from "rxjs/operators";
 import { StoreObject } from "../store-object";
 
@@ -24,9 +23,7 @@ import { StoreObject } from "../store-object";
  * }
  * ```
  */
-export function spreadArrayStore$<T>(
-  source: StoreObject<Array<T>>,
-): Observable<Array<StoreObject<T>>> {
+export function spreadArrayStore$<T>(source: StoreObject<Array<T>>) {
   let cache: Array<StoreObject<T>> = [];
   return source.$.pipe(
     distinctUntilKeyChanged("length"),
@@ -36,7 +33,7 @@ export function spreadArrayStore$<T>(
       } else {
         cache = cache.slice();
         for (let i = cache.length; i < array.length; ++i) {
-          cache[i] = source(i as any);
+          cache[i] = source(i);
         }
       }
       return cache;

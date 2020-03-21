@@ -17,8 +17,7 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "ng-app-state": ["dist/ng-app-state"],
-      "ng-app-state/*": ["dist/ng-app-state/*"]
+      "ng-app-state": ["dist/ng-app-state/ng-app-state", "dist/ng-app-state"]
     },
 
     //
@@ -32,6 +31,11 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+
+    //
+    // Simonton Software additions
+    //
+    "strictTemplates": true
   }
 }
