@@ -34,7 +34,7 @@ export class ObservableNode extends Observable<any> {
 
   ensureChild(key: string) {
     const set = this.children[key];
-    if (set && set.size) {
+    if (set?.size) {
       return set.values().next().value;
     } else {
       return new ObservableNode(this, key, this);
@@ -81,14 +81,14 @@ export class ObservableNode extends Observable<any> {
 
   private stop() {
     this.sourceSubscription!.unsubscribe();
-    if (this.parent && this.key) {
-      this.parent.unregisterChild(this.key, this);
+    if (this.key) {
+      this.parent?.unregisterChild(this.key, this);
     }
   }
 
   private registerWithParent() {
-    if (this.parent && this.key) {
-      this.parent.registerChild(this.key, this);
+    if (this.key) {
+      this.parent?.registerChild(this.key, this);
     }
   }
 

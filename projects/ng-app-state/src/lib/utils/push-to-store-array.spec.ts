@@ -12,7 +12,7 @@ describe("pushToStoreArray", () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    const backingStore = TestBed.get(Store);
+    const backingStore = TestBed.inject(Store);
     store = new AppStore(backingStore, "testKey", [1, 2]);
   });
 

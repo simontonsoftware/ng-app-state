@@ -30,7 +30,7 @@ describe("StoreObject", () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    backingStore = TestBed.get(Store);
+    backingStore = TestBed.inject(Store);
     store = new AppStore(backingStore, "testKey", new State());
   });
 

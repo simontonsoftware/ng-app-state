@@ -12,7 +12,7 @@ describe("spreadObjectStore$()", () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    const backingStore = TestBed.get(Store);
+    const backingStore = TestBed.inject(Store);
     const state: Record<string, number> = { a: 1, b: 2 };
     store = new AppStore(backingStore, "testKey", state);
   });

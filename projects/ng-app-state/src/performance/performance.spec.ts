@@ -25,7 +25,7 @@ describe("performance", () => {
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
-    backingStore = TestBed.get(Store);
+    backingStore = TestBed.inject(Store);
   });
 
   it("is good with a deep state", () => {
