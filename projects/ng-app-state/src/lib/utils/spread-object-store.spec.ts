@@ -1,11 +1,11 @@
-import { TestBed } from "@angular/core/testing";
-import { Store, StoreModule } from "@ngrx/store";
-import { AppStore } from "../app-store";
-import { ngAppStateReducer } from "../ng-app-state-reducer";
-import { StoreObject } from "../store-object";
-import { spreadObjectStore$ } from "./spread-object-store";
+import { TestBed } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
+import { AppStore } from '../app-store';
+import { ngAppStateReducer } from '../ng-app-state-reducer';
+import { StoreObject } from '../store-object';
+import { spreadObjectStore$ } from './spread-object-store';
 
-describe("spreadObjectStore$()", () => {
+describe('spreadObjectStore$()', () => {
   let store: StoreObject<Record<string, number>>;
 
   beforeEach(() => {
@@ -14,10 +14,10 @@ describe("spreadObjectStore$()", () => {
     });
     const backingStore = TestBed.inject(Store);
     const state: Record<string, number> = { a: 1, b: 2 };
-    store = new AppStore(backingStore, "testKey", state);
+    store = new AppStore(backingStore, 'testKey', state);
   });
 
-  it("emits a separate store object for each element in the object", () => {
+  it('emits a separate store object for each element in the object', () => {
     store.set({ a: 1, b: 2 });
     let emitted: Array<StoreObject<number>>;
     spreadObjectStore$(store).subscribe((stores) => {
@@ -41,7 +41,7 @@ describe("spreadObjectStore$()", () => {
     expect(emitted!.length).toBe(0);
   });
 
-  it("only emits when the keys of the object change", () => {
+  it('only emits when the keys of the object change', () => {
     store.set({ a: 1, b: 2 });
     const spy = jasmine.createSpy();
     spreadObjectStore$(store).subscribe(spy);
@@ -64,7 +64,7 @@ describe("spreadObjectStore$()", () => {
   });
 
   // this makes it nice for use in templates that use OnPush change detection
-  it("emits the same object reference for keys that remain", () => {
+  it('emits the same object reference for keys that remain', () => {
     store.set({ a: 1, b: 2 });
     let lastEmit: Array<StoreObject<number>>;
     let previousEmit: Array<StoreObject<number>>;

@@ -1,18 +1,18 @@
-import { Component } from "@angular/core";
-import { forEach, padStart } from "micro-dash";
-import { StoreObject } from "ng-app-state";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { mapToObject } from "s-js-utils";
-import { City, IntegrationState } from "./integration-state";
-import { IntegrationStore } from "./integration-store";
+import { Component } from '@angular/core';
+import { forEach, padStart } from 'micro-dash';
+import { StoreObject } from 'ng-app-state';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { mapToObject } from 's-js-utils';
+import { City, IntegrationState } from './integration-state';
+import { IntegrationStore } from './integration-store';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
+  selector: 'app-root',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-  cities: City[] = ["San Francisco", "Nairobi", "Gulu"];
+  cities: City[] = ['San Francisco', 'Nairobi', 'Gulu'];
   store: StoreObject<IntegrationState>;
   stateString$: Observable<string>;
 
@@ -24,7 +24,7 @@ export class AppComponent {
   }
 
   chooseToCheck() {
-    this.store("checkMany").set(
+    this.store('checkMany').set(
       mapToObject(this.store.state().chooseMany, (city) => [city, true]),
     );
   }
@@ -36,19 +36,19 @@ export class AppComponent {
         choices.push(city as any);
       }
     });
-    this.store("chooseMany").set(choices);
+    this.store('chooseMany').set(choices);
   }
 
   propagateDatetime() {
     const time = this.dateFromDatetime().getTime();
-    this.modDates("datetime", (dest) => {
+    this.modDates('datetime', (dest) => {
       dest.setTime(time);
     });
   }
 
   propagateDate() {
     const source = this.dateFromDate();
-    this.modDates("date", (dest) => {
+    this.modDates('date', (dest) => {
       dest.setFullYear(source.getFullYear());
       dest.setMonth(source.getMonth());
       dest.setDate(source.getDate());
@@ -57,7 +57,7 @@ export class AppComponent {
 
   propagateMonth() {
     const source = this.dateFromMonth();
-    this.modDates("month", (dest) => {
+    this.modDates('month', (dest) => {
       dest.setFullYear(source.getFullYear());
       dest.setMonth(source.getMonth());
     });
@@ -65,7 +65,7 @@ export class AppComponent {
 
   propagateWeek() {
     const source = this.dateFromWeek();
-    this.modDates("week", (dest) => {
+    this.modDates('week', (dest) => {
       const day = dest.getDay();
       dest.setFullYear(source.getFullYear());
       dest.setMonth(source.getMonth());
@@ -75,7 +75,7 @@ export class AppComponent {
 
   propagateTime() {
     const source = this.dateFromTime();
-    this.modDates("time", (dest) => {
+    this.modDates('time', (dest) => {
       dest.setHours(source.getHours());
       dest.setMinutes(source.getMinutes());
     });
@@ -88,8 +88,8 @@ export class AppComponent {
       let month;
       let week;
       let time;
-      if (state[type] === "") {
-        datetime = date = month = week = time = "";
+      if (state[type] === '') {
+        datetime = date = month = week = time = '';
       } else {
         let d = dateParts(this.dateFromDatetime(), fn);
         datetime = `${d.y}-${d.M}-${d.d}T${d.h}:${d.m}`;
@@ -112,24 +112,24 @@ export class AppComponent {
   }
 
   private dateFromDatetime(state = this.store.state()) {
-    return new Date(state.datetime || "2000-01-01T00:00");
+    return new Date(state.datetime || '2000-01-01T00:00');
   }
 
   private dateFromDate(state = this.store.state()) {
-    return new Date((state.date || "2000-01-01") + "T00:00");
+    return new Date((state.date || '2000-01-01') + 'T00:00');
   }
 
   private dateFromMonth(state = this.store.state()) {
-    return new Date((state.month || "2000-01") + "-01T00:00");
+    return new Date((state.month || '2000-01') + '-01T00:00');
   }
 
   private dateFromWeek(state = this.store.state()) {
-    const [year, week] = (state.week || "2000-W01").split("-W").map(Number);
+    const [year, week] = (state.week || '2000-W01').split('-W').map(Number);
     return weekToDate(year, week);
   }
 
   private dateFromTime(state = this.store.state()) {
-    return new Date("2000-01-01T" + (state.time || "00:00"));
+    return new Date('2000-01-01T' + (state.time || '00:00'));
   }
 }
 
@@ -145,7 +145,7 @@ function dateParts(date: Date, fn: (dest: Date) => void) {
 }
 
 function pad(num: number, length = 2) {
-  return padStart(num.toString(), length, "0");
+  return padStart(num.toString(), length, '0');
 }
 
 // Returns the ISO week of the date.

@@ -1,11 +1,11 @@
-import { TestBed } from "@angular/core/testing";
-import { Store, StoreModule } from "@ngrx/store";
-import { AppStore } from "../app-store";
-import { ngAppStateReducer } from "../ng-app-state-reducer";
-import { StoreObject } from "../store-object";
-import { spreadArrayStore$ } from "./spread-array-store";
+import { TestBed } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
+import { AppStore } from '../app-store';
+import { ngAppStateReducer } from '../ng-app-state-reducer';
+import { StoreObject } from '../store-object';
+import { spreadArrayStore$ } from './spread-array-store';
 
-describe("spreadArrayStore$()", () => {
+describe('spreadArrayStore$()', () => {
   let store: StoreObject<number[]>;
 
   beforeEach(() => {
@@ -13,10 +13,10 @@ describe("spreadArrayStore$()", () => {
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
     const backingStore = TestBed.inject(Store);
-    store = new AppStore(backingStore, "testKey", [1, 2]);
+    store = new AppStore(backingStore, 'testKey', [1, 2]);
   });
 
-  it("emits a separate store object for each element in the array", () => {
+  it('emits a separate store object for each element in the array', () => {
     store.set([1, 2]);
     let emitted: Array<StoreObject<number>>;
     spreadArrayStore$(store).subscribe((stores) => {
@@ -40,7 +40,7 @@ describe("spreadArrayStore$()", () => {
     expect(emitted!.length).toBe(0);
   });
 
-  it("only emits when the length of the array changes", () => {
+  it('only emits when the length of the array changes', () => {
     store.set([1, 2]);
     const spy = jasmine.createSpy();
     spreadArrayStore$(store).subscribe(spy);
@@ -54,7 +54,7 @@ describe("spreadArrayStore$()", () => {
   });
 
   // this makes it nice for use in templates that use OnPush change detection
-  it("emits the same object reference for indexes that remain", () => {
+  it('emits the same object reference for indexes that remain', () => {
     store.set([1, 2]);
     let lastEmit: Array<StoreObject<number>>;
     let previousEmit: Array<StoreObject<number>>;

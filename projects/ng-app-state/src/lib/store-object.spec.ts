@@ -1,10 +1,10 @@
-import { TestBed } from "@angular/core/testing";
-import { Action, Store, StoreModule } from "@ngrx/store";
-import { cloneDeep, identity, noop, pick } from "micro-dash";
-import { skip, take } from "rxjs/operators";
-import { expectSingleCallAndReset } from "s-ng-dev-utils";
-import { AppStore } from "./app-store";
-import { ngAppStateReducer } from "./ng-app-state-reducer";
+import { TestBed } from '@angular/core/testing';
+import { Action, Store, StoreModule } from '@ngrx/store';
+import { cloneDeep, identity, noop, pick } from 'micro-dash';
+import { skip, take } from 'rxjs/operators';
+import { expectSingleCallAndReset } from 's-ng-dev-utils';
+import { AppStore } from './app-store';
+import { ngAppStateReducer } from './ng-app-state-reducer';
 
 class InnerState {
   left?: InnerState;
@@ -20,90 +20,90 @@ class State {
   array?: number[];
 }
 
-describe("StoreObject", () => {
+describe('StoreObject', () => {
   let backingStore: Store<any>;
   let store: AppStore<State>;
   let logError: jasmine.Spy;
 
   beforeEach(() => {
-    logError = spyOn(console, "error");
+    logError = spyOn(console, 'error');
     TestBed.configureTestingModule({
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
     backingStore = TestBed.inject(Store);
-    store = new AppStore(backingStore, "testKey", new State());
+    store = new AppStore(backingStore, 'testKey', new State());
   });
 
-  describe("()", () => {
-    it("prints a useful error when used to modify missing state", () => {
-      store<"optional", InnerState>("optional")("state").set(2);
+  describe('()', () => {
+    it('prints a useful error when used to modify missing state', () => {
+      store<'optional', InnerState>('optional')('state').set(2);
       expect(logError).toHaveBeenCalledWith(
-        "testKey.optional is null or undefined (during [set] testKey.optional.state)",
+        'testKey.optional is null or undefined (during [set] testKey.optional.state)',
       );
     });
 
-    it("prints a useful error even when the root key is missing", () => {
+    it('prints a useful error even when the root key is missing', () => {
       store.delete();
-      store<"optional", InnerState>("optional")("state").set(2);
+      store<'optional', InnerState>('optional')('state').set(2);
       expect(logError).toHaveBeenCalledWith(
-        "testKey is null or undefined (during [set] testKey.optional.state)",
+        'testKey is null or undefined (during [set] testKey.optional.state)',
       );
     });
   });
 
-  describe(".$", () => {
-    it("fires immediately, and with every change", () => {
+  describe('.$', () => {
+    it('fires immediately, and with every change', () => {
       const rootNext = jasmine.createSpy();
       const counterNext = jasmine.createSpy();
       const nestedNext = jasmine.createSpy();
       store.$.subscribe(rootNext);
-      store("counter").$.subscribe(counterNext);
-      store("nested").$.subscribe(nestedNext);
+      store('counter').$.subscribe(counterNext);
+      store('nested').$.subscribe(nestedNext);
       expect(rootNext).toHaveBeenCalledTimes(1);
       expect(counterNext).toHaveBeenCalledTimes(1);
       expect(nestedNext).toHaveBeenCalledTimes(1);
 
-      store("counter").set(5);
+      store('counter').set(5);
       expect(rootNext).toHaveBeenCalledTimes(2);
       expect(counterNext).toHaveBeenCalledTimes(2);
 
-      store("nested")("state").set(15);
+      store('nested')('state').set(15);
       expect(rootNext).toHaveBeenCalledTimes(3);
       expect(nestedNext).toHaveBeenCalledTimes(2);
     });
 
-    it("gives the new value", () => {
+    it('gives the new value', () => {
       let lastValue: InnerState;
-      store("nested").$.subscribe((value) => {
+      store('nested').$.subscribe((value) => {
         lastValue = value;
       });
       expect(lastValue!).toBe(store.state().nested);
       expect(lastValue!).toEqual(new InnerState());
 
       const newValue = new InnerState(4);
-      store("nested").set(newValue);
+      store('nested').set(newValue);
       expect(lastValue!).toBe(newValue);
       expect(lastValue!).toEqual(new InnerState(4));
     });
 
-    it("gives undefined when a parent object is deleted", () => {
+    it('gives undefined when a parent object is deleted', () => {
       const next = jasmine.createSpy();
 
-      store<"optional", InnerState>("optional")("state").$.subscribe(next);
+      store<'optional', InnerState>('optional')('state').$.subscribe(next);
       expectSingleCallAndReset(next, undefined);
 
-      store("optional").set(new InnerState(17));
+      store('optional').set(new InnerState(17));
       expectSingleCallAndReset(next, 17);
 
-      store("optional").delete();
+      store('optional').delete();
       expectSingleCallAndReset(next, undefined);
     });
 
-    it("does not fire when parent objects change", () => {
+    it('does not fire when parent objects change', () => {
       const counterNext = jasmine.createSpy();
       const optionalNext = jasmine.createSpy();
-      store("counter").$.subscribe(counterNext);
-      store<"optional", InnerState>("optional")("state").$.subscribe(
+      store('counter').$.subscribe(counterNext);
+      store<'optional', InnerState>('optional')('state').$.subscribe(
         optionalNext,
       );
       expect(counterNext).toHaveBeenCalledTimes(1);
@@ -121,69 +121,65 @@ describe("StoreObject", () => {
       expect(counterNext).toHaveBeenCalledTimes(3);
       expect(optionalNext).toHaveBeenCalledTimes(1);
 
-      store("optional").set(new InnerState());
+      store('optional').set(new InnerState());
       expect(counterNext).toHaveBeenCalledTimes(3);
       expect(optionalNext).toHaveBeenCalledTimes(2);
     });
 
     // This is important for use in angular templates, so each change detection cycle it gets the same object, so OnPush can work
-    it("returns the same observable on successive calls", () => {
+    it('returns the same observable on successive calls', () => {
       const observable = store.$;
       expect(store.$).toBe(observable);
 
-      store("counter").set(2);
+      store('counter').set(2);
       expect(store.$).toBe(observable);
     });
 
-    it("works when a different path was previously subscribed", () => {
+    it('works when a different path was previously subscribed', () => {
       const nested = new InnerState();
       nested.left = new InnerState();
       nested.right = new InnerState();
-      store("nested").set(nested);
+      store('nested').set(nested);
 
       const spy = jasmine.createSpy();
-      store("nested")("left")
-        .$.subscribe(spy)
-        .unsubscribe();
+      store('nested')('left').$.subscribe(spy).unsubscribe();
       expectSingleCallAndReset(spy, nested.left);
 
-      store("nested")("right")
-        .$.subscribe(spy)
-        .unsubscribe();
+      store('nested')('right').$.subscribe(spy).unsubscribe();
       expectSingleCallAndReset(spy, nested.right);
     });
 
-    it("works when 2 observable nodes manager to get created for the same branch (code coverage)", () => {
+    it('works when 2 observable nodes manager to get created for the same branch (code coverage)', () => {
       const spy = jasmine.createSpy();
 
-      const obs = store("counter").$;
-      const sub = store("counter").$.subscribe();
+      const obs = store('counter').$;
+      const sub = store('counter').$.subscribe();
       obs.subscribe(spy);
       expectSingleCallAndReset(spy, 0);
 
       sub.unsubscribe();
-      store("counter").set(2);
+      store('counter').set(2);
       expectSingleCallAndReset(spy, 2);
     });
 
     // https://github.com/simontonsoftware/ng-app-state/issues/13
-    it("does not emit stale values in the middle of propogating a change (production bug)", () => {
+    it('does not emit stale values in the middle of propogating a change (production bug)', () => {
       let log: jasmine.Spy | undefined;
       store.$.subscribe(() => {
-        store("optional").$.subscribe(log);
+        store('optional').$.subscribe(log);
       });
-      store("optional").$.subscribe();
+      store('optional').$.subscribe();
 
       log = jasmine.createSpy();
       const value = new InnerState();
-      store("optional").set(value);
+      store('optional').set(value);
 
       expectSingleCallAndReset(log, value);
     });
 
     // https://github.com/simontonsoftware/ng-app-state/issues/20
-    it("will work again after being unsubscribed from (production bug)", () => {
-      const counterStore = store("counter");
+    it('will work again after being unsubscribed from (production bug)', () => {
+      const counterStore = store('counter');
       counterStore.$.subscribe().unsubscribe();
       counterStore.set(3);
       const spy = jasmine.createSpy();
@@ -191,30 +187,28 @@ describe("StoreObject", () => {
       expectSingleCallAndReset(spy, 3);
     });
 
-    it("works when the number of subscribers changes mid-emit (production bug)", () => {
+    it('works when the number of subscribers changes mid-emit (production bug)', () => {
       const spy = jasmine.createSpy();
 
-      store("counter")
-        .$.pipe(take(2))
-        .subscribe();
-      store("counter").$.subscribe(spy);
+      store('counter').$.pipe(take(2)).subscribe();
+      store('counter').$.subscribe(spy);
       expectSingleCallAndReset(spy, 0);
 
-      store("counter").set(1);
+      store('counter').set(1);
       expectSingleCallAndReset(spy, 1);
     });
   });
 
-  describe(".batch()", () => {
-    it("causes a single update after multiple actions", () => {
+  describe('.batch()', () => {
+    it('causes a single update after multiple actions', () => {
       const next = jasmine.createSpy();
 
       store.$.subscribe(next);
       expect(next).toHaveBeenCalledTimes(1);
 
       store.batch((batch) => {
-        batch("counter").set(3);
-        batch("nested")("state").set(6);
+        batch('counter').set(3);
+        batch('nested')('state').set(6);
         expect(next).toHaveBeenCalledTimes(1);
       });
 
@@ -222,12 +216,12 @@ describe("StoreObject", () => {
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
 
-    it("works when nested", () => {
+    it('works when nested', () => {
       store.batch((batch1) => {
-        batch1("counter").set(1);
+        batch1('counter').set(1);
         batch1.batch((batch2) => {
           expect(batch2.state().counter).toBe(1);
-          batch2("counter").set(2);
+          batch2('counter').set(2);
           expect(batch2.state().counter).toBe(2);
         });
         expect(batch1.state().counter).toBe(2);
@@ -237,12 +231,12 @@ describe("StoreObject", () => {
 
     it("doesn't have that infinite loop with 2 stores (production bug)", () => {
       // https://github.com/simontonsoftware/ng-app-state/issues/28
-      const store2 = new AppStore<{}>(backingStore, "store2", {});
+      const store2 = new AppStore<{}>(backingStore, 'store2', {});
       store.$.subscribe(() => {
         store2.batch(noop);
       });
       store2.$.subscribe();
-      store("counter").set(1);
+      store('counter').set(1);
 
       // the infinite loop was here
 
@@ -250,20 +244,18 @@ describe("StoreObject", () => {
     });
   });
 
-  describe(".inBatch()", () => {
-    it("causes mutations to run within the given batch", () => {
+  describe('.inBatch()', () => {
+    it('causes mutations to run within the given batch', () => {
       const next = jasmine.createSpy();
 
       store.$.subscribe(next);
       expect(next).toHaveBeenCalledTimes(1);
 
-      const counterStore = store("counter");
-      const nestedStore = store("nested");
+      const counterStore = store('counter');
+      const nestedStore = store('nested');
       store.batch((batch) => {
         counterStore.inBatch(batch).set(3);
-        nestedStore
-          .inBatch(batch)("state")
-          .set(6);
+        nestedStore.inBatch(batch)('state').set(6);
         expect(next).toHaveBeenCalledTimes(1);
       });
 
@@ -271,12 +263,12 @@ describe("StoreObject", () => {
       expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
 
-    it("starts nested batches with the correct state (production bug)", () => {
+    it('starts nested batches with the correct state (production bug)', () => {
       store.batch((batch1) => {
-        batch1("counter").set(1);
+        batch1('counter').set(1);
         store.inBatch(batch1).batch((batch2) => {
           expect(batch2.state().counter).toBe(1);
-          batch2("nested")("state").set(2);
+          batch2('nested')('state').set(2);
         });
       });
       expect(store.state()).toEqual(
@@ -285,11 +277,11 @@ describe("StoreObject", () => {
     });
   });
 
-  describe(".set()", () => {
-    it("stores the exact object given", () => {
+  describe('.set()', () => {
+    it('stores the exact object given', () => {
       const before = store.state().nested;
       const set = new InnerState();
-      store("nested").set(set);
+      store('nested').set(set);
       const after = store.state().nested;
 
       expect(before).not.toBe(after);
@@ -297,14 +289,14 @@ describe("StoreObject", () => {
       expect(after).toEqual(new InnerState());
     });
 
-    it("works with undefined", () => {
-      store("optional").set(new InnerState());
+    it('works with undefined', () => {
+      store('optional').set(new InnerState());
       expect(store.state().optional).not.toBeUndefined();
-      store("optional").set(undefined);
+      store('optional').set(undefined);
       expect(store.state().optional).toBeUndefined();
     });
 
-    it("works on the root object", () => {
+    it('works on the root object', () => {
       const before = store.state();
       const set = {
         counter: 2,
@@ -321,33 +313,33 @@ describe("StoreObject", () => {
       });
     });
 
-    it("does nothing when setting to the same value", () => {
+    it('does nothing when setting to the same value', () => {
       const startingState = store.state();
       const stateClone = cloneDeep(startingState);
       store.$.pipe(skip(1)).subscribe(() => {
-        fail("should not have fired");
+        fail('should not have fired');
       });
 
       store.set(startingState);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
-      store("counter").set(startingState.counter);
+      store('counter').set(startingState.counter);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
-      store("nested").set(startingState.nested);
+      store('nested').set(startingState.nested);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
     });
   });
 
-  describe(".assign()", () => {
-    it("assigns the exact objects given", () => {
+  describe('.assign()', () => {
+    it('assigns the exact objects given', () => {
       const before = store.state().nested;
       const left = new InnerState();
       const right = new InnerState();
-      store("nested").assign({ left, right });
+      store('nested').assign({ left, right });
       const after = store.state().nested;
 
       expect(before).not.toBe(after);
@@ -357,14 +349,14 @@ describe("StoreObject", () => {
       expect(after.right).toBe(right);
     });
 
-    it("does nothing when setting to the same value", () => {
+    it('does nothing when setting to the same value', () => {
       const startingState = store.state();
       const stateClone = cloneDeep(startingState);
       store.$.pipe(skip(1)).subscribe(() => {
-        fail("should not have fired");
+        fail('should not have fired');
       });
 
-      store.assign(pick(startingState, "counter", "nested"));
+      store.assign(pick(startingState, 'counter', 'nested'));
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
@@ -372,23 +364,23 @@ describe("StoreObject", () => {
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
-      store("nested").assign(startingState.nested);
+      store('nested').assign(startingState.nested);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
     });
   });
 
-  describe(".delete()", () => {
-    it("removes sub-trees from the store", () => {
-      store("optional").set(new InnerState());
-      store<"optional", InnerState>("optional")("left").set(new InnerState());
+  describe('.delete()', () => {
+    it('removes sub-trees from the store', () => {
+      store('optional').set(new InnerState());
+      store<'optional', InnerState>('optional')('left').set(new InnerState());
       expect(store.state().optional!.left).toEqual(new InnerState());
 
-      store<"optional", InnerState>("optional")("left").delete();
+      store<'optional', InnerState>('optional')('left').delete();
       expect(store.state().optional).not.toBe(undefined);
       expect(store.state().optional!.left).toBe(undefined);
 
-      store("optional").delete();
+      store('optional').delete();
       expect(getGlobalState().testKey).not.toBe(undefined);
       expect(store.state().optional).toBe(undefined);
 
@@ -396,31 +388,31 @@ describe("StoreObject", () => {
       expect(getGlobalState().testKey).toBe(undefined);
     });
 
-    it("has a type name that is nice for logging", () => {
+    it('has a type name that is nice for logging', () => {
       let lastAction: Action;
-      backingStore.addReducer("testKey", (state: any, action) => {
+      backingStore.addReducer('testKey', (state: any, action) => {
         lastAction = action;
         return state;
       });
 
-      store("nested").delete();
+      store('nested').delete();
 
-      expect(lastAction!.type).toBe("[delete:nested] testKey");
+      expect(lastAction!.type).toBe('[delete:nested] testKey');
     });
   });
 
-  describe(".setUsing()", () => {
-    it("set the state to the exact object returned", () => {
+  describe('.setUsing()', () => {
+    it('set the state to the exact object returned', () => {
       const object = new InnerState();
-      store("optional").setUsing(() => object);
+      store('optional').setUsing(() => object);
       expect(store.state().optional).toBe(object);
     });
 
-    it("uses the passed-in arguments", () => {
-      store("nested").setUsing(() => new InnerState(1));
+    it('uses the passed-in arguments', () => {
+      store('nested').setUsing(() => new InnerState(1));
       expect(store.state().nested.state).toBe(1);
 
-      store("nested").setUsing(
+      store('nested').setUsing(
         (_state, left, right) => {
           const newState = new InnerState(2);
           newState.left = left;
@@ -435,75 +427,75 @@ describe("StoreObject", () => {
       expect(store.state().nested.right!.state).toBe(4);
     });
 
-    it("is OK having `undefined` returned", () => {
-      store("optional").set(new InnerState());
+    it('is OK having `undefined` returned', () => {
+      store('optional').set(new InnerState());
 
       expect(store.state().optional).not.toBe(undefined);
-      store("optional").setUsing(() => undefined);
+      store('optional').setUsing(() => undefined);
       expect(store.state().optional).toBe(undefined);
     });
 
-    it("is OK having the same object returned", () => {
+    it('is OK having the same object returned', () => {
       const origState = store.state();
       store.setUsing(identity);
       expect(store.state()).toBe(origState);
     });
 
-    it("prints a message and is not called when the state is missing", () => {
+    it('prints a message and is not called when the state is missing', () => {
       const op = jasmine.createSpy();
-      store<"optional", InnerState>("optional")("left").setUsing(op);
+      store<'optional', InnerState>('optional')('left').setUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        "testKey.optional is null or undefined (during [set] testKey.optional.left)",
+        'testKey.optional is null or undefined (during [set] testKey.optional.left)',
       );
     });
 
-    it("uses the name of the passed-in function in the action", () => {
+    it('uses the name of the passed-in function in the action', () => {
       function myCustomFunction(state: State) {
         return state;
       }
 
       let lastEmitted: Action;
-      backingStore.addReducer("testKey", (state = {}, action) => {
+      backingStore.addReducer('testKey', (state = {}, action) => {
         lastEmitted = action;
         return state;
       });
 
       store.setUsing(myCustomFunction);
-      expect(lastEmitted!.type).toEqual("[set:myCustomFunction] testKey");
+      expect(lastEmitted!.type).toEqual('[set:myCustomFunction] testKey');
     });
 
-    it("does nothing when setting to the same value", () => {
+    it('does nothing when setting to the same value', () => {
       const startingState = store.state();
       const stateClone = cloneDeep(startingState);
       store.$.pipe(skip(1)).subscribe(() => {
-        fail("should not have fired");
+        fail('should not have fired');
       });
 
       store.setUsing(identity);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
-      store("counter").setUsing(identity);
+      store('counter').setUsing(identity);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
 
-      store("nested").setUsing(identity);
+      store('nested').setUsing(identity);
       expect(store.state()).toBe(startingState);
       expect(cloneDeep(store.state())).toEqual(stateClone);
     });
   });
 
-  describe(".mutateUsing()", () => {
-    it("uses the passed-in arguments", () => {
-      store("array").set([]);
+  describe('.mutateUsing()', () => {
+    it('uses the passed-in arguments', () => {
+      store('array').set([]);
 
-      store("array").mutateUsing((array) => {
+      store('array').mutateUsing((array) => {
         array!.push(1);
       });
       expect(store.state().array).toEqual([1]);
 
-      store("array").mutateUsing(
+      store('array').mutateUsing(
         (array, a, b) => {
           array!.push(a, b);
         },
@@ -513,70 +505,70 @@ describe("StoreObject", () => {
       expect(store.state().array).toEqual([1, 2, 3]);
     });
 
-    it("works when the state is undefined", () => {
-      store("optional").mutateUsing((value) => {
+    it('works when the state is undefined', () => {
+      store('optional').mutateUsing((value) => {
         expect(value).toBe(undefined);
       });
     });
 
-    it("prints a message and is not called when the state is missing", () => {
+    it('prints a message and is not called when the state is missing', () => {
       const op = jasmine.createSpy();
-      store<"optional", InnerState>("optional")("left").mutateUsing(op);
+      store<'optional', InnerState>('optional')('left').mutateUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        "testKey.optional is null or undefined (during [mutate] testKey.optional.left)",
+        'testKey.optional is null or undefined (during [mutate] testKey.optional.left)',
       );
     });
 
-    it("uses the name of the passed-in function in the action", () => {
+    it('uses the name of the passed-in function in the action', () => {
       function myCustomFunction() {}
 
       let lastEmitted: Action;
-      backingStore.addReducer("testKey", (state = {}, action) => {
+      backingStore.addReducer('testKey', (state = {}, action) => {
         lastEmitted = action;
         return state;
       });
 
       store.mutateUsing(myCustomFunction);
-      expect(lastEmitted!.type).toEqual("[mutate:myCustomFunction] testKey");
+      expect(lastEmitted!.type).toEqual('[mutate:myCustomFunction] testKey');
     });
   });
 
-  describe(".state()", () => {
-    it("works when there are no subscribers", () => {
+  describe('.state()', () => {
+    it('works when there are no subscribers', () => {
       expect(store.state().nested.state).toBe(0);
-      expect(store("nested").state().state).toBe(0);
-      expect(store("nested")("state").state()).toBe(0);
+      expect(store('nested').state().state).toBe(0);
+      expect(store('nested')('state').state()).toBe(0);
 
-      store("nested")("state").set(1);
+      store('nested')('state').set(1);
       expect(store.state().nested.state).toBe(1);
-      expect(store("nested").state().state).toBe(1);
-      expect(store("nested")("state").state()).toBe(1);
+      expect(store('nested').state().state).toBe(1);
+      expect(store('nested')('state').state()).toBe(1);
     });
 
-    it("gets the in-progress value of a batch", () => {
+    it('gets the in-progress value of a batch', () => {
       store.batch(() => {
-        store("counter").set(1);
+        store('counter').set(1);
         expect(store.state().counter).toBe(1);
 
-        store("counter").set(2);
+        store('counter').set(2);
         expect(store.state().counter).toBe(2);
       });
     });
 
-    it("gets the new subvalue even when it has a later subscriber (production bug)", () => {
+    it('gets the new subvalue even when it has a later subscriber (production bug)', () => {
       let expectedValue: InnerState | undefined;
       store.$.subscribe(() => {
-        expect(store("optional").state()).toBe(expectedValue);
+        expect(store('optional').state()).toBe(expectedValue);
       });
-      store("optional").$.subscribe();
+      store('optional').$.subscribe();
 
       expectedValue = new InnerState();
-      store("optional").set(expectedValue);
+      store('optional').set(expectedValue);
     });
 
-    it("works on a second store that subscribed later (production bug)", () => {
-      const store2 = new AppStore(backingStore, "testKey2", new State());
+    it('works on a second store that subscribed later (production bug)', () => {
+      const store2 = new AppStore(backingStore, 'testKey2', new State());
       let store2value = -1;
       store.$.subscribe(() => {
         store2value = store2.state().counter;
@@ -584,80 +576,69 @@ describe("StoreObject", () => {
       store2.$.subscribe();
 
       store.batch((batch) => {
-        batch("counter").set(3);
-        store2("counter")
-          .inBatch(batch)
-          .set(3);
+        batch('counter').set(3);
+        store2('counter').inBatch(batch).set(3);
       });
 
       expect(store2value).toBe(3);
     });
   });
 
-  describe(".withCaching()", () => {
-    it("caches descendant stores", () => {
-      expect(store("counter")).not.toBe(store("counter"));
-      expect(store("nested")("left")).not.toBe(store("nested")("left"));
+  describe('.withCaching()', () => {
+    it('caches descendant stores', () => {
+      expect(store('counter')).not.toBe(store('counter'));
+      expect(store('nested')('left')).not.toBe(store('nested')('left'));
 
       const cachingStore = store.withCaching();
-      expect(cachingStore("counter")).toBe(cachingStore("counter"));
-      expect(cachingStore("nested")("left")).toBe(
-        cachingStore("nested")("left"),
+      expect(cachingStore('counter')).toBe(cachingStore('counter'));
+      expect(cachingStore('nested')('left')).toBe(
+        cachingStore('nested')('left'),
       );
     });
 
-    it("accepts a boolean, too", () => {
+    it('accepts a boolean, too', () => {
       const withCaching = store.withCaching(true);
-      expect(withCaching("counter")).toBe(withCaching("counter"));
+      expect(withCaching('counter')).toBe(withCaching('counter'));
 
       const without = withCaching.withCaching(false);
-      expect(without("counter")).not.toBe(without("counter"));
+      expect(without('counter')).not.toBe(without('counter'));
     });
 
-    it("does not affect the source store object", () => {
+    it('does not affect the source store object', () => {
       store.withCaching();
-      expect(store("counter")).not.toBe(store("counter"));
+      expect(store('counter')).not.toBe(store('counter'));
     });
   });
 
-  describe(".caches()", () => {
-    it("indicates whether the store uses caching", () => {
+  describe('.caches()', () => {
+    it('indicates whether the store uses caching', () => {
       expect(store.caches()).toBe(false);
       expect(store.withCaching().caches()).toBe(true);
-      expect(
-        store
-          .withCaching()("nested")
-          .caches(),
-      ).toBe(true);
-      expect(
-        store
-          .withCaching(true)
-          .withCaching(false)
-          .caches(),
-      ).toBe(false);
+      expect(store.withCaching()('nested').caches()).toBe(true);
+      expect(store.withCaching(true).withCaching(false).caches()).toBe(false);
     });
   });
 
-  describe(".refersToSameStateAs()", () => {
-    it("works", () => {
+  describe('.refersToSameStateAs()', () => {
+    it('works', () => {
       expect(store.refersToSameStateAs(store)).toBe(true);
       expect(
-        store("counter").refersToSameStateAs(store("nested")("state")),
+        store('counter').refersToSameStateAs(store('nested')('state')),
       ).toBe(false);
       expect(
-        store("nested")("left").refersToSameStateAs(store("nested")("left")),
+        store('nested')('left').refersToSameStateAs(store('nested')('left')),
       ).toBe(true);
       expect(
-        store("nested")("left").refersToSameStateAs(store("nested")("right")),
+        store('nested')('left').refersToSameStateAs(store('nested')('right')),
       ).toBe(false);
       expect(
         store.refersToSameStateAs(
-          new AppStore(backingStore, "testKey", new State()),
+          new AppStore(backingStore, 'testKey', new State()),
         ),
       ).toBe(true);
       expect(
         store.refersToSameStateAs(
-          new AppStore(backingStore, "testKey2", new State()),
+          new AppStore(backingStore, 'testKey2', new State()),
         ),
       ).toBe(false);
     });

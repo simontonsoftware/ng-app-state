@@ -1,6 +1,6 @@
-import { Directive, ElementRef, Injector } from "@angular/core";
-import { ControlValueAccessor } from "@angular/forms";
-import { noop } from "micro-dash";
+import { Directive, ElementRef, Injector } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { noop } from 'micro-dash';
 
 /** @hidden */
 @Directive()

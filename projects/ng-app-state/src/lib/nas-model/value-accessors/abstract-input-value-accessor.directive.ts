@@ -1,18 +1,18 @@
-import { Directive, HostListener } from "@angular/core";
-import { AbstractValueAccessorDirective } from "./abstract-value-accessor.directive";
+import { Directive, HostListener } from '@angular/core';
+import { AbstractValueAccessorDirective } from './abstract-value-accessor.directive';
 
 /** @hidden */
 @Directive()
 export abstract class AbstractInputValueAccessorDirective extends AbstractValueAccessorDirective<
   HTMLInputElement
 > {
-  @HostListener("change")
-  @HostListener("input")
+  @HostListener('change')
+  @HostListener('input')
   onChange() {
     this.onChangeFn(this.element.value);
   }
 
-  @HostListener("blur")
+  @HostListener('blur')
   onBlur() {
     this.onTouchedFn();
   }

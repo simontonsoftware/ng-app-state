@@ -1,4 +1,4 @@
-import { Type } from "@angular/core";
+import { Type } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -6,10 +6,10 @@ import {
   flushMicrotasks,
   TestBed,
   tick,
-} from "@angular/core/testing";
-import { FormsModule } from "@angular/forms";
-import { By } from "@angular/platform-browser";
-import { StoreModule } from "@ngrx/store";
+} from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { StoreModule } from '@ngrx/store';
 import {
   CityComponent,
   citySelectWithCustomCompareFnTemplate,
@@ -25,9 +25,9 @@ import {
   NameStore,
   SingleValueComponent,
   SingleValueStore,
-} from "../../test-helpers";
-import { ngAppStateReducer } from "../ng-app-state-reducer";
-import { NasModelModule } from "./nas-model.module";
+} from '../../test-helpers';
+import { ngAppStateReducer } from '../ng-app-state-reducer';
+import { NasModelModule } from './nas-model.module';
 
 let fixture: ComponentFixture<any>;
 
@@ -58,7 +58,7 @@ function initTest<C, S>(
   storeType: Type<S>,
   {
     extraDirectives = [] as Array<Type<any>>,
-    template = "",
+    template = '',
     beforeCreate = () => {},
   } = {},
 ) {
@@ -81,55 +81,55 @@ function initTest<C, S>(
 }
 
 // Adapted from https://github.com/angular/angular/blob/master/packages/forms/test/value_accessor_integration_spec.ts
-describe("value accessors", () => {
-  it("should support <input> without type", () => {
+describe('value accessors', () => {
+  it('should support <input> without type', () => {
     const store = initSingleValueTest(`<input [nasModel]="store">`);
     detectChanges();
 
     // model -> view
-    const input = query("input");
-    expect(input.value).toEqual("old");
+    const input = query('input');
+    expect(input.value).toEqual('old');
 
-    input.value = "new";
-    dispatchEvent(input, "input");
+    input.value = 'new';
+    dispatchEvent(input, 'input');
 
     // view -> model
-    expect(store.state()).toEqual("new");
+    expect(store.state()).toEqual('new');
   });
 
-  it("should support <input type=text>", () => {
+  it('should support <input type=text>', () => {
     const store = initSingleValueTest(`<input type="text" [nasModel]="store">`);
     detectChanges();
 
     // model -> view
-    const input = query("input");
-    expect(input.value).toEqual("old");
+    const input = query('input');
+    expect(input.value).toEqual('old');
 
-    input.value = "new";
-    dispatchEvent(input, "input");
+    input.value = 'new';
+    dispatchEvent(input, 'input');
 
     // view -> model
-    expect(store.state()).toEqual("new");
+    expect(store.state()).toEqual('new');
   });
 
-  it("should support <textarea>", () => {
+  it('should support <textarea>', () => {
     const store = initSingleValueTest(
       `<textarea [nasModel]="store"></textarea>`,
     );
     detectChanges();
 
     // model -> view
-    const textarea = query("textarea");
-    expect(textarea.value).toEqual("old");
+    const textarea = query('textarea');
+    expect(textarea.value).toEqual('old');
 
-    textarea.value = "new";
-    dispatchEvent(textarea, "input");
+    textarea.value = 'new';
+    dispatchEvent(textarea, 'input');
 
     // view -> model
-    expect(store.state()).toEqual("new");
+    expect(store.state()).toEqual('new');
   });
 
-  it("should support <type=checkbox>", () => {
+  it('should support <type=checkbox>', () => {
     const store = initSingleValueTest(
       `<input type="checkbox" [nasModel]="store">`,
     );
@@ -137,17 +137,17 @@ describe("value accessors", () => {
     detectChanges();
 
     // model -> view
-    const input = query("input");
+    const input = query('input');
     expect(input.checked).toBe(true);
 
     input.checked = false;
-    dispatchEvent(input, "change");
+    dispatchEvent(input, 'change');
 
     // view -> model
     expect(store.state()).toBe(false);
   });
 
-  describe("should support <type=number>", () => {
+  describe('should support <type=number>', () => {
     let store: SingleValueStore;
 
     beforeEach(() => {
@@ -156,67 +156,67 @@ describe("value accessors", () => {
       fixture.detectChanges();
     });
 
-    it("with basic use case", () => {
+    it('with basic use case', () => {
       // model -> view
-      const input = query("input");
-      expect(input.value).toEqual("10");
+      const input = query('input');
+      expect(input.value).toEqual('10');
 
-      input.value = "20";
-      dispatchEvent(input, "input");
+      input.value = '20';
+      dispatchEvent(input, 'input');
 
       // view -> model
       expect(store.state()).toEqual(20);
     });
 
-    it("when value is cleared in the UI", () => {
-      const input = query("input");
-      input.value = "";
-      dispatchEvent(input, "input");
+    it('when value is cleared in the UI', () => {
+      const input = query('input');
+      input.value = '';
+      dispatchEvent(input, 'input');
 
       expect(store.state()).toEqual(null);
 
-      input.value = "0";
-      dispatchEvent(input, "input");
+      input.value = '0';
+      dispatchEvent(input, 'input');
 
       expect(store.state()).toEqual(0);
     });
 
-    it("when value is cleared programmatically", () => {
+    it('when value is cleared programmatically', () => {
       store.set(null);
 
-      const input = query("input");
-      expect(input.value).toEqual("");
+      const input = query('input');
+      expect(input.value).toEqual('');
     });
   });
 
-  describe("select controls", () => {
-    describe("in template-driven forms", () => {
-      it("with option values that are objects", fakeAsync(() => {
+  describe('select controls', () => {
+    describe('in template-driven forms', () => {
+      it('with option values that are objects', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore);
-        const cities = [{ name: "SF" }, { name: "NYC" }, { name: "Buffalo" }];
+        const cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'Buffalo' }];
         store.set({ cities, selectedCity: cities[1] });
         detectChanges();
         tick();
 
-        const select = query("select");
-        const nycOption = queryAll("option")[1];
+        const select = query('select');
+        const nycOption = queryAll('option')[1];
 
         // model -> view
-        expect(select.value).toEqual("1: Object");
+        expect(select.value).toEqual('1: Object');
         expect(nycOption.selected).toBe(true);
 
-        select.value = "2: Object";
-        dispatchEvent(select, "change");
+        select.value = '2: Object';
+        dispatchEvent(select, 'change');
         detectChanges();
         tick();
 
         // view -> model
-        expect(store.state().selectedCity.name).toEqual("Buffalo");
+        expect(store.state().selectedCity.name).toEqual('Buffalo');
       }));
 
-      it("when new options are added", fakeAsync(() => {
+      it('when new options are added', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore);
-        const cities = [{ name: "SF" }, { name: "NYC" }];
+        const cities = [{ name: 'SF' }, { name: 'NYC' }];
         store.set({
           cities,
           selectedCity: cities[1],
@@ -224,7 +224,7 @@ describe("value accessors", () => {
         detectChanges();
         tick();
 
-        const newCity = { name: "Buffalo" };
+        const newCity = { name: 'Buffalo' };
         store.set({
           cities: [...cities, newCity],
           selectedCity: newCity,
@@ -232,15 +232,15 @@ describe("value accessors", () => {
         detectChanges();
         tick();
 
-        const select = query("select");
-        const buffalo = queryAll("option")[2];
-        expect(select.value).toEqual("2: Object");
+        const select = query('select');
+        const buffalo = queryAll('option')[2];
+        expect(select.value).toEqual('2: Object');
         expect(buffalo.selected).toBe(true);
       }));
 
-      it("when options are removed", fakeAsync(() => {
+      it('when options are removed', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore);
-        const cities = [{ name: "SF" }, { name: "NYC" }];
+        const cities = [{ name: 'SF' }, { name: 'NYC' }];
         store.set({
           cities,
           selectedCity: cities[1],
@@ -248,21 +248,21 @@ describe("value accessors", () => {
         detectChanges();
         tick();
 
-        const select = query("select");
-        expect(select.value).toEqual("1: Object");
+        const select = query('select');
+        expect(select.value).toEqual('1: Object');
 
-        store("cities").mutateUsing((state) => {
+        store('cities').mutateUsing((state) => {
           state.pop();
         });
         detectChanges();
         tick();
 
-        expect(select.value).not.toEqual("1: Object");
+        expect(select.value).not.toEqual('1: Object');
       }));
 
-      it("when option values have same content, but different identities", fakeAsync(() => {
+      it('when option values have same content, but different identities', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore);
-        const cities = [{ name: "SF" }, { name: "NYC" }, { name: "NYC" }];
+        const cities = [{ name: 'SF' }, { name: 'NYC' }, { name: 'NYC' }];
         store.set({
           cities,
           selectedCity: cities[0],
@@ -270,80 +270,89 @@ describe("value accessors", () => {
         detectChanges();
         tick();
 
-        store("selectedCity").set(cities[2]);
+        store('selectedCity').set(cities[2]);
         detectChanges();
         tick();
 
-        const select = query("select");
-        const secondNYC = queryAll("option")[2];
-        expect(select.value).toEqual("2: Object");
+        const select = query('select');
+        const secondNYC = queryAll('option')[2];
+        expect(select.value).toEqual('2: Object');
         expect(secondNYC.selected).toBe(true);
       }));
 
-      it("should work with null option", fakeAsync(() => {
+      it('should work with null option', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore, {
           template: citySelectWithNullTemplate,
         });
         store.set({
-          cities: [{ name: "SF" }, { name: "NYC" }],
+          cities: [{ name: 'SF' }, { name: 'NYC' }],
           selectedCity: null,
         });
         detectChanges();
         tick();
 
-        const select = query("select");
+        const select = query('select');
 
-        select.value = "2: Object";
-        dispatchEvent(select, "change");
+        select.value = '2: Object';
+        dispatchEvent(select, 'change');
         detectChanges();
         tick();
-        expect(store.state().selectedCity.name).toEqual("NYC");
+        expect(store.state().selectedCity.name).toEqual('NYC');
 
-        select.value = "0: null";
-        dispatchEvent(select, "change");
+        select.value = '0: null';
+        dispatchEvent(select, 'change');
         detectChanges();
         tick();
         expect(store.state().selectedCity).toEqual(null!);
       }));
 
-      it("should compare options using provided compareWith function", fakeAsync(() => {
+      it('should compare options using provided compareWith function', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore, {
           template: citySelectWithCustomCompareFnTemplate,
         });
         store.set({
-          selectedCity: { id: 1, name: "SF" },
-          cities: [{ id: 1, name: "SF" }, { id: 2, name: "LA" }],
+          selectedCity: { id: 1, name: 'SF' },
+          cities: [
+            { id: 1, name: 'SF' },
+            { id: 2, name: 'LA' },
+          ],
         });
         detectChanges();
         tick();
 
-        const select = query("select");
-        const sfOption = query("option");
-        expect(select.value).toEqual("0: Object");
+        const select = query('select');
+        const sfOption = query('option');
+        expect(select.value).toEqual('0: Object');
         expect(sfOption.selected).toBe(true);
       }));
 
-      it("should support re-assigning the options array with compareWith", fakeAsync(() => {
+      it('should support re-assigning the options array with compareWith', fakeAsync(() => {
         const store = initTest(CityComponent, CityStore, {
           template: citySelectWithCustomCompareFnTemplate,
         });
         store.set({
-          selectedCity: { id: 1, name: "SF" },
-          cities: [{ id: 1, name: "SF" }, { id: 2, name: "NY" }],
+          selectedCity: { id: 1, name: 'SF' },
+          cities: [
+            { id: 1, name: 'SF' },
+            { id: 2, name: 'NY' },
+          ],
         });
         detectChanges();
         tick();
 
         // Option IDs start out as 0 and 1, so setting the select value to "1: Object"
         // will select the second option (NY).
-        const select = query("select");
-        select.value = "1: Object";
-        dispatchEvent(select, "change");
+        const select = query('select');
+        select.value = '1: Object';
+        dispatchEvent(select, 'change');
         detectChanges();
 
-        expect(store.state().selectedCity).toEqual({ id: 2, name: "NY" });
+        expect(store.state().selectedCity).toEqual({ id: 2, name: 'NY' });
 
-        store("cities").set([{ id: 1, name: "SF" }, { id: 2, name: "NY" }]);
+        store('cities').set([
+          { id: 1, name: 'SF' },
+          { id: 2, name: 'NY' },
+        ]);
         detectChanges();
         tick();
 
@@ -351,23 +360,23 @@ describe("value accessors", () => {
         // be created by ngFor. These instances will have different option IDs, subsequent
         // to the first: 2 and 3. For the second option to stay selected, the select
         // value will need to have the ID of the current second option: 3.
-        const nyOption = queryAll("option")[1];
-        expect(select.value).toEqual("3: Object");
+        const nyOption = queryAll('option')[1];
+        expect(select.value).toEqual('3: Object');
         expect(nyOption.selected).toBe(true);
       }));
     });
   });
 
-  describe("select multiple controls", () => {
-    describe("in template-driven forms", () => {
+  describe('select multiple controls', () => {
+    describe('in template-driven forms', () => {
       let store: MultipleCityStore;
 
       beforeEach(() => {
         store = initTest(MultipleCityComponent, MultipleCityStore);
-        store("cities").set([
-          { name: "SF" },
-          { name: "NYC" },
-          { name: "Buffalo" },
+        store('cities').set([
+          { name: 'SF' },
+          { name: 'NYC' },
+          { name: 'Buffalo' },
         ]);
       });
 
@@ -377,24 +386,24 @@ describe("value accessors", () => {
       };
 
       const setSelectedCities = (selectedCities: any): void => {
-        store("selectedCities").set(selectedCities);
+        store('selectedCities').set(selectedCities);
         detectChangesAndTick();
       };
 
       const selectOptionViaUI = (valueString: string): void => {
-        const select = query("select");
+        const select = query('select');
         select.value = valueString;
-        dispatchEvent(select, "change");
+        dispatchEvent(select, 'change');
         detectChangesAndTick();
       };
 
       const assertOptionElementSelectedState = (
         selectedStates: boolean[],
       ): void => {
-        const options = queryAll("option");
+        const options = queryAll('option');
         if (options.length !== selectedStates.length) {
           throw new Error(
-            "the selected state values to assert does not match the number of options",
+            'the selected state values to assert does not match the number of options',
           );
         }
         for (let i = 0; i < selectedStates.length; i++) {
@@ -402,27 +411,27 @@ describe("value accessors", () => {
         }
       };
 
-      it("should reflect state of model after option selected and new options subsequently added", fakeAsync(() => {
+      it('should reflect state of model after option selected and new options subsequently added', fakeAsync(() => {
         setSelectedCities([]);
 
-        selectOptionViaUI("1: Object");
+        selectOptionViaUI('1: Object');
         assertOptionElementSelectedState([false, true, false]);
 
-        store("cities").mutateUsing((cities) => {
-          cities.push({ name: "Chicago" });
+        store('cities').mutateUsing((cities) => {
+          cities.push({ name: 'Chicago' });
         });
         detectChangesAndTick();
 
         assertOptionElementSelectedState([false, true, false, false]);
       }));
 
-      it("should reflect state of model after option selected and then other options removed", fakeAsync(() => {
+      it('should reflect state of model after option selected and then other options removed', fakeAsync(() => {
         setSelectedCities([]);
 
-        selectOptionViaUI("1: Object");
+        selectOptionViaUI('1: Object');
         assertOptionElementSelectedState([false, true, false]);
 
-        store("cities").mutateUsing((cities) => {
+        store('cities').mutateUsing((cities) => {
           cities.pop();
         });
         detectChangesAndTick();
@@ -431,11 +440,14 @@ describe("value accessors", () => {
       }));
     });
 
-    it("should compare options using provided compareWith function", fakeAsync(() => {
+    it('should compare options using provided compareWith function', fakeAsync(() => {
       const store = initTest(MultipleCityComponent, MultipleCityStore, {
         template: multipleCityWithCustomCompareFnTemplate,
       });
-      const cities = [{ id: 1, name: "SF" }, { id: 2, name: "LA" }];
+      const cities = [
+        { id: 1, name: 'SF' },
+        { id: 2, name: 'LA' },
+      ];
       store.assign({
         cities,
         selectedCities: [cities[0]],
@@ -443,103 +455,103 @@ describe("value accessors", () => {
       detectChanges();
       tick();
 
-      const select = query("select");
-      const sfOption = query("option");
-      expect(select.value).toEqual("0: Object");
+      const select = query('select');
+      const sfOption = query('option');
+      expect(select.value).toEqual('0: Object');
       expect(sfOption.selected).toBe(true);
     }));
   });
 
-  describe("should support <type=radio>", () => {
-    describe("in template-driven forms", () => {
-      it("should support basic functionality", fakeAsync(() => {
+  describe('should support <type=radio>', () => {
+    describe('in template-driven forms', () => {
+      it('should support basic functionality', fakeAsync(() => {
         const store = initTest(MenuComponent, MenuStore);
-        store("food").set("fish");
+        store('food').set('fish');
         detectChanges();
         tick();
 
         // model -> view
-        const inputs = queryAll("input");
+        const inputs = queryAll('input');
         expect(inputs[0].checked).toEqual(false);
         expect(inputs[1].checked).toEqual(true);
 
-        dispatchEvent(inputs[0], "change");
+        dispatchEvent(inputs[0], 'change');
         tick();
 
         // view -> model
-        expect(store.state().food).toEqual("chicken");
+        expect(store.state().food).toEqual('chicken');
         expect(inputs[1].checked).toEqual(false);
       }));
 
-      it("should support multiple named <type=radio> groups", fakeAsync(() => {
+      it('should support multiple named <type=radio> groups', fakeAsync(() => {
         const store = initTest(MenuComponent, MenuStore);
-        store.assign({ food: "fish", drink: "sprite" });
+        store.assign({ food: 'fish', drink: 'sprite' });
         detectChanges();
         tick();
 
-        const inputs = queryAll("input");
+        const inputs = queryAll('input');
         expect(inputs[0].checked).toEqual(false);
         expect(inputs[1].checked).toEqual(true);
         expect(inputs[2].checked).toEqual(false);
         expect(inputs[3].checked).toEqual(true);
 
-        dispatchEvent(inputs[0], "change");
+        dispatchEvent(inputs[0], 'change');
         tick();
 
-        expect(store.state().food).toEqual("chicken");
-        expect(store.state().drink).toEqual("sprite");
+        expect(store.state().food).toEqual('chicken');
+        expect(store.state().drink).toEqual('sprite');
         expect(inputs[1].checked).toEqual(false);
         expect(inputs[2].checked).toEqual(false);
         expect(inputs[3].checked).toEqual(true);
       }));
 
-      it("should support initial undefined value", fakeAsync(() => {
+      it('should support initial undefined value', fakeAsync(() => {
         initTest(MenuComponent, MenuStore);
         detectChanges();
         tick();
 
-        const inputs = queryAll("input");
+        const inputs = queryAll('input');
         expect(inputs[0].checked).toEqual(false);
         expect(inputs[1].checked).toEqual(false);
         expect(inputs[2].checked).toEqual(false);
         expect(inputs[3].checked).toEqual(false);
       }));
 
-      it("should support resetting properly", fakeAsync(() => {
+      it('should support resetting properly', fakeAsync(() => {
         const store = initTest(MenuComponent, MenuStore);
-        store("food").set("chicken");
+        store('food').set('chicken');
         detectChanges();
         tick();
 
-        const form = query("form");
+        const form = query('form');
         form.reset();
         detectChanges();
         tick();
 
-        const inputs = queryAll("input");
+        const inputs = queryAll('input');
         expect(inputs[0].checked).toEqual(false);
         expect(inputs[1].checked).toEqual(false);
       }));
 
-      it("should support setting value to null and undefined", fakeAsync(() => {
+      it('should support setting value to null and undefined', fakeAsync(() => {
         const store = initTest(MenuComponent, MenuStore);
-        store("food").set("chicken");
+        store('food').set('chicken');
         detectChanges();
         tick();
 
-        store("food").set(null!);
+        store('food').set(null!);
         detectChanges();
         tick();
 
-        const inputs = queryAll("input");
+        const inputs = queryAll('input');
         expect(inputs[0].checked).toEqual(false);
         expect(inputs[1].checked).toEqual(false);
 
-        store("food").set("chicken");
+        store('food').set('chicken');
         detectChanges();
         tick();
 
-        store("food").set(undefined!);
+        store('food').set(undefined!);
         detectChanges();
         tick();
         expect(inputs[0].checked).toEqual(false);
@@ -569,9 +581,9 @@ describe("value accessors", () => {
     });
   });
 
-  describe("should support <type=range>", () => {
-    describe("in template-driven forms", () => {
-      it("with basic use case", fakeAsync(() => {
+  describe('should support <type=range>', () => {
+    describe('in template-driven forms', () => {
+      it('with basic use case', fakeAsync(() => {
         const store = initTest(SingleValueComponent, SingleValueStore, {
           template: `<input type="range" [nasModel]="store">`,
         });
@@ -580,45 +592,45 @@ describe("value accessors", () => {
         store.set(4);
         detectChanges();
         tick();
-        const input = query("input");
-        expect(input.value).toBe("4");
+        const input = query('input');
+        expect(input.value).toBe('4');
         detectChanges();
         tick();
-        const newVal = "4";
+        const newVal = '4';
         fixture.debugElement
-          .query(By.css("input"))
-          .triggerEventHandler("input", { target: { value: newVal } });
+          .query(By.css('input'))
+          .triggerEventHandler('input', { target: { value: newVal } });
         tick();
 
         // view -> model
         detectChanges();
-        expect(typeof store.state()).toBe("number");
+        expect(typeof store.state()).toBe('number');
       }));
     });
   });
 
-  describe("custom value accessors", () => {
-    describe("in template-driven forms", () => {
-      it("should support standard writing to view and model", async(() => {
+  describe('custom value accessors', () => {
+    describe('in template-driven forms', () => {
+      it('should support standard writing to view and model', async(() => {
         const store = initTest(NameComponent, NameStore, {
           extraDirectives: [InnerNameComponent],
         });
 
-        store("name").set("Nancy");
+        store('name').set('Nancy');
         detectChanges();
         fixture.whenStable().then(() => {
           detectChanges();
           fixture.whenStable().then(() => {
             // model -> view
             const customInput = query('[name="custom"]');
-            expect(customInput.value).toEqual("Nancy");
+            expect(customInput.value).toEqual('Nancy');
 
-            customInput.value = "Carson";
-            dispatchEvent(customInput, "input");
+            customInput.value = 'Carson';
+            dispatchEvent(customInput, 'input');
             detectChanges();
 
             // view -> model
-            expect(store.state().name).toEqual("Carson");
+            expect(store.state().name).toEqual('Carson');
           });
         });
       }));
@@ -627,34 +639,34 @@ describe("value accessors", () => {
 });
 
 // `nasModel` is tested pretty thoroughly above, by the tests adapted from angular's suite. Here we hit a few more cases to complete code coverage.
-describe("nasModel", () => {
-  it("can bind to different store objects over time", fakeAsync(() => {
+describe('nasModel', () => {
+  it('can bind to different store objects over time', fakeAsync(() => {
     const store = initTest(MenuComponent, MenuStore, {
       template: `<input [nasModel]="textStore">`,
     });
-    store.assign({ food: "chicken", drink: "coke" });
-    const input = query("input");
+    store.assign({ food: 'chicken', drink: 'coke' });
+    const input = query('input');
 
-    fixture.componentInstance.textStore = store("food");
+    fixture.componentInstance.textStore = store('food');
     detectChanges();
-    expect(input.value).toEqual("chicken");
-    input.value = "pork";
-    dispatchEvent(input, "input");
+    expect(input.value).toEqual('chicken');
+    input.value = 'pork';
+    dispatchEvent(input, 'input');
 
-    fixture.componentInstance.textStore = store("drink");
+    fixture.componentInstance.textStore = store('drink');
     detectChanges();
-    expect(input.value).toEqual("coke");
+    expect(input.value).toEqual('coke');
 
-    fixture.componentInstance.textStore = store("food");
+    fixture.componentInstance.textStore = store('food');
     detectChanges();
-    expect(input.value).toEqual("pork");
+    expect(input.value).toEqual('pork');
   }));
 
-  it("warns about inefficient template bindings", fakeAsync(() => {
+  it('warns about inefficient template bindings', fakeAsync(() => {
     const store = initSingleValueTest(`<input [nasModel]="store('inner')">`);
     detectChanges();
 
-    const warn = spyOn(console, "warn");
+    const warn = spyOn(console, 'warn');
 
     detectChanges();
     expect(warn).not.toHaveBeenCalled();
@@ -667,11 +679,11 @@ describe("nasModel", () => {
     detectChanges();
     expect(warn).toHaveBeenCalledTimes(2);
     expect(warn).toHaveBeenCalledWith(
-      "nasModel was updated with a new store object that is equivalent to the old one. Cache the value bound to nasModel for better performance, e.g. using `StoreObject.withCaching()`.",
+      'nasModel was updated with a new store object that is equivalent to the old one. Cache the value bound to nasModel for better performance, e.g. using `StoreObject.withCaching()`.',
     );
   }));
 
-  it("can control disabledness", fakeAsync(() => {
+  it('can control disabledness', fakeAsync(() => {
     const store = initSingleValueTest(`
       <input
         type="number"
@@ -680,7 +692,7 @@ describe("nasModel", () => {
       />
     `);
     store.set({ num: 2, disabled: true });
-    const input = query("input");
+    const input = query('input');
 
     detectChanges();
     flushMicrotasks();

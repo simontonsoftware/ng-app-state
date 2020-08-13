@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { AppStore } from "ng-app-state";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppStore } from 'ng-app-state';
 import {
   DeepState,
   runDeep,
   subscribeDeep,
-} from "../../../projects/ng-app-state/src/performance/deep-performance";
+} from '../../../projects/ng-app-state/src/performance/deep-performance';
 
 @Component({
-  selector: "app-deep-performance",
-  templateUrl: "./deep-performance.component.html",
+  selector: 'app-deep-performance',
+  templateUrl: './deep-performance.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeepPerformanceComponent {
@@ -21,7 +21,7 @@ export class DeepPerformanceComponent {
   run() {
     const store: any = new AppStore(
       this.ngrxStore,
-      "testKey",
+      'testKey',
       new DeepState(this.depth),
     );
     const { subscription } = subscribeDeep(store);

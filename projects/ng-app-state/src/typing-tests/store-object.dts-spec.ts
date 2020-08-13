@@ -1,5 +1,5 @@
-import { Store } from "@ngrx/store";
-import { AppStore } from "../public-api";
+import { Store } from '@ngrx/store';
+import { AppStore } from '../public-api';
 
 class State {
   a: number;
@@ -8,15 +8,15 @@ class State {
   ary: Array<boolean>;
 }
 
-const store = new AppStore<State>({} as Store, "", new State());
+const store = new AppStore<State>({} as Store, '', new State());
 
 // $ExpectType StoreObject<number>
-store("a");
+store('a');
 // $ExpectType StoreObject<{ c: Date; }>
-store("obj");
+store('obj');
 // $ExpectType StoreObject<Date>
-store("obj")("c");
+store('obj')('c');
 // $ExpectType StoreObject<boolean[]>
-store("ary");
+store('ary');
 // $ExpectType StoreObject<boolean>
-store("ary")(1);
+store('ary')(1);

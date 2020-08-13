@@ -1,10 +1,10 @@
-import { Directive } from "@angular/core";
-import { provideValueAccessor } from "s-ng-utils";
-import { AbstractInputValueAccessorDirective } from "./abstract-input-value-accessor.directive";
+import { Directive } from '@angular/core';
+import { provideValueAccessor } from 's-ng-utils';
+import { AbstractInputValueAccessorDirective } from './abstract-input-value-accessor.directive';
 
 /** @hidden */
 @Directive({
-  selector: "input[type=radio][nasModel]",
+  selector: 'input[type=radio][nasModel]',
   providers: [provideValueAccessor(RadioValueAccessorDirective)],
 })
 export class RadioValueAccessorDirective extends AbstractInputValueAccessorDirective {

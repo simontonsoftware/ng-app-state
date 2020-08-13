@@ -1,8 +1,8 @@
-import { Action, Store } from "@ngrx/store";
-import { bindKey } from "micro-dash";
-import { Observable, Subject } from "rxjs";
-import { TreeBasedObservableFactory } from "./tree-based-observable/tree-based-observable-factory";
-import { StoreObject } from "./store-object";
+import { Action, Store } from '@ngrx/store';
+import { bindKey } from 'micro-dash';
+import { Observable, Subject } from 'rxjs';
+import { TreeBasedObservableFactory } from './tree-based-observable/tree-based-observable-factory';
+import { StoreObject } from './store-object';
 
 export class AppStore<T extends object> extends StoreObject<T> {
   /**
@@ -17,9 +17,9 @@ export class AppStore<T extends object> extends StoreObject<T> {
     const observableFactory = TreeBasedObservableFactory.getFor(ngrxStore);
     super(
       {
-        getState: bindKey(observableFactory, "getState"),
-        getState$: bindKey(observableFactory, "getState$"),
-        dispatch: bindKey(ngrxStore, "dispatch"),
+        getState: bindKey(observableFactory, 'getState'),
+        getState$: bindKey(observableFactory, 'getState$'),
+        dispatch: bindKey(ngrxStore, 'dispatch'),
       },
       [key],
     );

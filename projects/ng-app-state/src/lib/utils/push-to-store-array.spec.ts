@@ -1,11 +1,11 @@
-import { TestBed } from "@angular/core/testing";
-import { Store, StoreModule } from "@ngrx/store";
-import { AppStore } from "../app-store";
-import { ngAppStateReducer } from "../ng-app-state-reducer";
-import { StoreObject } from "../store-object";
-import { pushToStoreArray } from "./push-to-store-array";
+import { TestBed } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
+import { AppStore } from '../app-store';
+import { ngAppStateReducer } from '../ng-app-state-reducer';
+import { StoreObject } from '../store-object';
+import { pushToStoreArray } from './push-to-store-array';
 
-describe("pushToStoreArray", () => {
+describe('pushToStoreArray', () => {
   let store: StoreObject<number[]>;
 
   beforeEach(() => {
@@ -13,10 +13,10 @@ describe("pushToStoreArray", () => {
       imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
     });
     const backingStore = TestBed.inject(Store);
-    store = new AppStore(backingStore, "testKey", [1, 2]);
+    store = new AppStore(backingStore, 'testKey', [1, 2]);
   });
 
-  it("adds the specified item to the store", () => {
+  it('adds the specified item to the store', () => {
     store.set([]);
     pushToStoreArray(store, 1);
     expect(store.state()).toEqual([1]);
@@ -26,7 +26,7 @@ describe("pushToStoreArray", () => {
     expect(store.state()).toEqual([1, 2, 17]);
   });
 
-  it("returns a store object representing the newly pushed item", () => {
+  it('returns a store object representing the newly pushed item', () => {
     store.set([]);
 
     let added = pushToStoreArray(store, 1);
@@ -38,7 +38,7 @@ describe("pushToStoreArray", () => {
     expect(store.state()).toEqual([2, -12]);
   });
 
-  it("works within a batch (production bug)", () => {
+  it('works within a batch (production bug)', () => {
     store.set([]);
     let so1: StoreObject<number>;
     let so2: StoreObject<number>;

@@ -1,12 +1,12 @@
-import { get } from "micro-dash";
-import { AppStateAction } from "./app-state-action";
+import { get } from 'micro-dash';
+import { AppStateAction } from './app-state-action';
 
 /** @hidden */
 export class BatchAction extends AppStateAction {
   private children: AppStateAction[] = [];
 
   constructor(private rootSnapshot: any) {
-    super("batch", []);
+    super('batch', []);
   }
 
   dispatch(action: AppStateAction) {

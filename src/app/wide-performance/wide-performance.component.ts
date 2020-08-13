@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { AppStore } from "ng-app-state";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppStore } from 'ng-app-state';
 import {
   runWide,
   subscribeWide,
   WideState,
-} from "../../../projects/ng-app-state/src/performance/wide-performance";
+} from '../../../projects/ng-app-state/src/performance/wide-performance';
 
 @Component({
-  selector: "app-wide-performance",
-  templateUrl: "./wide-performance.component.html",
+  selector: 'app-wide-performance',
+  templateUrl: './wide-performance.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidePerformanceComponent {
@@ -21,7 +21,7 @@ export class WidePerformanceComponent {
   run() {
     const store: any = new AppStore(
       this.ngrxStore,
-      "testKey",
+      'testKey',
       new WideState(this.width),
     );
     const { subscription } = subscribeWide(store);

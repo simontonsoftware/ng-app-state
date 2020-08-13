@@ -1,8 +1,8 @@
-import { Component, Injectable } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Store } from "@ngrx/store";
-import { AppStore } from "./lib/app-store";
-import { StoreObject } from "./lib/store-object";
+import { Component, Injectable } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppStore } from './lib/app-store';
+import { StoreObject } from './lib/store-object';
 
 class StoreComponent<T extends object> {
   store: StoreObject<T>;
@@ -21,11 +21,11 @@ class StoreComponent<T extends object> {
 @Injectable()
 export class SingleValueStore extends AppStore<any> {
   constructor(store: Store<any>) {
-    super(store, "singleValueStore", "old");
+    super(store, 'singleValueStore', 'old');
   }
 }
 
-@Component({ selector: "nas-single-value" })
+@Component({ selector: 'nas-single-value' })
 export class SingleValueComponent extends StoreComponent<any> {
   constructor(store: SingleValueStore) {
     super(store);
@@ -44,7 +44,7 @@ export class CityState {
 @Injectable()
 export class CityStore extends AppStore<CityState> {
   constructor(store: Store<any>) {
-    super(store, "cityStore", new CityState());
+    super(store, 'cityStore', new CityState());
   }
 }
 
@@ -65,7 +65,7 @@ export const citySelectWithCustomCompareFnTemplate = `
 `;
 
 @Component({
-  selector: "nas-city",
+  selector: 'nas-city',
   template: `
     <select [nasModel]="store('selectedCity')">
       <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
@@ -92,7 +92,7 @@ export class MultipleCityState {
 @Injectable()
 export class MultipleCityStore extends AppStore<MultipleCityState> {
   constructor(store: Store<any>) {
-    super(store, "mulitpleCityStore", new MultipleCityState());
+    super(store, 'mulitpleCityStore', new MultipleCityState());
   }
 }
 
@@ -109,7 +109,7 @@ export const multipleCityWithCustomCompareFnTemplate = `
 `;
 
 @Component({
-  selector: "nas-multiple-city",
+  selector: 'nas-multiple-city',
   template: `
     <select multiple [nasModel]="store('selectedCities')">
       <option *ngFor="let c of store('cities').$ | async" [ngValue]="c">
@@ -138,12 +138,12 @@ export class MenuState {
 @Injectable()
 export class MenuStore extends AppStore<MenuState> {
   constructor(store: Store<any>) {
-    super(store, "menuStore", new MenuState());
+    super(store, 'menuStore', new MenuState());
   }
 }
 
 @Component({
-  selector: "nas-menu",
+  selector: 'nas-menu',
   template: `
     <form>
       <input type="radio" [nasModel]="store('food')" value="chicken" />
@@ -172,12 +172,12 @@ export class NameState {
 @Injectable()
 export class NameStore extends AppStore<NameState> {
   constructor(store: Store<any>) {
-    super(store, "nameStore", new NameState());
+    super(store, 'nameStore', new NameState());
   }
 }
 
 @Component({
-  selector: "nas-ng-model-custom-wrapper",
+  selector: 'nas-ng-model-custom-wrapper',
   template: `
     <nas-inner-name
       [nasModel]="store('name')"
@@ -192,7 +192,7 @@ export class NameComponent extends StoreComponent<NameState> {
 }
 
 @Component({
-  selector: "nas-inner-name",
+  selector: 'nas-inner-name',
   template: `
     <input
       name="custom"

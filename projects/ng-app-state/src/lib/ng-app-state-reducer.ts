@@ -1,5 +1,5 @@
-import { ActionReducer } from "@ngrx/store";
-import { AppStateAction } from "./actions/app-state-action";
+import { ActionReducer } from '@ngrx/store';
+import { AppStateAction } from './actions/app-state-action';
 
 export function ngAppStateReducer(
   reducer: ActionReducer<any>,

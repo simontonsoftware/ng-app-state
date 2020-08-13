@@ -1,5 +1,5 @@
-import { forOwn, pull } from "micro-dash";
-import { Observable, Subscriber, Subscription } from "rxjs";
+import { forOwn, pull } from 'micro-dash';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 
 /** @hidden */
 export class ObservableNode extends Observable<any> {

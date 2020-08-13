@@ -1,10 +1,10 @@
-import { Observable, ReplaySubject } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
-import { Debouncer } from "s-js-utils";
-import { StoreObject } from "../store-object";
+import { Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { Debouncer } from 's-js-utils';
+import { StoreObject } from '../store-object';
 
 /** @hidden */
-export type UndoOrRedo = "undo" | "redo";
+export type UndoOrRedo = 'undo' | 'redo';
 
 export abstract class UndoManager<StateType, UndoStateType> {
   private stack: UndoStateType[] = [];
@@ -112,10 +112,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
    */
   undo() {
     if (!this.canUndo()) {
-      throw new Error("Cannot undo");
+      throw new Error('Cannot undo');
     }
 
-    this.changeState(-1, "undo");
+    this.changeState(-1, 'undo');
   }
 
   /**
@@ -125,10 +125,10 @@ export abstract class UndoManager<StateType, UndoStateType> {
    */
   redo() {
     if (!this.canRedo()) {
-      throw new Error("Cannot redo");
+      throw new Error('Cannot redo');
     }
 
-    this.changeState(1, "redo");
+    this.changeState(1, 'redo');
   }
 
   /**
@@ -138,7 +138,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    */
   dropCurrentUndoState() {
     if (!this.canUndo()) {
-      throw new Error("Nothing to drop");
+      throw new Error('Nothing to drop');
     }
 
     this.currentStateIndex = this.currentStateIndex - 1;

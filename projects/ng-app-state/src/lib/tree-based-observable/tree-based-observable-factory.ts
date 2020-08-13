@@ -1,7 +1,7 @@
-import { get } from "micro-dash";
-import { Observable } from "rxjs";
-import { take, tap } from "rxjs/operators";
-import { ObservableNode } from "./observable-node";
+import { get } from 'micro-dash';
+import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
+import { ObservableNode } from './observable-node';
 
 /** @hidden */
 const factories = new WeakMap<Observable<any>, TreeBasedObservableFactory>();

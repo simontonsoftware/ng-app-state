@@ -1,9 +1,9 @@
-import { Action } from "@ngrx/store";
-import { bindKey, every, isEqual, last, memoize, omit } from "micro-dash";
-import { Observable } from "rxjs";
-import { CallableObject } from "s-js-utils";
-import { BatchAction } from "./actions/batch-action";
-import { buildName, FunctionAction } from "./actions/function-action";
+import { Action } from '@ngrx/store';
+import { bindKey, every, isEqual, last, memoize, omit } from 'micro-dash';
+import { Observable } from 'rxjs';
+import { CallableObject } from 's-js-utils';
+import { BatchAction } from './actions/batch-action';
+import { buildName, FunctionAction } from './actions/function-action';
 
 /** @hidden */
 interface Client {
@@ -69,9 +69,9 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     func(
       new StoreObject(
         {
-          getState: bindKey(batch, "getState"),
+          getState: bindKey(batch, 'getState'),
           getState$: this.client.getState$,
-          dispatch: bindKey(batch, "dispatch"),
+          dispatch: bindKey(batch, 'dispatch'),
         },
         this.path,
       ),
@@ -124,7 +124,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   delete() {
     const key = last(this.path);
     this.client.dispatch(
-      new FunctionAction("delete:" + key, this.path.slice(0, -1), false, omit, [
+      new FunctionAction('delete:' + key, this.path.slice(0, -1), false, omit, [
         key,
       ]),
     );
@@ -137,7 +137,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    */
   setUsing<A extends any[]>(func: (state: T, ...args: A) => T, ...args: A) {
     this.client.dispatch(
-      new FunctionAction(buildName("set", func), this.path, false, func, args),
+      new FunctionAction(buildName('set', func), this.path, false, func, args),
     );
   }
 
@@ -152,7 +152,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   ) {
     this.client.dispatch(
       new FunctionAction(
-        buildName("mutate", func),
+        buildName('mutate', func),
         this.path,
         true,
         func,

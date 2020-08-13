@@ -164,9 +164,7 @@ This library includes the `[nasModel]` directive that you can use in place of `[
 
 ```ts
 @Component({
-  template: `
-    <input [nasModel]="nameStore" />
-  `,
+  template: ` <input [nasModel]="nameStore" /> `,
 })
 class AccountSettingsComponent {
   nameStore: StoreObject<string>;
