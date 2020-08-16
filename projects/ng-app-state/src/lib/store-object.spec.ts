@@ -446,7 +446,7 @@ describe('StoreObject', () => {
       store<'optional', InnerState>('optional')('left').setUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        'testKey.optional is null or undefined (during [set] testKey.optional.left)',
+        'testKey.optional is null or undefined (during [set:wrap] testKey.optional.left)',
       );
     });
 
@@ -516,7 +516,7 @@ describe('StoreObject', () => {
       store<'optional', InnerState>('optional')('left').mutateUsing(op);
       expect(op).not.toHaveBeenCalled();
       expect(logError).toHaveBeenCalledWith(
-        'testKey.optional is null or undefined (during [mutate] testKey.optional.left)',
+        'testKey.optional is null or undefined (during [mutate:wrap] testKey.optional.left)',
       );
     });
 
