@@ -1,6 +1,6 @@
 {
   "name": "ng-app-state",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "author": "Simonton Software",
   "license": "MIT",
   "repository": "simontonsoftware/ng-app-state",
@@ -13,7 +13,5 @@
     "s-js-utils": "^7.0.0",
     "s-rxjs-utils": "^4.0.0"
   },
-  "dependencies": {
-    "tslib": "^2.0.0"
-  }
+  "dependencies": { "tslib": "^2.0.0" }
 }

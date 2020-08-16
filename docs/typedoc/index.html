@@ -977,13 +977,13 @@ added.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// st
 				<a name="spreadarraystore_" class="tsd-anchor"></a>
 				<h3>spread<wbr>Array<wbr>Store$</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">spread<wbr>Array<wbr>Store$&lt;T&gt;<span class="tsd-signature-symbol">(</span>source<span class="tsd-signature-symbol">: </span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">spread<wbr>Array<wbr>Store$&lt;T&gt;<span class="tsd-signature-symbol">(</span>source<span class="tsd-signature-symbol">: </span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="classes/storeobject.html" class="tsd-signature-type">StoreObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/spread-array-store.ts#L26">projects/ng-app-state/src/lib/utils/spread-array-store.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/utils/spread-array-store.ts#L27">projects/ng-app-state/src/lib/utils/spread-array-store.ts:27</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -993,8 +993,8 @@ added.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// st
 							<pre><code class="language-ts"><span class="hljs-meta">@Component</span>({
   template: <span class="hljs-string">`
     &lt;hero
-      *ngFor="let heroStore of heroStores$ | async"
-      [heroStore]="heroStore"
+      *ngFor=&quot;let heroStore of heroStores$ | async&quot;
+      [heroStore]=&quot;heroStore&quot;
     &gt;&lt;/hero&gt;
   `</span>,
 })
@@ -1003,7 +1003,7 @@ added.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// st
   <span class="hljs-meta">@Input</span>() <span class="hljs-keyword">private</span> heroesStore: StoreObject&lt;<span class="hljs-built_in">Array</span>&lt;Hero&gt;&gt;;
 
   ngOnChanges() {
-    <span class="hljs-keyword">this</span>.heroStores$ = spreadArrayStore(<span class="hljs-keyword">this</span>.heroesStore);
+    <span class="hljs-built_in">this</span>.heroStores$ = spreadArrayStore(<span class="hljs-built_in">this</span>.heroesStore);
   }
 }</code></pre>
 						</div>
@@ -1034,8 +1034,8 @@ added.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// st
 <span class="hljs-meta">@Component</span>({
   template: <span class="hljs-string">`
     &lt;hero
-      *ngFor="let heroStore of heroStores$ | async"
-      [heroStore]="heroStore"
+      *ngFor=&quot;let heroStore of heroStores$ | async&quot;
+      [heroStore]=&quot;heroStore&quot;
     &gt;&lt;/hero&gt;
   `</span>,
 })
@@ -1044,7 +1044,7 @@ added.set(<span class="hljs-number">17</span>); <span class="hljs-comment">// st
   <span class="hljs-meta">@Input</span>() <span class="hljs-keyword">private</span> heroesStore: StoreObject&lt;HeroMap&gt;;
 
   ngOnChanges() {
-    <span class="hljs-keyword">this</span>.heroStores$ = spreadObjectStore(<span class="hljs-keyword">this</span>.heroesStore);
+    <span class="hljs-built_in">this</span>.heroStores$ = spreadObjectStore(<span class="hljs-built_in">this</span>.heroesStore);
   }
 }</code></pre>
 						</div>

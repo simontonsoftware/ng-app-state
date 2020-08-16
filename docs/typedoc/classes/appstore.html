@@ -1003,7 +1003,7 @@ img { max-width: 100%; }
 				<li class="tsd-description">
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/s-js-utils/lib/callable-object.d.ts:2</li>
+							<li>Defined in node_modules/s-js-utils/lib/functions/callable-object.d.ts:2</li>
 						</ul>
 					</aside>
 				</li>
@@ -1152,11 +1152,11 @@ img { max-width: 100%; }
 							</div>
 							<pre><code class="language-ts">store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>) =&gt;</span> {
   batch.assign({ key1: value1 });
-  batch(<span class="hljs-string">'key2'</span>).delete();
-  batch(<span class="hljs-string">'key3'</span>).set({ key4: value4 });
+  batch(<span class="hljs-string">&#x27;key2&#x27;</span>).delete();
+  batch(<span class="hljs-string">&#x27;key3&#x27;</span>).set({ key4: value4 });
 
-  batch(<span class="hljs-string">'key1'</span>).state(); <span class="hljs-comment">// returns `value1`</span>
-  store(<span class="hljs-string">'key1'</span>).state(); <span class="hljs-comment">// don't do this. may not return `value1`</span>
+  batch(<span class="hljs-string">&#x27;key1&#x27;</span>).state(); <span class="hljs-comment">// returns `value1`</span>
+  store(<span class="hljs-string">&#x27;key1&#x27;</span>).state(); <span class="hljs-comment">// don&#x27;t do this. may not return `value1`</span>
 });</code></pre>
 						</div>
 					</li>
@@ -1173,7 +1173,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#caches">caches</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L191">projects/ng-app-state/src/lib/store-object.ts:191</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L194">projects/ng-app-state/src/lib/store-object.ts:194</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1199,7 +1199,7 @@ img { max-width: 100%; }
 							<div class="lead">
 								<p>Removes the state represented by this store object from its parent. E.g. to remove the current user:</p>
 							</div>
-							<pre><code class="language-ts">store(<span class="hljs-string">'currentUser'</span>).delete();</code></pre>
+							<pre><code class="language-ts">store(<span class="hljs-string">&#x27;currentUser&#x27;</span>).delete();</code></pre>
 						</div>
 					</li>
 				</ul>
@@ -1245,8 +1245,8 @@ img { max-width: 100%; }
 							</div>
 							<pre><code class="language-ts"><span class="hljs-keyword">const</span> existingStoreObject: StoreObject&lt;<span class="hljs-built_in">string</span>&gt;;
 store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>) =&gt;</span> {
-  batch(<span class="hljs-string">'key1'</span>).set(<span class="hljs-string">'a new value'</span>);
-  existingStoreObject.inBatch(batch).set(<span class="hljs-string">'a second value'</span>);
+  batch(<span class="hljs-string">&#x27;key1&#x27;</span>).set(<span class="hljs-string">&#x27;a new value&#x27;</span>);
+  existingStoreObject.inBatch(batch).set(<span class="hljs-string">&#x27;a second value&#x27;</span>);
 });</code></pre>
 						</div>
 					</li>
@@ -1263,7 +1263,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#mutateusing">mutateUsing</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L149">projects/ng-app-state/src/lib/store-object.ts:149</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L152">projects/ng-app-state/src/lib/store-object.ts:152</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1286,7 +1286,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#referstosamestateas">refersToSameStateAs</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L198">projects/ng-app-state/src/lib/store-object.ts:198</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L201">projects/ng-app-state/src/lib/store-object.ts:201</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1350,7 +1350,7 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#state">state</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L167">projects/ng-app-state/src/lib/store-object.ts:167</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L170">projects/ng-app-state/src/lib/store-object.ts:170</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1372,14 +1372,14 @@ store.batch(<span class="hljs-function">(<span class="hljs-params">batch</span>)
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="storeobject.html">StoreObject</a>.<a href="storeobject.html#withcaching">withCaching</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L184">projects/ng-app-state/src/lib/store-object.ts:184</a></li>
+								<li>Defined in <a href="https://github.com/simontonsoftware/ng-app-state/blob/master/projects/ng-app-state/src/lib/store-object.ts#L187">projects/ng-app-state/src/lib/store-object.ts:187</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Creates a new store object representing the same state as this one, but with caching turned on or off. When caching is on, selecting the same sub-store multiple times will return the same object. This allows you to safely use expressions like this in an Angular template:</p>
 							</div>
-							<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">child-component</span> [<span class="hljs-attr">childStore</span>]=<span class="hljs-string">"myStore('subKey')"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">child-component</span>&gt;</span></code></pre>
+							<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">child-component</span> [<span class="hljs-attr">childStore</span>]=<span class="hljs-string">&quot;myStore(&#x27;subKey&#x27;)&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">child-component</span>&gt;</span></code></pre>
 							<p>Without caching <code>myStore(&#39;subKey&#39;)</code> would evaluate to a new object every time change detection runs.</p>
 							<p>Caching propogates to descendant stores, so e.g. <code>myStore(&#39;subKey&#39;)(&#39;deepKey&#39;)</code> always return the same object, which will itself have caching turned on.</p>
 							<p>This method does not modify the current store object; it returns a new one with the given setting.</p>

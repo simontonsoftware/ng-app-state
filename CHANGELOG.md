@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [13.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v12.0.0...v13.0.0) (2020-08-16)
+
+### ⚠ BREAKING CHANGES
+
+- requires @ngrx/store 10.0
+- requires micro-dash 8.0
+- requires s-js-utils 7.0
+- requires s-rxjs-utils 4.0
+- requires s-ng-utils 3.0
+- requires angular 10
+- requires typescript 3.9
+
+### Features
+
+- upgrade angular ([fc4553a](https://github.com/simontonsoftware/ng-app-state/commit/fc4553ae4b88e7dfd493751c0fe4efba79d46c61))
+
+* upgrade other dependencies ([3d31433](https://github.com/simontonsoftware/ng-app-state/commit/3d31433b2f41c25c31a37afd75b1b2cda36998d8))
+
 ## [12.0.0](https://github.com/simontonsoftware/ng-app-state/compare/v11.1.4...v12.0.0) (2020-03-21)
 
 ### ⚠ BREAKING CHANGES
