@@ -11,7 +11,9 @@ export class WideState {
   }
 }
 
-export function subscribeWide(store: StoreObject<WideState>) {
+export function subscribeWide(
+  store: StoreObject<WideState>,
+): { elapsed: number; subscription: Subscription } {
   const arrayStore = store('array');
   const width = arrayStore.state().length;
   const subscription = new Subscription();
@@ -27,7 +29,10 @@ export function subscribeWide(store: StoreObject<WideState>) {
   return { elapsed, subscription };
 }
 
-export function runWide(store: StoreObject<WideState>, iterations: number) {
+export function runWide(
+  store: StoreObject<WideState>,
+  iterations: number,
+): number {
   const counterStore = store('array')(0)('counter');
 
   const start = new Date().getTime();
@@ -41,6 +46,6 @@ export function runWide(store: StoreObject<WideState>, iterations: number) {
   return elapsed;
 }
 
-function increment(n: number) {
+function increment(n: number): number {
   return n + 1;
 }

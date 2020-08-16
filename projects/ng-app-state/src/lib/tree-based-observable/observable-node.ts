@@ -17,7 +17,7 @@ export class ObservableNode extends Observable<any> {
     super();
   }
 
-  _subscribe(subscriber: Subscriber<any>) {
+  _subscribe(subscriber: Subscriber<any>): () => void {
     if (this.subscribersAreEmpty()) {
       this.start();
     }
@@ -32,7 +32,7 @@ export class ObservableNode extends Observable<any> {
     };
   }
 
-  ensureChild(key: string) {
+  ensureChild(key: string): any {
     const set = this.children[key];
     if (set?.size) {
       return set.values().next().value;
@@ -41,7 +41,7 @@ export class ObservableNode extends Observable<any> {
     }
   }
 
-  updateCache(value: any) {
+  updateCache(value: any): void {
     if (this.value === value) {
       return;
     }
@@ -55,15 +55,15 @@ export class ObservableNode extends Observable<any> {
     });
   }
 
-  subscribersAreEmpty() {
+  subscribersAreEmpty(): boolean {
     return this.subscribers.length === 0;
   }
 
-  getValue() {
+  getValue(): any {
     return this.value;
   }
 
-  private start() {
+  private start(): void {
     this.registerWithParent();
     this.sourceSubscription = this._source.subscribe(() => {
       if (this.valueChanged) {
@@ -73,26 +73,26 @@ export class ObservableNode extends Observable<any> {
     });
   }
 
-  private emit() {
+  private emit(): void {
     for (const subscriber of this.subscribers.slice()) {
       subscriber.next(this.value);
     }
   }
 
-  private stop() {
+  private stop(): void {
     this.sourceSubscription!.unsubscribe();
     if (this.key) {
       this.parent?.unregisterChild(this.key, this);
     }
   }
 
-  private registerWithParent() {
+  private registerWithParent(): void {
     if (this.key) {
       this.parent?.registerChild(this.key, this);
     }
   }
 
-  private registerChild(key: string, child: ObservableNode) {
+  private registerChild(key: string, child: ObservableNode): void {
     let set = this.children[key];
     if (!set) {
       set = this.children[key] = new Set<ObservableNode>();
@@ -105,7 +105,7 @@ export class ObservableNode extends Observable<any> {
     child.value = this.value ? this.value[key] : undefined;
   }
 
-  private unregisterChild(key: string, child: ObservableNode) {
+  private unregisterChild(key: string, child: ObservableNode): void {
     const set = this.children[key];
     set.delete(child);
     if (set.size === 0) {

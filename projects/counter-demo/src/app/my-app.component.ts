@@ -24,15 +24,15 @@ export class MyAppComponent {
     this.count$ = store.pipe(select('count'));
   }
 
-  increment() {
+  increment(): void {
     this.store.dispatch({ type: INCREMENT });
   }
 
-  decrement() {
+  decrement(): void {
     this.store.dispatch({ type: DECREMENT });
   }
 
-  reset() {
+  reset(): void {
     this.store.dispatch({ type: RESET });
   }
 }

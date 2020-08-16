@@ -9,16 +9,16 @@ export class BatchAction extends AppStateAction {
     super('batch', []);
   }
 
-  dispatch(action: AppStateAction) {
+  dispatch(action: AppStateAction): void {
     this.children.push(action);
     this.rootSnapshot = action.execute(this.rootSnapshot);
   }
 
-  execute() {
+  execute(): any {
     return this.rootSnapshot;
   }
 
-  getState(path: string[]) {
+  getState(path: string[]): any {
     return path.length ? get(this.rootSnapshot, path) : this.rootSnapshot;
   }
 }

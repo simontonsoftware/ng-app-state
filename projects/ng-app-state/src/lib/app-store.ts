@@ -34,7 +34,7 @@ export class AppStore<T extends object> extends StoreObject<T> {
   /**
    * Dispatches a custom actions both on the global `@ngrx/store` (in case you are using something like `@ngrx/effects`), as well as emitted from `.action$`.
    */
-  public dispatch(action: Action) {
+  public dispatch(action: Action): void {
     this.store.dispatch(action);
     this.actionSubject.next(action);
   }

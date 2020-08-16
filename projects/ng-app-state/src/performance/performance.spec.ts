@@ -53,7 +53,7 @@ describe('performance', () => {
   });
 });
 
-function unsubscribe(subscription: Subscription, count: number) {
+function unsubscribe(subscription: Subscription, count: number): number {
   const start = new Date().getTime();
   subscription.unsubscribe();
   const elapsed = new Date().getTime() - start;

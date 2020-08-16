@@ -9,7 +9,10 @@ import { StoreObject } from '../store-object';
  * added.set(17); // store has [1, 2, 17]
  * ```
  */
-export function pushToStoreArray<T>(store: StoreObject<T[]>, item: T) {
+export function pushToStoreArray<T>(
+  store: StoreObject<T[]>,
+  item: T,
+): StoreObject<T> {
   const itemStore = store(store.state().length);
   itemStore.set(item);
   return itemStore;

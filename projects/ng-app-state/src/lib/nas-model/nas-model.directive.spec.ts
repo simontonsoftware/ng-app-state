@@ -31,25 +31,25 @@ import { NasModelModule } from './nas-model.module';
 
 let fixture: ComponentFixture<any>;
 
-function detectChanges() {
+function detectChanges(): void {
   fixture.detectChanges();
 }
 
-function query(css: string) {
+function query(css: string): any {
   return queryAll(css)[0];
 }
 
-function queryAll(css: string) {
+function queryAll(css: string): any[] {
   return fixture.debugElement
     .queryAll(By.css(css))
     .map((el) => el.nativeElement);
 }
 
-function initSingleValueTest(template: string) {
+function initSingleValueTest(template: string): SingleValueStore {
   return initTest(SingleValueComponent, SingleValueStore, { template });
 }
 
-function dispatchEvent(domElement: EventTarget, type: string) {
+function dispatchEvent(domElement: EventTarget, type: string): void {
   domElement.dispatchEvent(new Event(type));
 }
 
@@ -61,7 +61,7 @@ function initTest<C, S>(
     template = '',
     beforeCreate = () => {},
   } = {},
-) {
+): S {
   if (template) {
     TestBed.overrideComponent(component, { set: { template } });
   }

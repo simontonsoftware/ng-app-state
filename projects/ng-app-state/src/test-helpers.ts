@@ -216,17 +216,17 @@ export class InnerNameComponent implements ControlValueAccessor {
   // prettier-ignore
   changeFn!: (value: any) => void;
 
-  writeValue(value: any) {
+  writeValue(value: any): void {
     this.model = value;
   }
 
-  registerOnChange(fn: (value: any) => void) {
+  registerOnChange(fn: (value: any) => void): void {
     this.changeFn = fn;
   }
 
-  registerOnTouched() {}
+  registerOnTouched(): void {}
 
-  setDisabledState(disabled: boolean) {
+  setDisabledState(disabled: boolean): void {
     this.disabled = disabled;
   }
 }

@@ -48,13 +48,13 @@ export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
     invoke(this.valueAccessor, ['setDisabledState'], isDisabled);
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.valueAccessor.registerOnChange((value: T) => {
       this.store.set(value);
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

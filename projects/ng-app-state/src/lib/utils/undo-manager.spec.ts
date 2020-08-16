@@ -33,12 +33,12 @@ class TestImpl extends UndoManager<State, State> {
     });
   }
 
-  shouldPush(state: State) {
-    // looks pointless, but allows this function to overwritten below
+  shouldPush(state: State): boolean {
+    // looks pointless, but allows this function to be overwritten below
     return super.shouldPush(state);
   }
 
-  protected extractUndoState(state: State) {
+  protected extractUndoState(state: State): State {
     return state;
   }
 
@@ -47,7 +47,7 @@ class TestImpl extends UndoManager<State, State> {
     batch: StoreObject<State>,
     undoOrRedo: UndoOrRedo,
     stateToOverwrite: State,
-  ) {
+  ): void {
     this.skipNextChange = true;
     batch.set(stateToApply);
     this.lastApplicationUndoOrRedo = undoOrRedo;
@@ -673,7 +673,7 @@ describe('UndoManager', () => {
           super(store, 2);
         }
 
-        protected isOverSize() {
+        protected isOverSize(): boolean {
           if (numToDrop > 0) {
             --numToDrop;
             return true;
@@ -698,7 +698,7 @@ describe('UndoManager', () => {
     });
   });
 
-  function expectStack(...states: number[]) {
+  function expectStack(...states: number[]): void {
     expect(undoManager.undoStack.map((s) => s.counter)).toEqual(states);
   }
 });

@@ -10,7 +10,7 @@ const factories = new WeakMap<Observable<any>, TreeBasedObservableFactory>();
 export class TreeBasedObservableFactory {
   private readonly root: ObservableNode;
 
-  static getFor(source: Observable<any>) {
+  static getFor(source: Observable<any>): TreeBasedObservableFactory {
     let factory = factories.get(source);
     if (!factory) {
       factory = new TreeBasedObservableFactory(source);
@@ -33,7 +33,7 @@ export class TreeBasedObservableFactory {
     return this.ensureNodeAt(path);
   }
 
-  getState(path: string[]) {
+  getState(path: string[]): any {
     if (this.root.subscribersAreEmpty()) {
       this.root.pipe(take(1)).subscribe();
     }
@@ -41,7 +41,7 @@ export class TreeBasedObservableFactory {
     return path.length ? get(rootState, path) : rootState;
   }
 
-  private ensureNodeAt(path: string[]) {
+  private ensureNodeAt(path: string[]): ObservableNode {
     let node = this.root;
     for (const childKey of path) {
       const parent = node;

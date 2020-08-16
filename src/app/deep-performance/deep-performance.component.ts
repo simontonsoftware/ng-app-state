@@ -18,7 +18,7 @@ export class DeepPerformanceComponent {
 
   constructor(private ngrxStore: Store<any>) {}
 
-  run() {
+  run(): void {
     const store: any = new AppStore(
       this.ngrxStore,
       'testKey',

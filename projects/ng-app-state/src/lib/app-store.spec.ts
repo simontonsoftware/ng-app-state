@@ -81,7 +81,7 @@ describe('AppStore', () => {
     });
   });
 
-  function getGlobalState() {
+  function getGlobalState(): any {
     let value: any;
     backingStore.pipe(take(1)).subscribe((v) => {
       value = v;

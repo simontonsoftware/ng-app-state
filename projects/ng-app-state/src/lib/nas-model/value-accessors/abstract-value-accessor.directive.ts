@@ -17,15 +17,15 @@ export abstract class AbstractValueAccessorDirective<T extends HTMLElement>
 
   abstract writeValue(value: any): void;
 
-  registerOnChange(fn: (value: any) => void) {
+  registerOnChange(fn: (value: any) => void): void {
     this.onChangeFn = fn;
   }
 
-  registerOnTouched(fn: () => void) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedFn = fn;
   }
 
-  protected get element() {
-    return this.elementRef.nativeElement as T;
+  protected get element(): T {
+    return this.elementRef.nativeElement;
   }
 }

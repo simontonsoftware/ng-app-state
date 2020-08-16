@@ -7,20 +7,17 @@ export class FunctionAction extends AppStateAction {
     name: string,
     path: string[],
     private mutates: boolean,
-    // tslint:disable-next-line:ban-types
     private func: Function,
     private args: any[],
   ) {
     super(name, path);
   }
 
-  execute<T extends object>(rootState: T) {
+  execute<T extends object>(rootState: T): any {
     return this.getNewState(this.path, rootState);
   }
 
-  ///////
-
-  protected getNewState<T>(path: string[], oldState: T) {
+  protected getNewState<T>(path: string[], oldState: T): any {
     if (path.length) {
       if (oldState == null) {
         console.error(
@@ -51,8 +48,7 @@ export class FunctionAction extends AppStateAction {
 }
 
 /** @hidden */
-// tslint:disable-next-line:ban-types
-export function buildName(prefix: string, func: Function) {
+export function buildName(prefix: string, func: Function): string {
   if (func.name) {
     return `${prefix}:${func.name}`;
   } else {

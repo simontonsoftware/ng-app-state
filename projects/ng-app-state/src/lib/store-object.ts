@@ -64,7 +64,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * });
    * ```
    */
-  batch(func: (state: StoreObject<T>) => void) {
+  batch(func: (state: StoreObject<T>) => void): void {
     const batch = new BatchAction(this.client.getState([]));
     func(
       new StoreObject(
@@ -90,21 +90,21 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * });
    * ```
    */
-  inBatch(batch: StoreObject<any>) {
+  inBatch(batch: StoreObject<any>): StoreObject<T> {
     return new StoreObject<T>(batch.client, this.path);
   }
 
   /**
    * Replace the state represented by this store object with the given value.
    */
-  set(value: T) {
+  set(value: T): void {
     this.setUsing(() => value);
   }
 
   /**
    * Assigns the given values to state of this store object. The resulting state will be like `Object.assign(store.state(), value)`.
    */
-  assign(value: Partial<T>) {
+  assign(value: Partial<T>): void {
     this.setUsing((state: any) => {
       if (every(value, (innerValue, key) => state[key] === innerValue)) {
         return state;
@@ -121,7 +121,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * store('currentUser').delete();
    * ```
    */
-  delete() {
+  delete(): void {
     const key = last(this.path);
     this.client.dispatch(
       new FunctionAction('delete:' + key, this.path.slice(0, -1), false, omit, [
@@ -135,7 +135,10 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    *
    * WARNING: You SHOULD NOT use a function that will mutate the state.
    */
-  setUsing<A extends any[]>(func: (state: T, ...args: A) => T, ...args: A) {
+  setUsing<A extends any[]>(
+    func: (state: T, ...args: A) => T,
+    ...args: A
+  ): void {
     this.client.dispatch(
       new FunctionAction(buildName('set', func), this.path, false, func, args),
     );
@@ -149,7 +152,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   mutateUsing<A extends any[]>(
     func: (state: T, ...args: A) => void,
     ...args: A
-  ) {
+  ): void {
     this.client.dispatch(
       new FunctionAction(
         buildName('mutate', func),
@@ -188,14 +191,14 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   /**
    * @return whether or not caching is turned on for this store object. See `.withCaching()` for details.
    */
-  caches() {
+  caches(): boolean {
     return this._withCaching;
   }
 
   /**
    * @returns whether the given `StoreObject` operates on the same slice of the store as this object.
    */
-  refersToSameStateAs(other: StoreObject<T>) {
+  refersToSameStateAs(other: StoreObject<T>): boolean {
     return isEqual(this.path, other.path);
   }
 }

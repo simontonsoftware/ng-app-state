@@ -51,7 +51,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
   /**
    * Discard all history and push the current state.
    */
-  reset() {
+  reset(): void {
     this.currentStateIndex = -1;
     this.pushCurrentState();
   }
@@ -65,7 +65,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
   pushCurrentState({
     collectKey = undefined as undefined | string,
     collectDebounce = undefined as undefined | number,
-  } = {}) {
+  } = {}): void {
     const nextState = this.extractUndoState(this.store.state());
     if (this.currentStateIndex >= 0 && !this.shouldPush(nextState)) {
       return;
@@ -94,14 +94,14 @@ export abstract class UndoManager<StateType, UndoStateType> {
   /**
    * @returns whether any states are available for `undo()`
    */
-  canUndo() {
+  canUndo(): boolean {
     return this.currentStateIndex > 0;
   }
 
   /**
    * @returns whether any states are available for `redo()`
    */
-  canRedo() {
+  canRedo(): boolean {
     return this.currentStateIndex < this.stack.length - 1;
   }
 
@@ -110,7 +110,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    *
    * @throws Error when there is no such state (i.e. when `canUndo()` returns false)
    */
-  undo() {
+  undo(): void {
     if (!this.canUndo()) {
       throw new Error('Cannot undo');
     }
@@ -123,7 +123,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    *
    * @throws Error when there is no such state (i.e. when `canRedo()` returns false)
    */
-  redo() {
+  redo(): void {
     if (!this.canRedo()) {
       throw new Error('Cannot redo');
     }
@@ -136,7 +136,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    *
    * @throws Error when there is no such state (i.e. when `canUndo()` returns false)
    */
-  dropCurrentUndoState() {
+  dropCurrentUndoState(): void {
     if (!this.canUndo()) {
       throw new Error('Nothing to drop');
     }
@@ -149,14 +149,14 @@ export abstract class UndoManager<StateType, UndoStateType> {
   /**
    * Returns the current undo state that was most recently pushed or applied. Calls to `undo` will apply the state before this in teh stack, and `redo` will apply the state after this.
    */
-  get currentUndoState() {
+  get currentUndoState(): UndoStateType {
     return this.stack[this.currentStateIndex];
   }
 
   /**
    * Returns a view of the internal undo stack, from oldest to newest. Note that this contains states that would be applied by calls to both `.undo()` and `.redo`.
    */
-  get undoStack() {
+  get undoStack(): UndoStateType[] {
     return this.stack.slice();
   }
 
@@ -186,22 +186,22 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * }
    * ```
    */
-  protected shouldPush(_state: UndoStateType) {
+  protected shouldPush(_state: UndoStateType): boolean {
     return true;
   }
 
-  private dropRedoHistory() {
+  private dropRedoHistory(): void {
     this.stack.splice(this.currentStateIndex + 1, this.stack.length);
   }
 
   /**
    * Each time a state is added to the history, this method will be called to determine whether the oldest state should be dropped. Override to implement more complex logic than the simple `maxDepth`.
    */
-  protected isOverSize(size: number) {
+  protected isOverSize(size: number): boolean {
     return this.maxDepth > 0 && size > this.maxDepth;
   }
 
-  private changeState(change: 1 | -1, undoOrRedo: UndoOrRedo) {
+  private changeState(change: 1 | -1, undoOrRedo: UndoOrRedo): void {
     const stateToOverwrite = this.currentUndoState;
     this.currentStateIndex += change;
     const stateToApply = this.currentUndoState;
@@ -211,7 +211,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
     this.emitUndoChanges();
   }
 
-  private emitUndoChanges(collectKey?: string, collectDebounce?: number) {
+  private emitUndoChanges(collectKey?: string, collectDebounce?: number): void {
     this.canUndoSubject.next(this.canUndo());
     this.canRedoSubject.next(this.canRedo());
     this.stateSubject.next(this.stack[this.currentStateIndex]);

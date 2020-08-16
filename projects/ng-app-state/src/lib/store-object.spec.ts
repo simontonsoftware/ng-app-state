@@ -451,7 +451,7 @@ describe('StoreObject', () => {
     });
 
     it('uses the name of the passed-in function in the action', () => {
-      function myCustomFunction(state: State) {
+      function myCustomFunction(state: State): State {
         return state;
       }
 
@@ -521,7 +521,7 @@ describe('StoreObject', () => {
     });
 
     it('uses the name of the passed-in function in the action', () => {
-      function myCustomFunction() {}
+      function myCustomFunction(): void {}
 
       let lastEmitted: Action;
       backingStore.addReducer('testKey', (state = {}, action) => {
@@ -644,7 +644,7 @@ describe('StoreObject', () => {
     });
   });
 
-  function getGlobalState() {
+  function getGlobalState(): any {
     let value: any;
     backingStore.pipe(take(1)).subscribe((v) => {
       value = v;

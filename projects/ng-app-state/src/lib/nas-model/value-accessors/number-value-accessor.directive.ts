@@ -9,7 +9,7 @@ import { AbstractInputValueAccessorDirective } from './abstract-input-value-acce
   providers: [provideValueAccessor(NumberValueAccessorDirective)],
 })
 export class NumberValueAccessorDirective extends AbstractInputValueAccessorDirective {
-  registerOnChange(fn: (value: number | null) => void) {
+  registerOnChange(fn: (value: number | null) => void): void {
     this.onChangeFn = (value: string) => {
       fn(value === '' ? null : parseFloat(value));
     };

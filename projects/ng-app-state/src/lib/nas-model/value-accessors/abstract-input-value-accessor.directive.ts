@@ -8,20 +8,20 @@ export abstract class AbstractInputValueAccessorDirective extends AbstractValueA
 > {
   @HostListener('change')
   @HostListener('input')
-  onChange() {
+  onChange(): void {
     this.onChangeFn(this.element.value);
   }
 
   @HostListener('blur')
-  onBlur() {
+  onBlur(): void {
     this.onTouchedFn();
   }
 
-  writeValue(value: any) {
+  writeValue(value: any): void {
     this.element.value = value;
   }
 
-  setDisabledState(isDisabled: boolean) {
+  setDisabledState(isDisabled: boolean): void {
     this.element.disabled = isDisabled;
   }
 }

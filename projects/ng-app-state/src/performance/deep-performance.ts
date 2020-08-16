@@ -13,7 +13,9 @@ export class DeepState extends CounterState {
   }
 }
 
-export function subscribeDeep(store: StoreObject<DeepState>) {
+export function subscribeDeep(
+  store: StoreObject<DeepState>,
+): { elapsed: number; subscription: Subscription } {
   const { depth } = analyze(store);
   const subscriptions: Subscription[] = [];
 
@@ -32,7 +34,10 @@ export function subscribeDeep(store: StoreObject<DeepState>) {
   return { elapsed, subscription };
 }
 
-export function runDeep(store: StoreObject<DeepState>, iterations: number) {
+export function runDeep(
+  store: StoreObject<DeepState>,
+  iterations: number,
+): number {
   const { leafStore } = analyze(store);
 
   const start = new Date().getTime();
@@ -46,7 +51,9 @@ export function runDeep(store: StoreObject<DeepState>, iterations: number) {
   return elapsed;
 }
 
-function analyze(store: StoreObject<DeepState>) {
+function analyze(
+  store: StoreObject<DeepState>,
+): { depth: number; leafStore: StoreObject<DeepState> } {
   let depth = 1;
   for (; store('next').state(); ++depth) {
     store = store('next');
@@ -54,6 +61,6 @@ function analyze(store: StoreObject<DeepState>) {
   return { depth, leafStore: store };
 }
 
-function increment(n: number) {
+function increment(n: number): number {
   return n + 1;
 }

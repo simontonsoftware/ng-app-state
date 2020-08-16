@@ -21,7 +21,7 @@ describe('integration App', () => {
     );
   });
 
-  async function clearValue(control: string | ElementFinder) {
+  async function clearValue(control: string | ElementFinder): Promise<void> {
     control = getControl(control);
 
     // https://github.com/angular/protractor/issues/4343#issuecomment-350106755
@@ -30,7 +30,7 @@ describe('integration App', () => {
     await control.clear();
   }
 
-  function getControl(control: string | ElementFinder) {
+  function getControl(control: string | ElementFinder): ElementFinder {
     if (typeof control === 'string') {
       return getInput(control);
     } else {
@@ -38,7 +38,7 @@ describe('integration App', () => {
     }
   }
 
-  function getInput(type: string) {
+  function getInput(type: string): ElementFinder {
     let css = 'input';
     if (type) {
       css += `[type="${type}"]`;
@@ -49,7 +49,7 @@ describe('integration App', () => {
   }
 
   describe('free text controls (and color)', () => {
-    function textarea() {
+    function textarea(): ElementFinder {
       return element(by.css('textarea'));
     }
 
@@ -61,7 +61,7 @@ describe('integration App', () => {
       control: string | ElementFinder,
       value: string,
       options?: ExpectFreeTextOptions,
-    ) {
+    ): Promise<void> {
       await clearValue(control);
       await expectValue('');
       await getControl(control).sendKeys(value);
@@ -71,7 +71,7 @@ describe('integration App', () => {
     async function expectValue(
       value: string,
       { isColor = false }: ExpectFreeTextOptions = {},
-    ) {
+    ): Promise<void> {
       const stripped = value.replace(/[\r\n]/g, '');
       expect(await getInput('').getAttribute('value')).toEqual(stripped);
       expect(await getInput('text').getAttribute('value')).toEqual(stripped);
@@ -113,7 +113,7 @@ describe('integration App', () => {
   });
 
   describe('number controls', () => {
-    async function expectValue(value: string) {
+    async function expectValue(value: string): Promise<void> {
       expect(await getInput('number').getAttribute('value')).toEqual(value);
       expect(await getInput('range').getAttribute('value')).toEqual(
         value || '50',
@@ -130,22 +130,22 @@ describe('integration App', () => {
 
       await browser
         .actions()
-        .dragAndDrop(await getInput('range'), { x: -99, y: 0 })
+        .dragAndDrop(getInput('range'), { x: -99, y: 0 })
         .perform();
       await expectValue('0');
     });
   });
 
   describe('choose one controls', () => {
-    function getDropdown() {
+    function getDropdown(): ElementFinder {
       return element(by.css('select:not([multiple])'));
     }
 
-    function getRadio(value: string) {
+    function getRadio(value: string): ElementFinder {
       return element(by.css(`input[type="radio"][value="${value}"]`));
     }
 
-    async function expectValue(value: string) {
+    async function expectValue(value: string): Promise<void> {
       expect(await getDropdown().getAttribute('value')).toEqual(value);
       for (const city of cities) {
         expect(await getRadio(city).getAttribute('checked')).toEqual(
@@ -166,15 +166,15 @@ describe('integration App', () => {
   });
 
   describe('choose many controls', () => {
-    function getOption(value: string) {
+    function getOption(value: string): ElementFinder {
       return element(by.cssContainingText('select[multiple] option', value));
     }
 
-    function getCheck(value: string) {
+    function getCheck(value: string): ElementFinder {
       return element(by.css(`input[type="checkbox"][value="${value}"]`));
     }
 
-    async function expectValues(values: string[]) {
+    async function expectValues(values: string[]): Promise<void> {
       for (const city of cities) {
         const expected = values.includes(city) ? 'true' : null!;
         expect(await getOption(city).getAttribute('checked')).toEqual(expected);
@@ -201,7 +201,7 @@ describe('integration App', () => {
       keys: string,
       value: string,
       week: string,
-    ) {
+    ): Promise<void> {
       await clearDate(type);
       await expectValue('', '');
       await getInput(type).sendKeys(keys);
@@ -209,17 +209,17 @@ describe('integration App', () => {
       await expectValue(value, week);
     }
 
-    async function clearDate(type: string) {
+    async function clearDate(type: string): Promise<void> {
       const control = getInput(type);
       await control.sendKeys(Key.BACK_SPACE);
       await propagate(type);
     }
 
-    async function propagate(type: string) {
+    async function propagate(type: string): Promise<void> {
       await element(by.cssContainingText('button', type + ' flush')).click();
     }
 
-    async function expectValue(datetime: string, week: string) {
+    async function expectValue(datetime: string, week: string): Promise<void> {
       expect(await getInput('datetime-local').getAttribute('value')).toEqual(
         datetime,
       );

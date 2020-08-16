@@ -23,13 +23,13 @@ export class AppComponent {
     );
   }
 
-  chooseToCheck() {
+  chooseToCheck(): void {
     this.store('checkMany').set(
       mapToObject(this.store.state().chooseMany, (city) => [city, true]),
     );
   }
 
-  checkToChoose() {
+  checkToChoose(): void {
     const choices: City[] = [];
     forEach(this.store.state().checkMany, (selected, city) => {
       if (selected) {
@@ -39,14 +39,14 @@ export class AppComponent {
     this.store('chooseMany').set(choices);
   }
 
-  propagateDatetime() {
+  propagateDatetime(): void {
     const time = this.dateFromDatetime().getTime();
     this.modDates('datetime', (dest) => {
       dest.setTime(time);
     });
   }
 
-  propagateDate() {
+  propagateDate(): void {
     const source = this.dateFromDate();
     this.modDates('date', (dest) => {
       dest.setFullYear(source.getFullYear());
@@ -55,7 +55,7 @@ export class AppComponent {
     });
   }
 
-  propagateMonth() {
+  propagateMonth(): void {
     const source = this.dateFromMonth();
     this.modDates('month', (dest) => {
       dest.setFullYear(source.getFullYear());
@@ -63,7 +63,7 @@ export class AppComponent {
     });
   }
 
-  propagateWeek() {
+  propagateWeek(): void {
     const source = this.dateFromWeek();
     this.modDates('week', (dest) => {
       const day = dest.getDay();
@@ -73,7 +73,7 @@ export class AppComponent {
     });
   }
 
-  propagateTime() {
+  propagateTime(): void {
     const source = this.dateFromTime();
     this.modDates('time', (dest) => {
       dest.setHours(source.getHours());
@@ -81,7 +81,10 @@ export class AppComponent {
     });
   }
 
-  private modDates(type: keyof IntegrationState, fn: (dest: Date) => void) {
+  private modDates(
+    type: keyof IntegrationState,
+    fn: (dest: Date) => void,
+  ): void {
     this.store.setUsing((state) => {
       let datetime;
       let date;
@@ -111,29 +114,32 @@ export class AppComponent {
     });
   }
 
-  private dateFromDatetime(state = this.store.state()) {
+  private dateFromDatetime(state = this.store.state()): Date {
     return new Date(state.datetime || '2000-01-01T00:00');
   }
 
-  private dateFromDate(state = this.store.state()) {
+  private dateFromDate(state = this.store.state()): Date {
     return new Date((state.date || '2000-01-01') + 'T00:00');
   }
 
-  private dateFromMonth(state = this.store.state()) {
+  private dateFromMonth(state = this.store.state()): Date {
     return new Date((state.month || '2000-01') + '-01T00:00');
   }
 
-  private dateFromWeek(state = this.store.state()) {
+  private dateFromWeek(state = this.store.state()): Date {
     const [year, week] = (state.week || '2000-W01').split('-W').map(Number);
     return weekToDate(year, week);
   }
 
-  private dateFromTime(state = this.store.state()) {
+  private dateFromTime(state = this.store.state()): Date {
     return new Date('2000-01-01T' + (state.time || '00:00'));
   }
 }
 
-function dateParts(date: Date, fn: (dest: Date) => void) {
+function dateParts(
+  date: Date,
+  fn: (dest: Date) => void,
+): { d: string; h: string; y: string; M: string; m: string } {
   fn(date);
   return {
     y: pad(date.getFullYear(), 4),
@@ -144,13 +150,13 @@ function dateParts(date: Date, fn: (dest: Date) => void) {
   };
 }
 
-function pad(num: number, length = 2) {
+function pad(num: number, length = 2): string {
   return padStart(num.toString(), length, '0');
 }
 
 // Returns the ISO week of the date.
 // Source: https://weeknumber.net/how-to/javascript
-function getWeek(date: Date) {
+function getWeek(date: Date): number {
   date = new Date(date.getTime());
   date.setHours(0, 0, 0, 0);
   // Thursday in current week decides the year.
@@ -171,14 +177,14 @@ function getWeek(date: Date) {
 
 // Returns the four-digit year corresponding to the ISO week of the date.
 // Source: https://weeknumber.net/how-to/javascript
-function getWeekYear(date: Date) {
+function getWeekYear(date: Date): number {
   date = new Date(date.getTime());
   date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
   return date.getFullYear();
 }
 
 // https://stackoverflow.com/a/16591175/1836506
-function weekToDate(year: number, week: number) {
+function weekToDate(year: number, week: number): Date {
   const date = new Date(year, 0, 1 + (week - 1) * 7);
   if (date.getDay() <= 4) {
     date.setDate(date.getDate() - date.getDay() + 1);
