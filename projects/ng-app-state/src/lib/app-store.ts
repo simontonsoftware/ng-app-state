@@ -14,8 +14,8 @@ export class AppStore<T extends object> extends StoreObject<T> {
       {
         getState: bindKey(observableFactory, 'getState'),
         getState$: bindKey(observableFactory, 'getState$'),
-        dispatch: (action) => {
-          state$.next(action.execute(state$.value));
+        setRootState: (value) => {
+          state$.next(value);
         },
       },
       [],

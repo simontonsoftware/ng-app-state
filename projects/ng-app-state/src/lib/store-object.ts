@@ -1,14 +1,12 @@
-import { every, isEqual, last, memoize, omit } from 'micro-dash';
+import { clone, every, isEqual, last, memoize, omit } from 'micro-dash';
 import { Observable } from 'rxjs';
 import { CallableObject } from 's-js-utils';
-import { AppStateAction } from './actions/app-state-action';
-import { buildName, FunctionAction } from './actions/function-action';
 
 /** @hidden */
 interface Client {
   getState(path: string[]): any;
   getState$(path: string[]): Observable<any>;
-  dispatch(action: AppStateAction): void;
+  setRootState(value: any): void;
 }
 
 /** @hidden */
@@ -37,7 +35,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
           new StoreObject(
             client,
             path.concat(prop.toString()),
-            parent,
+            this,
             _withCaching,
           ),
         _withCaching,
@@ -103,7 +101,21 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * Replace the state represented by this store object with the given value.
    */
   set(value: T): void {
-    this.setUsing(() => value);
+    if (value === this.state()) {
+      return;
+    }
+
+    if (this.parent) {
+      const parentState = clone(this.parent.state());
+      if (!parentState) {
+        throw new Error('cannot modify when parent state is missing');
+      }
+
+      parentState[last(this.path)] = value;
+      this.parent.set(parentState);
+    } else {
+      this.client.setRootState(value);
+    }
   }
 
   /**
@@ -143,9 +155,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     func: (state: T, ...args: A) => T,
     ...args: A
   ): void {
-    this.client.dispatch(
-      new FunctionAction(buildName('set', func), this.path, false, func, args),
-    );
+    this.set(func(this.state(), ...args));
   }
 
   /**
@@ -157,15 +167,9 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     func: (state: T, ...args: A) => void,
     ...args: A
   ): void {
-    this.client.dispatch(
-      new FunctionAction(
-        buildName('mutate', func),
-        this.path,
-        true,
-        func,
-        args,
-      ),
-    );
+    const state = clone(this.state());
+    func(state, ...args);
+    this.set(state);
   }
 
   /**

@@ -7,7 +7,6 @@ import {
   Self,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { invoke } from 'micro-dash';
 import { Subscription } from 'rxjs';
 import { StoreObject } from '../store-object';
 
@@ -45,7 +44,7 @@ export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
 
   @Input()
   set disabled(isDisabled: boolean) {
-    invoke(this.valueAccessor, ['setDisabledState'], isDisabled);
+    this.valueAccessor.setDisabledState?.(isDisabled);
   }
 
   ngAfterViewInit(): void {

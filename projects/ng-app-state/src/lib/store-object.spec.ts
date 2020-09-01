@@ -19,27 +19,23 @@ class State {
 
 describe('StoreObject', () => {
   let store: AppStore<State>;
-  let logError: jasmine.Spy;
 
   beforeEach(() => {
-    logError = spyOn(console, 'error');
     store = new AppStore(new State());
   });
 
   describe('()', () => {
-    it('prints a useful error when used to modify missing state', () => {
-      store<'optional', InnerState>('optional')('state').set(2);
-      expect(logError).toHaveBeenCalledWith(
-        'optional is null or undefined (during [set] optional.state)',
-      );
+    it('throws with a useful message when used to modify missing state', () => {
+      expect(() => {
+        store<'optional', InnerState>('optional')('state').set(2);
+      }).toThrowError('cannot modify when parent state is missing');
     });
 
-    it('prints a useful error even when the root key is missing', () => {
+    it('throws with a useful message even when the root key is missing', () => {
       store.delete();
-      store<'optional', InnerState>('optional')('state').set(2);
-      expect(logError).toHaveBeenCalledWith(
-        '<root> is null or undefined (during [set] optional.state)',
-      );
+      expect(() => {
+        store<'optional', InnerState>('optional')('state').set(2);
+      }).toThrowError('cannot modify when parent state is missing');
     });
   });
 
@@ -439,13 +435,10 @@ describe('StoreObject', () => {
       expect(store.state()).toBe(origState);
     });
 
-    it('prints a message and is not called when the state is missing', () => {
-      const op = jasmine.createSpy();
-      store<'optional', InnerState>('optional')('left').setUsing(op);
-      expect(op).not.toHaveBeenCalled();
-      expect(logError).toHaveBeenCalledWith(
-        'optional is null or undefined (during [set:wrap] optional.left)',
-      );
+    it('throws with a useful message when the state is missing', () => {
+      expect(() => {
+        store<'optional', InnerState>('optional')('state').setUsing(() => 3);
+      }).toThrowError('cannot modify when parent state is missing');
     });
 
     it('uses the name of the passed-in function in the action', () => {
@@ -508,15 +501,6 @@ describe('StoreObject', () => {
       store('optional').mutateUsing((value) => {
         expect(value).toBe(undefined);
       });
-    });
-
-    it('prints a message and is not called when the state is missing', () => {
-      const op = jasmine.createSpy();
-      store<'optional', InnerState>('optional')('left').mutateUsing(op);
-      expect(op).not.toHaveBeenCalled();
-      expect(logError).toHaveBeenCalledWith(
-        'optional is null or undefined (during [mutate:wrap] optional.left)',
-      );
     });
 
     it('uses the name of the passed-in function in the action', () => {
