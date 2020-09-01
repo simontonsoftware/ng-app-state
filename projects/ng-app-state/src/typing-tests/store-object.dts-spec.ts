@@ -1,4 +1,3 @@
-import { Store } from '@ngrx/store';
 import { AppStore } from '../public-api';
 
 class State {
@@ -8,7 +7,7 @@ class State {
   ary: Array<boolean>;
 }
 
-const store = new AppStore<State>({} as Store, '', new State());
+const store = new AppStore<State>(new State());
 
 // $ExpectType StoreObject<number>
 store('a');

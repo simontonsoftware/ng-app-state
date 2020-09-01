@@ -1,6 +1,5 @@
 import { Component, Injectable } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { AppStore } from './lib/app-store';
 import { StoreObject } from './lib/store-object';
 
@@ -20,8 +19,8 @@ class StoreComponent<T extends object> {
 
 @Injectable()
 export class SingleValueStore extends AppStore<any> {
-  constructor(store: Store<any>) {
-    super(store, 'singleValueStore', 'old');
+  constructor() {
+    super('old');
   }
 }
 
@@ -43,8 +42,8 @@ export class CityState {
 
 @Injectable()
 export class CityStore extends AppStore<CityState> {
-  constructor(store: Store<any>) {
-    super(store, 'cityStore', new CityState());
+  constructor() {
+    super(new CityState());
   }
 }
 
@@ -91,8 +90,8 @@ export class MultipleCityState {
 
 @Injectable()
 export class MultipleCityStore extends AppStore<MultipleCityState> {
-  constructor(store: Store<any>) {
-    super(store, 'mulitpleCityStore', new MultipleCityState());
+  constructor() {
+    super(new MultipleCityState());
   }
 }
 
@@ -137,8 +136,8 @@ export class MenuState {
 
 @Injectable()
 export class MenuStore extends AppStore<MenuState> {
-  constructor(store: Store<any>) {
-    super(store, 'menuStore', new MenuState());
+  constructor() {
+    super(new MenuState());
   }
 }
 
@@ -171,8 +170,8 @@ export class NameState {
 
 @Injectable()
 export class NameStore extends AppStore<NameState> {
-  constructor(store: Store<any>) {
-    super(store, 'nameStore', new NameState());
+  constructor() {
+    super(new NameState());
   }
 }
 

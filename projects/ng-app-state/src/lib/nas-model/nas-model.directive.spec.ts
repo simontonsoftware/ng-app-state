@@ -9,7 +9,6 @@ import {
 } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { StoreModule } from '@ngrx/store';
 import {
   CityComponent,
   citySelectWithCustomCompareFnTemplate,
@@ -26,7 +25,6 @@ import {
   SingleValueComponent,
   SingleValueStore,
 } from '../../test-helpers';
-import { ngAppStateReducer } from '../ng-app-state-reducer';
 import { NasModelModule } from './nas-model.module';
 
 let fixture: ComponentFixture<any>;
@@ -67,11 +65,7 @@ function initTest<C, S>(
   }
   TestBed.configureTestingModule({
     declarations: [component, ...extraDirectives],
-    imports: [
-      FormsModule,
-      StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] }),
-      NasModelModule,
-    ],
+    imports: [FormsModule, NasModelModule],
     providers: [storeType],
   });
 

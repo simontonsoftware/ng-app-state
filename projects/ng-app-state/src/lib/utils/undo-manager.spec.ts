@@ -1,9 +1,7 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { isEqual } from 'micro-dash';
 import { expectSingleCallAndReset } from 's-ng-dev-utils';
 import { AppStore } from '../app-store';
-import { ngAppStateReducer } from '../ng-app-state-reducer';
 import { StoreObject } from '../store-object';
 import { UndoManager, UndoOrRedo } from './undo-manager';
 
@@ -60,13 +58,8 @@ describe('UndoManager', () => {
   let undoManager: TestImpl;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
-    });
-    inject([Store], (backingStore: Store<any>) => {
-      store = new AppStore(backingStore, 'testKey', new State());
-      undoManager = new TestImpl(store);
-    })();
+    store = new AppStore(new State());
+    undoManager = new TestImpl(store);
   });
 
   describe('.canUndo()', () => {

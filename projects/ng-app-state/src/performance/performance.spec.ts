@@ -1,8 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppStore } from '../lib/app-store';
-import { ngAppStateReducer } from '../lib/ng-app-state-reducer';
 import { DeepState, runDeep, subscribeDeep } from './deep-performance';
 import { runWide, subscribeWide, WideState } from './wide-performance';
 
@@ -19,17 +16,8 @@ const msPerWideIteration = 5;
 const msPerWideUnsubscribe = 1;
 
 describe('performance', () => {
-  let backingStore: Store<any>;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
-    });
-    backingStore = TestBed.inject(Store);
-  });
-
   it('is good with a deep state', () => {
-    const store = new AppStore(backingStore, 'testKey', new DeepState(depth));
+    const store = new AppStore(new DeepState(depth));
 
     const { elapsed: timeToSubscribe, subscription } = subscribeDeep(store);
     const timeToChange = runDeep(store, deepIterations);
@@ -41,7 +29,7 @@ describe('performance', () => {
   });
 
   it('is good with a wide state', () => {
-    const store = new AppStore(backingStore, 'testKey', new WideState(width));
+    const store = new AppStore(new WideState(width));
 
     const { elapsed: timeToSubscribe, subscription } = subscribeWide(store);
     const timeToChange = runWide(store, wideIterations);

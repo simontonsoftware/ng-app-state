@@ -1,7 +1,5 @@
-import { Action } from '@ngrx/store';
-
 /** @hidden */
-export abstract class AppStateAction implements Action {
+export abstract class AppStateAction {
   type: string;
 
   constructor(name: string, protected path: string[], protected value?: any) {

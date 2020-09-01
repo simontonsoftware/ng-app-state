@@ -1,7 +1,4 @@
-import { TestBed } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
 import { AppStore } from '../app-store';
-import { ngAppStateReducer } from '../ng-app-state-reducer';
 import { StoreObject } from '../store-object';
 import { spreadObjectStore$ } from './spread-object-store';
 
@@ -9,12 +6,8 @@ describe('spreadObjectStore$()', () => {
   let store: StoreObject<Record<string, number>>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}, { metaReducers: [ngAppStateReducer] })],
-    });
-    const backingStore = TestBed.inject(Store);
     const state: Record<string, number> = { a: 1, b: 2 };
-    store = new AppStore(backingStore, 'testKey', state);
+    store = new AppStore(state);
   });
 
   it('emits a separate store object for each element in the object', () => {

@@ -1,15 +1,14 @@
-import { Action } from '@ngrx/store';
-import { bindKey, every, isEqual, last, memoize, omit } from 'micro-dash';
+import { every, isEqual, last, memoize, omit } from 'micro-dash';
 import { Observable } from 'rxjs';
 import { CallableObject } from 's-js-utils';
-import { BatchAction } from './actions/batch-action';
+import { AppStateAction } from './actions/app-state-action';
 import { buildName, FunctionAction } from './actions/function-action';
 
 /** @hidden */
 interface Client {
   getState(path: string[]): any;
   getState$(path: string[]): Observable<any>;
-  dispatch(action?: Action): void;
+  dispatch(action: AppStateAction): void;
 }
 
 /** @hidden */
@@ -29,12 +28,18 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   protected constructor(
     private client: Client,
     private path: string[],
+    private parent: StoreObject<any> | undefined,
     private _withCaching = false,
   ) {
     super(
       maybeMemoize(
         (prop: keyof T) =>
-          new StoreObject(client, path.concat(prop.toString()), _withCaching),
+          new StoreObject(
+            client,
+            path.concat(prop.toString()),
+            parent,
+            _withCaching,
+          ),
         _withCaching,
       ),
     );
@@ -64,19 +69,19 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * });
    * ```
    */
-  batch(func: (state: StoreObject<T>) => void): void {
-    const batch = new BatchAction(this.client.getState([]));
-    func(
-      new StoreObject(
-        {
-          getState: bindKey(batch, 'getState'),
-          getState$: this.client.getState$,
-          dispatch: bindKey(batch, 'dispatch'),
-        },
-        this.path,
-      ),
-    );
-    this.client.dispatch(batch);
+  batch(_func: (state: StoreObject<T>) => void): void {
+    // const batch = new BatchAction(this.client.getState([]));
+    // func(
+    //   new StoreObject(
+    //     {
+    //       getState: bindKey(batch, 'getState'),
+    //       getState$: this.client.getState$,
+    //       dispatch: bindKey(batch, 'dispatch'),
+    //     },
+    //     this.path,
+    //   ),
+    // );
+    // this.client.dispatch(batch);
   }
 
   /**
@@ -91,7 +96,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * ```
    */
   inBatch(batch: StoreObject<any>): StoreObject<T> {
-    return new StoreObject<T>(batch.client, this.path);
+    return new StoreObject<T>(batch.client, this.path, this.parent);
   }
 
   /**
@@ -122,12 +127,11 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * ```
    */
   delete(): void {
-    const key = last(this.path);
-    this.client.dispatch(
-      new FunctionAction('delete:' + key, this.path.slice(0, -1), false, omit, [
-        key,
-      ]),
-    );
+    if (this.parent) {
+      this.parent.setUsing(omit, last(this.path));
+    } else {
+      this.set(undefined as any);
+    }
   }
 
   /**
@@ -185,7 +189,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * This method does not modify the current store object; it returns a new one with the given setting.
    */
   withCaching(value = true): StoreObject<T> {
-    return new StoreObject(this.client, this.path, value);
+    return new StoreObject(this.client, this.path, this.parent, value);
   }
 
   /**

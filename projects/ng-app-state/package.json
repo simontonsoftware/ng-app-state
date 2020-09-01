@@ -7,7 +7,6 @@
   "peerDependencies": {
     "@angular/common": "^10.0.0",
     "@angular/core": "^10.0.0",
-    "@ngrx/store": "^10.0.0",
     "micro-dash": "^8.0.0",
     "s-ng-utils": "^3.0.0",
     "s-js-utils": "^7.0.0",

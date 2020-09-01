@@ -1,41 +1,26 @@
-import { Action, Store } from '@ngrx/store';
 import { bindKey } from 'micro-dash';
-import { Observable, Subject } from 'rxjs';
-import { TreeBasedObservableFactory } from './tree-based-observable/tree-based-observable-factory';
+import { BehaviorSubject } from 'rxjs';
 import { StoreObject } from './store-object';
+import { TreeBasedObservableFactory } from './tree-based-observable/tree-based-observable-factory';
 
+// TODO: rename `RootStore`?
 export class AppStore<T extends object> extends StoreObject<T> {
-  /**
-   * Emits the custom actions dispatched through this object (via `.dispatch()`).
-   */
-  action$: Observable<Action>;
+  // private batchCount: number;
 
-  private store: Store<any>;
-  private actionSubject: Subject<Action>;
-
-  constructor(ngrxStore: Store<any>, key: string, initialState: T) {
-    const observableFactory = TreeBasedObservableFactory.getFor(ngrxStore);
+  constructor(state: T) {
+    const state$ = new BehaviorSubject(state);
+    const observableFactory = TreeBasedObservableFactory.getFor(state$);
     super(
       {
         getState: bindKey(observableFactory, 'getState'),
         getState$: bindKey(observableFactory, 'getState$'),
-        dispatch: bindKey(ngrxStore, 'dispatch'),
+        dispatch: (action) => {
+          state$.next(action.execute(state$.value));
+        },
       },
-      [key],
+      [],
+      undefined,
     );
-
-    this.store = ngrxStore;
-    this.actionSubject = new Subject<Action>();
-    this.action$ = this.actionSubject.asObservable();
-
-    this.set(initialState);
-  }
-
-  /**
-   * Dispatches a custom actions both on the global `@ngrx/store` (in case you are using something like `@ngrx/effects`), as well as emitted from `.action$`.
-   */
-  public dispatch(action: Action): void {
-    this.store.dispatch(action);
-    this.actionSubject.next(action);
+    // this.batchCount = 0;
   }
 }
