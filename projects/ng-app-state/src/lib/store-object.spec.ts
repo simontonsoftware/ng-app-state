@@ -1,4 +1,4 @@
-import { cloneDeep, identity, pick } from 'micro-dash';
+import { cloneDeep, identity, noop, pick } from 'micro-dash';
 import { skip, take } from 'rxjs/operators';
 import { expectSingleCallAndReset } from 's-ng-dev-utils';
 import { AppStore } from './app-store';
@@ -189,84 +189,59 @@ describe('StoreObject', () => {
 
   describe('.batch()', () => {
     it('causes a single update after multiple actions', () => {
-      fail('revisit this test');
-      // const next = jasmine.createSpy();
-      //
-      // store.$.subscribe(next);
-      // expect(next).toHaveBeenCalledTimes(1);
-      //
-      // store.batch((batch) => {
-      //   batch('counter').set(3);
-      //   batch('nested')('state').set(6);
-      //   expect(next).toHaveBeenCalledTimes(1);
-      // });
-      //
-      // expect(next).toHaveBeenCalledTimes(2);
-      // expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
+      const next = jasmine.createSpy();
+
+      store.$.subscribe(next);
+      expect(next).toHaveBeenCalledTimes(1);
+
+      store.batch(() => {
+        store('counter').set(3);
+        store('nested')('state').set(6);
+        expect(next).toHaveBeenCalledTimes(1);
+      });
+
+      expect(next).toHaveBeenCalledTimes(2);
+      expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
     });
 
     it('works when nested', () => {
-      fail('revisit this test');
-      // store.batch((batch1) => {
-      //   batch1('counter').set(1);
-      //   batch1.batch((batch2) => {
-      //     expect(batch2.state().counter).toBe(1);
-      //     batch2('counter').set(2);
-      //     expect(batch2.state().counter).toBe(2);
-      //   });
-      //   expect(batch1.state().counter).toBe(2);
-      // });
-      // expect(store.state().counter).toBe(2);
+      store.batch(() => {
+        store('counter').set(1);
+        store.batch(() => {
+          expect(store.state().counter).toBe(1);
+          store('counter').set(2);
+          expect(store.state().counter).toBe(2);
+        });
+        expect(store.state().counter).toBe(2);
+      });
+      expect(store.state().counter).toBe(2);
     });
 
     it("doesn't have that infinite loop with 2 stores (production bug)", () => {
-      fail('revisit this test');
-      // // https://github.com/simontonsoftware/ng-app-state/issues/28
-      // const store2 = new AppStore<{}>({});
-      // store.$.subscribe(() => {
-      //   store2.batch(noop);
-      // });
-      // store2.$.subscribe();
-      // store('counter').set(1);
-      //
-      // // the infinite loop was here
-      //
-      // expect(store.state().counter).toBe(1);
-    });
-  });
+      // https://github.com/simontonsoftware/ng-app-state/issues/28
+      const store2 = new AppStore<{}>({});
+      store.$.subscribe(() => {
+        store2.batch(noop);
+      });
+      store2.$.subscribe();
+      store('counter').set(1);
 
-  describe('.inBatch()', () => {
-    it('causes mutations to run within the given batch', () => {
-      fail('revisit this test');
-      // const next = jasmine.createSpy();
-      //
-      // store.$.subscribe(next);
-      // expect(next).toHaveBeenCalledTimes(1);
-      //
-      // const counterStore = store('counter');
-      // const nestedStore = store('nested');
-      // store.batch((batch) => {
-      //   counterStore.inBatch(batch).set(3);
-      //   nestedStore.inBatch(batch)('state').set(6);
-      //   expect(next).toHaveBeenCalledTimes(1);
-      // });
-      //
-      // expect(next).toHaveBeenCalledTimes(2);
-      // expect(store.state()).toEqual({ counter: 3, nested: { state: 6 } });
+      // the infinite loop was here
+
+      expect(store.state().counter).toBe(1);
     });
 
     it('starts nested batches with the correct state (production bug)', () => {
-      fail('revisit this test');
-      // store.batch((batch1) => {
-      //   batch1('counter').set(1);
-      //   store.inBatch(batch1).batch((batch2) => {
-      //     expect(batch2.state().counter).toBe(1);
-      //     batch2('nested')('state').set(2);
-      //   });
-      // });
-      // expect(store.state()).toEqual(
-      //   jasmine.objectContaining({ counter: 1, nested: { state: 2 } }),
-      // );
+      store.batch(() => {
+        store('counter').set(1);
+        store.batch(() => {
+          expect(store.state().counter).toBe(1);
+          store('nested')('state').set(2);
+        });
+      });
+      expect(store.state()).toEqual(
+        jasmine.objectContaining({ counter: 1, nested: { state: 2 } }),
+      );
     });
   });
 
@@ -531,14 +506,13 @@ describe('StoreObject', () => {
     });
 
     it('gets the in-progress value of a batch', () => {
-      fail('revisit this test');
-      // store.batch(() => {
-      //   store('counter').set(1);
-      //   expect(store.state().counter).toBe(1);
-      //
-      //   store('counter').set(2);
-      //   expect(store.state().counter).toBe(2);
-      // });
+      store.batch(() => {
+        store('counter').set(1);
+        expect(store.state().counter).toBe(1);
+
+        store('counter').set(2);
+        expect(store.state().counter).toBe(2);
+      });
     });
 
     it('gets the new subvalue even when it has a later subscriber (production bug)', () => {
@@ -553,20 +527,19 @@ describe('StoreObject', () => {
     });
 
     it('works on a second store that subscribed later (production bug)', () => {
-      fail('revisit this test');
-      // const store2 = new AppStore(new State());
-      // let store2value = -1;
-      // store.$.subscribe(() => {
-      //   store2value = store2.state().counter;
-      // });
-      // store2.$.subscribe();
-      //
-      // store.batch((batch) => {
-      //   batch('counter').set(3);
-      //   store2('counter').inBatch(batch).set(3);
-      // });
-      //
-      // expect(store2value).toBe(3);
+      const store2 = new AppStore(new State());
+      let store2value = -1;
+      store.$.subscribe(() => {
+        store2value = store2.state().counter;
+      });
+      store2.$.subscribe();
+
+      store.batch(() => {
+        store('counter').set(3);
+        store2('counter').set(3);
+      });
+
+      expect(store2value).toBe(3);
     });
   });
 

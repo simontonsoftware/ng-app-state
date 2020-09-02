@@ -2,7 +2,6 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { isEqual } from 'micro-dash';
 import { expectSingleCallAndReset } from 's-ng-dev-utils';
 import { AppStore } from '../app-store';
-import { StoreObject } from '../store-object';
 import { UndoManager, UndoOrRedo } from './undo-manager';
 
 class State {
@@ -42,12 +41,11 @@ class TestImpl extends UndoManager<State, State> {
 
   protected applyUndoState(
     stateToApply: State,
-    batch: StoreObject<State>,
     undoOrRedo: UndoOrRedo,
     stateToOverwrite: State,
   ): void {
     this.skipNextChange = true;
-    batch.set(stateToApply);
+    this.store.set(stateToApply);
     this.lastApplicationUndoOrRedo = undoOrRedo;
     this.lastApplicationStateToOverwrite = stateToOverwrite;
   }

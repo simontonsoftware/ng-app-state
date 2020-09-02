@@ -7,6 +7,7 @@ interface Client {
   getState(path: string[]): any;
   getState$(path: string[]): Observable<any>;
   setRootState(value: any): void;
+  runInBatch(func: () => void): void;
 }
 
 /** @hidden */
@@ -67,34 +68,8 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * });
    * ```
    */
-  batch(_func: (state: StoreObject<T>) => void): void {
-    // const batch = new BatchAction(this.client.getState([]));
-    // func(
-    //   new StoreObject(
-    //     {
-    //       getState: bindKey(batch, 'getState'),
-    //       getState$: this.client.getState$,
-    //       dispatch: bindKey(batch, 'dispatch'),
-    //     },
-    //     this.path,
-    //   ),
-    // );
-    // this.client.dispatch(batch);
-  }
-
-  /**
-   * Returns a copy of this store object that will operate within the given batch.
-   *
-   * ```ts
-   * const existingStoreObject: StoreObject<string>;
-   * store.batch((batch) => {
-   *   batch('key1').set('a new value');
-   *   existingStoreObject.inBatch(batch).set('a second value');
-   * });
-   * ```
-   */
-  inBatch(batch: StoreObject<any>): StoreObject<T> {
-    return new StoreObject<T>(batch.client, this.path, this.parent);
+  batch(func: () => void): void {
+    this.client.runInBatch(func);
   }
 
   /**

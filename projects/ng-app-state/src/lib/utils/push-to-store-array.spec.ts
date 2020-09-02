@@ -32,20 +32,19 @@ describe('pushToStoreArray', () => {
   });
 
   it('works within a batch (production bug)', () => {
-    fail('revisit this test');
-    // store.set([]);
-    // let so1: StoreObject<number>;
-    // let so2: StoreObject<number>;
-    //
-    // store.batch((batch) => {
-    //   so1 = pushToStoreArray(batch, 1);
-    //   so2 = pushToStoreArray(batch, 2);
-    //
-    //   expect(so1.state()).toEqual(1);
-    //   expect(so2.state()).toEqual(2);
-    // });
-    // expect(store.state()).toEqual([1, 2]);
-    // expect(so1!.state()).toEqual(1);
-    // expect(so2!.state()).toEqual(2);
+    store.set([]);
+    let so1: StoreObject<number>;
+    let so2: StoreObject<number>;
+
+    store.batch(() => {
+      so1 = pushToStoreArray(store, 1);
+      so2 = pushToStoreArray(store, 2);
+
+      expect(so1.state()).toEqual(1);
+      expect(so2.state()).toEqual(2);
+    });
+    expect(store.state()).toEqual([1, 2]);
+    expect(so1!.state()).toEqual(1);
+    expect(so2!.state()).toEqual(2);
   });
 });
