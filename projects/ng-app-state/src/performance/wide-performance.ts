@@ -18,11 +18,11 @@ export function subscribeWide(
   const width = arrayStore.state().length;
   const subscription = new Subscription();
 
-  const start = new Date().getTime();
+  const start = performance.now();
   for (let i = width; --i >= 0; ) {
     subscription.add(arrayStore(i)('counter').$.subscribe());
   }
-  const elapsed = new Date().getTime() - start;
+  const elapsed = performance.now() - start;
 
   console.log('ms to subscribe wide:', elapsed);
   console.log(' - per subscription:', elapsed / width);
@@ -35,11 +35,11 @@ export function runWide(
 ): number {
   const counterStore = store('array')(0)('counter');
 
-  const start = new Date().getTime();
+  const start = performance.now();
   for (let i = iterations; --i; ) {
     counterStore.setUsing(increment);
   }
-  const elapsed = new Date().getTime() - start;
+  const elapsed = performance.now() - start;
 
   console.log('ms to run wide:', elapsed);
   console.log(' - per iteration:', elapsed / iterations);

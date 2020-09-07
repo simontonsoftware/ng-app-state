@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { AppStore } from 'ng-app-state';
 import {
   DeepState,
@@ -16,14 +15,8 @@ export class DeepPerformanceComponent {
   depth = 1000;
   iterations = 1000;
 
-  constructor(private ngrxStore: Store<any>) {}
-
   run(): void {
-    const store: any = new AppStore(
-      this.ngrxStore,
-      'testKey',
-      new DeepState(this.depth),
-    );
+    const store: any = new AppStore(new DeepState(this.depth));
     const { subscription } = subscribeDeep(store);
     runDeep(store, this.iterations);
     subscription.unsubscribe();

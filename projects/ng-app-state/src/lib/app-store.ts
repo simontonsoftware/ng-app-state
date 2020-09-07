@@ -1,13 +1,11 @@
 import { bindKey, get } from 'micro-dash';
-import { BehaviorSubject } from 'rxjs';
 import { StoreObject } from './store-object';
 import { TreeBasedObservableFactory } from './tree-based-observable/tree-based-observable-factory';
 
 // TODO: rename `RootStore`?
 export class AppStore<T extends object> extends StoreObject<T> {
   constructor(state: T) {
-    const state$ = new BehaviorSubject(state);
-    const observableFactory = TreeBasedObservableFactory.getFor(state$);
+    const observableFactory = new TreeBasedObservableFactory<T>(state);
     let batchCount = 0;
     super(
       {
@@ -15,9 +13,7 @@ export class AppStore<T extends object> extends StoreObject<T> {
         getState$: bindKey(observableFactory, 'getState$'),
         setRootState: (value) => {
           state = value;
-          if (!batchCount) {
-            state$.next(state);
-          }
+          observableFactory.setState(state, !batchCount);
         },
         runInBatch: (func: () => void) => {
           ++batchCount;
@@ -25,7 +21,7 @@ export class AppStore<T extends object> extends StoreObject<T> {
             func();
           } finally {
             if (--batchCount === 0) {
-              state$.next(state);
+              observableFactory.setState(state, true);
             }
           }
         },

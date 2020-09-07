@@ -580,19 +580,22 @@ describe('StoreObject', () => {
 
   describe('.refersToSameStateAs()', () => {
     it('works', () => {
-      fail('revisit this test');
-      // expect(store.refersToSameStateAs(store)).toBe(true);
-      // expect(
-      //   store('counter').refersToSameStateAs(store('nested')('state')),
-      // ).toBe(false);
-      // expect(
-      //   store('nested')('left').refersToSameStateAs(store('nested')('left')),
-      // ).toBe(true);
-      // expect(
-      //   store('nested')('left').refersToSameStateAs(store('nested')('right')),
-      // ).toBe(false);
-      // expect(store.refersToSameStateAs(new AppStore(new State()))).toBe(true);
-      // expect(store.refersToSameStateAs(new AppStore(new State()))).toBe(false);
+      expect(store.refersToSameStateAs(store)).toBe(true);
+      expect(
+        store('counter').refersToSameStateAs(store('nested')('state')),
+      ).toBe(false);
+      expect(
+        store('nested')('left').refersToSameStateAs(store('nested')('left')),
+      ).toBe(true);
+      expect(
+        store('nested')('left').refersToSameStateAs(store('nested')('right')),
+      ).toBe(false);
+      expect(store.refersToSameStateAs(new AppStore(new State()))).toBe(false);
+      expect(
+        store('counter').refersToSameStateAs(
+          new AppStore(new State())('counter'),
+        ),
+      ).toBe(false);
     });
   });
 });

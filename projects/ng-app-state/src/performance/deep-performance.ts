@@ -19,11 +19,11 @@ export function subscribeDeep(
   const { depth } = analyze(store);
   const subscriptions: Subscription[] = [];
 
-  const start = new Date().getTime();
+  const start = performance.now();
   for (let i = depth; --i >= 0; store = store('next')) {
     subscriptions.push(store.$.subscribe());
   }
-  const elapsed = new Date().getTime() - start;
+  const elapsed = performance.now() - start;
 
   console.log('ms to subscribe deep:', elapsed);
   console.log(' - per subscription:', elapsed / depth);
@@ -40,11 +40,11 @@ export function runDeep(
 ): number {
   const { leafStore } = analyze(store);
 
-  const start = new Date().getTime();
+  const start = performance.now();
   for (let i = iterations; --i >= 0; ) {
     leafStore('counter').setUsing(increment);
   }
-  const elapsed = new Date().getTime() - start;
+  const elapsed = performance.now() - start;
 
   console.log('ms to run deep:', elapsed);
   console.log(' - per iteration:', elapsed / iterations);

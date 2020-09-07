@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { AppStore } from 'ng-app-state';
 import {
   runWide,
@@ -16,14 +15,8 @@ export class WidePerformanceComponent {
   width = 1000;
   iterations = 1000;
 
-  constructor(private ngrxStore: Store<any>) {}
-
   run(): void {
-    const store: any = new AppStore(
-      this.ngrxStore,
-      'testKey',
-      new WideState(this.width),
-    );
+    const store: any = new AppStore(new WideState(this.width));
     const { subscription } = subscribeWide(store);
     runWide(store, this.iterations);
     subscription.unsubscribe();

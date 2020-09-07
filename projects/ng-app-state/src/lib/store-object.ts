@@ -1,11 +1,12 @@
 import { clone, every, isEqual, last, memoize, omit } from 'micro-dash';
 import { Observable } from 'rxjs';
 import { CallableObject } from 's-js-utils';
+import { ObservableNode } from './tree-based-observable/observable-node';
 
 /** @hidden */
 interface Client {
   getState(path: string[]): any;
-  getState$(path: string[]): Observable<any>;
+  getState$(path: string[]): ObservableNode;
   setRootState(value: any): void;
   runInBatch(func: () => void): void;
 }
@@ -22,7 +23,7 @@ export interface StoreObject<T> extends GetSlice<T> {
 }
 
 export class StoreObject<T> extends CallableObject<GetSlice<T>> {
-  private _$?: Observable<T>;
+  private _$ = this.client.getState$(this.path);
 
   protected constructor(
     private client: Client,
@@ -48,9 +49,6 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * An `Observable` of the state of this store object.
    */
   get $(): Observable<T> {
-    if (!this._$) {
-      this._$ = this.client.getState$(this.path);
-    }
     return this._$;
   }
 
@@ -151,7 +149,9 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * Retrieve the current state represented by this store object.
    */
   state(): T {
-    return this.client.getState(this.path);
+    return this._$.subscribersAreEmpty()
+      ? this.client.getState(this.path)
+      : this._$.getValue();
   }
 
   /**
@@ -182,7 +182,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * @returns whether the given `StoreObject` operates on the same slice of the store as this object.
    */
   refersToSameStateAs(other: StoreObject<T>): boolean {
-    return isEqual(this.path, other.path);
+    return this.client === other.client && isEqual(this.path, other.path);
   }
 }
 
