@@ -1,13 +1,18 @@
-import { clone, every, isEqual, last, memoize, omit } from 'micro-dash';
-import { Observable } from 'rxjs';
+import {
+  clone,
+  every,
+  forOwn,
+  get,
+  isEqual,
+  last,
+  memoize,
+  omit,
+} from 'micro-dash';
+import { Observable, Subscriber } from 'rxjs';
 import { CallableObject } from 's-js-utils';
-import { ObservableNode } from './tree-based-observable/observable-node';
 
 /** @hidden */
 interface Client {
-  getState(path: string[]): any;
-  getState$(path: string[]): ObservableNode;
-  setRootState(value: any): void;
   runInBatch(func: () => void): void;
 }
 
@@ -23,11 +28,23 @@ export interface StoreObject<T> extends GetSlice<T> {
 }
 
 export class StoreObject<T> extends CallableObject<GetSlice<T>> {
-  private _$ = this.client.getState$(this.path);
+  private lastKnownState?: T;
+  private lastKnownStateChanged = false;
+  private subscribers = new Set<Subscriber<T>>();
+  private activeChildren: Record<string, Set<StoreObject<any>>> = {};
+  private observable = new Observable<T>((subscriber) => {
+    this.subscribers.add(subscriber);
+    this.maybeActivate();
+    subscriber.next(this.state());
+    return () => {
+      this.subscribers.delete(subscriber);
+      this.maybeDeactivate();
+    };
+  });
 
   protected constructor(
     private client: Client,
-    private path: string[],
+    private path: string[], // TODO: change to `key`
     private parent: StoreObject<any> | undefined,
     private _withCaching = false,
   ) {
@@ -49,7 +66,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * An `Observable` of the state of this store object.
    */
   get $(): Observable<T> {
-    return this._$;
+    return this.observable;
   }
 
   /**
@@ -87,7 +104,8 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
       parentState[last(this.path)] = value;
       this.parent.set(parentState);
     } else {
-      this.client.setRootState(value);
+      this.updateState(value);
+      this.maybeEmit();
     }
   }
 
@@ -149,9 +167,11 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * Retrieve the current state represented by this store object.
    */
   state(): T {
-    return this._$.subscribersAreEmpty()
-      ? this.client.getState(this.path)
-      : this._$.getValue();
+    if (this.isActive()) {
+      return this.lastKnownState!;
+    } else {
+      return get(this.parent!.state(), [last(this.path)]);
+    }
   }
 
   /**
@@ -183,6 +203,69 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    */
   refersToSameStateAs(other: StoreObject<T>): boolean {
     return this.client === other.client && isEqual(this.path, other.path);
+  }
+
+  protected maybeEmit(): void {
+    if (!this.lastKnownStateChanged) {
+      return;
+    }
+
+    this.lastKnownStateChanged = false;
+    for (const subscriber of this.subscribers) {
+      subscriber.next(this.lastKnownState);
+    }
+    forOwn(this.activeChildren, (children) => {
+      for (const child of children) {
+        child.maybeEmit();
+      }
+    });
+  }
+
+  private maybeActivate(): void {
+    if (!this.parent || this.isActive()) {
+      return;
+    }
+
+    const key = last(this.path);
+    let set = this.parent.activeChildren[key];
+    if (!set) {
+      set = this.parent.activeChildren[key] = new Set<StoreObject<any>>();
+    }
+    set.add(this);
+    this.parent.maybeActivate();
+    this.lastKnownState = get(this.parent.state(), [key]);
+  }
+
+  private maybeDeactivate(): void {
+    if (!this.parent || !this.isActive()) {
+      return;
+    }
+
+    const key = last(this.path);
+    const set = this.parent.activeChildren[key];
+    set.delete(this);
+    if (set.size === 0) {
+      delete this.parent.activeChildren[key];
+    }
+  }
+
+  private updateState(value: any): void {
+    if (value === this.lastKnownState) {
+      return;
+    }
+
+    this.lastKnownState = value;
+    this.lastKnownStateChanged = true;
+    forOwn(this.activeChildren, (children, key) => {
+      for (const child of children) {
+        child.updateState(get(value, [key]));
+      }
+    });
+  }
+
+  private isActive(): boolean {
+    const key = last(this.path);
+    return !this.parent || this.parent.activeChildren[key]?.has(this);
   }
 }
 
