@@ -18,8 +18,8 @@ export class AppStore<T extends object> extends StoreObject<T> {
           }
         },
       },
-      [],
       undefined,
+      (undefined as unknown) as string | number, // TODO: too hacky
     );
     this.set(state);
   }

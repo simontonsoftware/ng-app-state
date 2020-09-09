@@ -1,13 +1,4 @@
-import {
-  clone,
-  every,
-  forOwn,
-  get,
-  isEqual,
-  last,
-  memoize,
-  omit,
-} from 'micro-dash';
+import { clone, every, forOwn, memoize, omit } from 'micro-dash';
 import { Observable, Subscriber } from 'rxjs';
 import { CallableObject } from 's-js-utils';
 
@@ -28,6 +19,7 @@ export interface StoreObject<T> extends GetSlice<T> {
 }
 
 export class StoreObject<T> extends CallableObject<GetSlice<T>> {
+  private isActive: boolean;
   private lastKnownState?: T;
   private lastKnownStateChanged = false;
   private subscribers = new Set<Subscriber<T>>();
@@ -44,22 +36,23 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
 
   protected constructor(
     private client: Client,
-    private path: string[], // TODO: change to `key`
     private parent: StoreObject<any> | undefined,
+    private key: string | number,
     private _withCaching = false,
   ) {
     super(
       maybeMemoize(
-        (prop: keyof T) =>
+        (childKey: keyof T) =>
           new StoreObject(
             client,
-            path.concat(prop.toString()),
             this,
+            childKey as string | number,
             _withCaching,
           ),
         _withCaching,
       ),
     );
+    this.isActive = !parent;
   }
 
   /**
@@ -101,7 +94,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
         throw new Error('cannot modify when parent state is missing');
       }
 
-      parentState[last(this.path)] = value;
+      parentState[this.key] = value;
       this.parent.set(parentState);
     } else {
       this.updateState(value);
@@ -131,7 +124,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    */
   delete(): void {
     if (this.parent) {
-      this.parent.setUsing(omit, last(this.path));
+      this.parent.setUsing(omit, this.key);
     } else {
       this.set(undefined as any);
     }
@@ -167,10 +160,10 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * Retrieve the current state represented by this store object.
    */
   state(): T {
-    if (this.isActive()) {
+    if (this.isActive) {
       return this.lastKnownState!;
     } else {
-      return get(this.parent!.state(), [last(this.path)]);
+      return this.parent!.state()?.[this.key];
     }
   }
 
@@ -188,7 +181,8 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * This method does not modify the current store object; it returns a new one with the given setting.
    */
   withCaching(value = true): StoreObject<T> {
-    return new StoreObject(this.client, this.path, this.parent, value);
+    // throw new Error('caching is not available yet');
+    return new StoreObject(this.client, this.parent, this.key, value);
   }
 
   /**
@@ -202,7 +196,13 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * @returns whether the given `StoreObject` operates on the same slice of the store as this object.
    */
   refersToSameStateAs(other: StoreObject<T>): boolean {
-    return this.client === other.client && isEqual(this.path, other.path);
+    if (this.parent && other.parent) {
+      return (
+        this.key === other.key && this.parent?.refersToSameStateAs(other.parent)
+      );
+    } else {
+      return this === other;
+    }
   }
 
   protected maybeEmit(): void {
@@ -222,30 +222,30 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   }
 
   private maybeActivate(): void {
-    if (!this.parent || this.isActive()) {
+    if (!this.parent || this.isActive) {
       return;
     }
 
-    const key = last(this.path);
-    let set = this.parent.activeChildren[key];
+    let set = this.parent.activeChildren[this.key];
     if (!set) {
-      set = this.parent.activeChildren[key] = new Set<StoreObject<any>>();
+      set = this.parent.activeChildren[this.key] = new Set<StoreObject<any>>();
     }
     set.add(this);
+    this.isActive = true;
     this.parent.maybeActivate();
-    this.lastKnownState = get(this.parent.state(), [key]);
+    this.lastKnownState = this.parent.state()?.[this.key];
   }
 
   private maybeDeactivate(): void {
-    if (!this.parent || !this.isActive()) {
+    if (!this.parent || !this.isActive) {
       return;
     }
 
-    const key = last(this.path);
-    const set = this.parent.activeChildren[key];
+    const set = this.parent.activeChildren[this.key];
     set.delete(this);
+    this.isActive = false;
     if (set.size === 0) {
-      delete this.parent.activeChildren[key];
+      delete this.parent.activeChildren[this.key];
     }
   }
 
@@ -258,14 +258,9 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     this.lastKnownStateChanged = true;
     forOwn(this.activeChildren, (children, key) => {
       for (const child of children) {
-        child.updateState(get(value, [key]));
+        child.updateState(value?.[key]);
       }
     });
-  }
-
-  private isActive(): boolean {
-    const key = last(this.path);
-    return !this.parent || this.parent.activeChildren[key]?.has(this);
   }
 }
 

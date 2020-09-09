@@ -17,9 +17,7 @@ export class WidePerformanceComponent {
 
   run(): void {
     const store: any = new AppStore(new WideState(this.width));
-    const { subscription } = subscribeWide(store);
+    subscribeWide(store);
     runWide(store, this.iterations);
-    subscription.unsubscribe();
-    store.delete();
   }
 }

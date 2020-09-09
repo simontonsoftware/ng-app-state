@@ -17,9 +17,7 @@ export class DeepPerformanceComponent {
 
   run(): void {
     const store: any = new AppStore(new DeepState(this.depth));
-    const { subscription } = subscribeDeep(store);
+    subscribeDeep(store);
     runDeep(store, this.iterations);
-    subscription.unsubscribe();
-    store.delete();
   }
 }
