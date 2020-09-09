@@ -1,4 +1,4 @@
-import { clone, every, forOwn, memoize, omit } from 'micro-dash';
+import { clone, every, forOwn, omit } from 'micro-dash';
 import { Observable, Subscriber } from 'rxjs';
 import { CallableObject } from 's-js-utils';
 
@@ -19,15 +19,15 @@ export interface StoreObject<T> extends GetSlice<T> {
 }
 
 export class StoreObject<T> extends CallableObject<GetSlice<T>> {
-  private isActive: boolean;
   private lastKnownState?: T;
   private lastKnownStateChanged = false;
-  private subscribers = new Set<Subscriber<T>>();
+  private subscribers = new Map<Subscriber<T>, T | undefined>();
   private activeChildren: Record<string, Set<StoreObject<any>>> = {};
   private observable = new Observable<T>((subscriber) => {
-    this.subscribers.add(subscriber);
+    const value = this.state();
+    this.subscribers.set(subscriber, value);
     this.maybeActivate();
-    subscriber.next(this.state());
+    subscriber.next(value);
     return () => {
       this.subscribers.delete(subscriber);
       this.maybeDeactivate();
@@ -38,21 +38,13 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     private client: Client,
     private parent: StoreObject<any> | undefined,
     private key: string | number,
-    private _withCaching = false,
   ) {
     super(
-      maybeMemoize(
-        (childKey: keyof T) =>
-          new StoreObject(
-            client,
-            this,
-            childKey as string | number,
-            _withCaching,
-          ),
-        _withCaching,
-      ),
+      // TODO: test auto-caching
+      (childKey: any) =>
+        this.activeChildren[childKey]?.values().next()?.value ||
+        new StoreObject(client, this, childKey as string | number),
     );
-    this.isActive = !parent;
   }
 
   /**
@@ -160,36 +152,11 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
    * Retrieve the current state represented by this store object.
    */
   state(): T {
-    if (this.isActive) {
+    if (this.isActive()) {
       return this.lastKnownState!;
     } else {
       return this.parent!.state()?.[this.key];
     }
-  }
-
-  /**
-   * Creates a new store object representing the same state as this one, but with caching turned on or off. When caching is on, selecting the same sub-store multiple times will return the same object. This allows you to safely use expressions like this in an Angular template:
-   *
-   * ```html
-   * <child-component [childStore]="myStore('subKey')"></child-component>
-   * ```
-   *
-   * Without caching `myStore('subKey')` would evaluate to a new object every time change detection runs.
-   *
-   * Caching propogates to descendant stores, so e.g. `myStore('subKey')('deepKey')` always return the same object, which will itself have caching turned on.
-   *
-   * This method does not modify the current store object; it returns a new one with the given setting.
-   */
-  withCaching(value = true): StoreObject<T> {
-    // throw new Error('caching is not available yet');
-    return new StoreObject(this.client, this.parent, this.key, value);
-  }
-
-  /**
-   * @return whether or not caching is turned on for this store object. See `.withCaching()` for details.
-   */
-  caches(): boolean {
-    return this._withCaching;
   }
 
   /**
@@ -211,9 +178,12 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     }
 
     this.lastKnownStateChanged = false;
-    for (const subscriber of this.subscribers) {
-      subscriber.next(this.lastKnownState);
-    }
+    this.subscribers.forEach((lastEmitted, subscriber) => {
+      if (lastEmitted !== this.lastKnownState) {
+        subscriber.next(this.lastKnownState);
+        this.subscribers.set(subscriber, this.lastKnownState);
+      }
+    });
     forOwn(this.activeChildren, (children) => {
       for (const child of children) {
         child.maybeEmit();
@@ -222,7 +192,7 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   }
 
   private maybeActivate(): void {
-    if (!this.parent || this.isActive) {
+    if (!this.parent || this.isActive()) {
       return;
     }
 
@@ -231,19 +201,17 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
       set = this.parent.activeChildren[this.key] = new Set<StoreObject<any>>();
     }
     set.add(this);
-    this.isActive = true;
     this.parent.maybeActivate();
     this.lastKnownState = this.parent.state()?.[this.key];
   }
 
   private maybeDeactivate(): void {
-    if (!this.parent || !this.isActive) {
+    if (!this.parent || !this.isActive()) {
       return;
     }
 
     const set = this.parent.activeChildren[this.key];
     set.delete(this);
-    this.isActive = false;
     if (set.size === 0) {
       delete this.parent.activeChildren[this.key];
     }
@@ -262,14 +230,8 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
       }
     });
   }
-}
 
-/** @hidden */
-// tslint:disable-next-line:ban-types
-function maybeMemoize<F extends Function>(fn: F, withCaching: boolean): F {
-  if (withCaching) {
-    return memoize(fn);
-  } else {
-    return fn;
+  private isActive(): boolean {
+    return !this.parent || this.parent.activeChildren[this.key]?.has(this);
   }
 }

@@ -543,41 +543,6 @@ describe('StoreObject', () => {
     });
   });
 
-  describe('.withCaching()', () => {
-    it('caches descendant stores', () => {
-      expect(store('counter')).not.toBe(store('counter'));
-      expect(store('nested')('left')).not.toBe(store('nested')('left'));
-
-      const cachingStore = store.withCaching();
-      expect(cachingStore('counter')).toBe(cachingStore('counter'));
-      expect(cachingStore('nested')('left')).toBe(
-        cachingStore('nested')('left'),
-      );
-    });
-
-    it('accepts a boolean, too', () => {
-      const withCaching = store.withCaching(true);
-      expect(withCaching('counter')).toBe(withCaching('counter'));
-
-      const without = withCaching.withCaching(false);
-      expect(without('counter')).not.toBe(without('counter'));
-    });
-
-    it('does not affect the source store object', () => {
-      store.withCaching();
-      expect(store('counter')).not.toBe(store('counter'));
-    });
-  });
-
-  describe('.caches()', () => {
-    it('indicates whether the store uses caching', () => {
-      expect(store.caches()).toBe(false);
-      expect(store.withCaching().caches()).toBe(true);
-      expect(store.withCaching()('nested').caches()).toBe(true);
-      expect(store.withCaching(true).withCaching(false).caches()).toBe(false);
-    });
-  });
-
   describe('.refersToSameStateAs()', () => {
     it('works', () => {
       expect(store.refersToSameStateAs(store)).toBe(true);

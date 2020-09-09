@@ -26,12 +26,6 @@ export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
 
   @Input()
   set nasModel(store: StoreObject<T>) {
-    if (this.store?.refersToSameStateAs(this.store)) {
-      console.warn(
-        'nasModel was updated with a new store object that is equivalent to the old one. Cache the value bound to nasModel for better performance, e.g. using `StoreObject.withCaching()`.',
-      );
-    }
-
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { forEach, padStart } from 'micro-dash';
-import { StoreObject } from 'ng-app-state';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { mapToObject } from 's-js-utils';
@@ -13,12 +12,10 @@ import { IntegrationStore } from './integration-store';
 })
 export class AppComponent {
   cities: City[] = ['San Francisco', 'Nairobi', 'Gulu'];
-  store: StoreObject<IntegrationState>;
   stateString$: Observable<string>;
 
-  constructor(store: IntegrationStore) {
-    this.store = store.withCaching();
-    this.stateString$ = this.store.$.pipe(
+  constructor(public store: IntegrationStore) {
+    this.stateString$ = store.$.pipe(
       map((state) => JSON.stringify(state, null, 2)),
     );
   }

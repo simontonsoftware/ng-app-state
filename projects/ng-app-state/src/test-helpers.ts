@@ -1,16 +1,12 @@
 import { Component, Injectable } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppStore } from './lib/app-store';
-import { StoreObject } from './lib/store-object';
 
 class StoreComponent<T extends object> {
-  store: StoreObject<T>;
   compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
     o1 && o2 ? o1.id === o2.id : o1 === o2;
 
-  constructor(store: AppStore<T>) {
-    this.store = store.withCaching();
-  }
+  constructor(public store: AppStore<T>) {}
 }
 
 //

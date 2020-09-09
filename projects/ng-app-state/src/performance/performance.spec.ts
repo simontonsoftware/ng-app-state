@@ -4,13 +4,13 @@ import { DeepState, runDeep, subscribeDeep } from './deep-performance';
 import { runWide, subscribeWide, WideState } from './wide-performance';
 
 const depth = 1000;
-const deepIterations = 1000;
+const deepIterations = 100;
 const msPerDeepSubscription = 1;
 const msPerDeepIteration = 5;
 const msPerDeepUnsubscribe = 1;
 
 const width = 10000;
-const wideIterations = 1000;
+const wideIterations = 100;
 const msPerWideSubscription = 1;
 const msPerWideIteration = 5;
 const msPerWideUnsubscribe = 1;
