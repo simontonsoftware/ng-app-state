@@ -1,12 +1,12 @@
 import { Component, Injectable } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { AppStore } from './lib/app-store';
+import { RootStore } from './lib/root-store';
 
 class StoreComponent<T extends object> {
   compareFn: (o1: any, o2: any) => boolean = (o1: any, o2: any) =>
     o1 && o2 ? o1.id === o2.id : o1 === o2;
 
-  constructor(public store: AppStore<T>) {}
+  constructor(public store: RootStore<T>) {}
 }
 
 //
@@ -14,7 +14,7 @@ class StoreComponent<T extends object> {
 //
 
 @Injectable()
-export class SingleValueStore extends AppStore<any> {
+export class SingleValueStore extends RootStore<any> {
   constructor() {
     super('old');
   }
@@ -37,7 +37,7 @@ export class CityState {
 }
 
 @Injectable()
-export class CityStore extends AppStore<CityState> {
+export class CityStore extends RootStore<CityState> {
   constructor() {
     super(new CityState());
   }
@@ -85,7 +85,7 @@ export class MultipleCityState {
 }
 
 @Injectable()
-export class MultipleCityStore extends AppStore<MultipleCityState> {
+export class MultipleCityStore extends RootStore<MultipleCityState> {
   constructor() {
     super(new MultipleCityState());
   }
@@ -131,7 +131,7 @@ export class MenuState {
 }
 
 @Injectable()
-export class MenuStore extends AppStore<MenuState> {
+export class MenuStore extends RootStore<MenuState> {
   constructor() {
     super(new MenuState());
   }
@@ -165,7 +165,7 @@ export class NameState {
 }
 
 @Injectable()
-export class NameStore extends AppStore<NameState> {
+export class NameStore extends RootStore<NameState> {
   constructor() {
     super(new NameState());
   }

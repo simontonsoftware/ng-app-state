@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { StoreObject } from '../public-api';
+import { Store } from '../public-api';
 import { CounterState } from './counter-state';
 
 export class DeepState extends CounterState {
@@ -14,7 +14,7 @@ export class DeepState extends CounterState {
 }
 
 export function subscribeDeep(
-  store: StoreObject<DeepState>,
+  store: Store<DeepState>,
 ): { elapsed: number; subscription: Subscription } {
   const { depth } = analyze(store);
   const subscriptions: Subscription[] = [];
@@ -34,10 +34,7 @@ export function subscribeDeep(
   return { elapsed, subscription };
 }
 
-export function runDeep(
-  store: StoreObject<DeepState>,
-  iterations: number,
-): number {
+export function runDeep(store: Store<DeepState>, iterations: number): number {
   const { leafStore } = analyze(store);
 
   const start = performance.now();
@@ -52,8 +49,8 @@ export function runDeep(
 }
 
 function analyze(
-  store: StoreObject<DeepState>,
-): { depth: number; leafStore: StoreObject<DeepState> } {
+  store: Store<DeepState>,
+): { depth: number; leafStore: Store<DeepState> } {
   let depth = 1;
   for (; store('next').state(); ++depth) {
     store = store('next');

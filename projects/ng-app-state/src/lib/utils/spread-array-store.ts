@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { distinctUntilKeyChanged, map } from 'rxjs/operators';
-import { StoreObject } from '../store-object';
+import { Store } from '../store';
 
 /**
  * Returns an observable that emits an array of store objects, one for each element in `source`'s state. The resulting arrays will have references to the exact store objects included in the previous emission when possible, making them performant to use in `*ngFor` expressions without the need to use `trackBy`.
@@ -15,8 +15,8 @@ import { StoreObject } from '../store-object';
  *   `,
  * })
  * class HeroListComponent {
- *   heroStores$: Observable<Array<StoreObject<Hero>>>;
- *   @Input() private heroesStore: StoreObject<Array<Hero>>;
+ *   heroStores$: Observable<Array<Store<Hero>>>;
+ *   @Input() private heroesStore: Store<Array<Hero>>;
  *
  *   ngOnChanges() {
  *     this.heroStores$ = spreadArrayStore(this.heroesStore);
@@ -25,9 +25,9 @@ import { StoreObject } from '../store-object';
  * ```
  */
 export function spreadArrayStore$<T>(
-  source: StoreObject<Array<T>>,
-): Observable<Array<StoreObject<T>>> {
-  let cache: Array<StoreObject<T>> = [];
+  source: Store<Array<T>>,
+): Observable<Array<Store<T>>> {
+  let cache: Array<Store<T>> = [];
   return source.$.pipe(
     distinctUntilKeyChanged('length'),
     map((array) => {

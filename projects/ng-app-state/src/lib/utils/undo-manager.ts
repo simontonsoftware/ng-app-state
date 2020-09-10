@@ -1,7 +1,7 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Debouncer } from 's-js-utils';
-import { StoreObject } from '../store-object';
+import { Store } from '../store';
 
 /** @hidden */
 export type UndoOrRedo = 'undo' | 'redo';
@@ -42,7 +42,7 @@ export abstract class UndoManager<StateType, UndoStateType> {
    * @param maxDepth The maximum size of the history before discarding the oldest state. `0` means no limit.
    */
   constructor(
-    protected readonly store: StoreObject<StateType>,
+    protected readonly store: Store<StateType>,
     protected maxDepth = 0,
   ) {
     this.reset();

@@ -1,7 +1,7 @@
 import { fakeAsync, tick } from '@angular/core/testing';
 import { isEqual } from 'micro-dash';
 import { expectSingleCallAndReset } from 's-ng-dev-utils';
-import { AppStore } from '../app-store';
+import { RootStore } from '../root-store';
 import { UndoManager, UndoOrRedo } from './undo-manager';
 
 class State {
@@ -16,7 +16,7 @@ class TestImpl extends UndoManager<State, State> {
   collectDebounce?: number;
   private skipNextChange = true;
 
-  constructor(store: AppStore<State>, maxDepth?: number) {
+  constructor(store: RootStore<State>, maxDepth?: number) {
     super(store, maxDepth);
     store.$.subscribe(() => {
       if (this.skipNextChange) {
@@ -52,11 +52,11 @@ class TestImpl extends UndoManager<State, State> {
 }
 
 describe('UndoManager', () => {
-  let store: AppStore<State>;
+  let store: RootStore<State>;
   let undoManager: TestImpl;
 
   beforeEach(() => {
-    store = new AppStore(new State());
+    store = new RootStore(new State());
     undoManager = new TestImpl(store);
   });
 

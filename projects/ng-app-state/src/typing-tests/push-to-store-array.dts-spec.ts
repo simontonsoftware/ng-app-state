@@ -1,6 +1,6 @@
-import { pushToStoreArray, StoreObject } from '../public-api';
+import { pushToStoreArray, ChildStore } from '../public-api';
 
-const store = (null as unknown) as StoreObject<Array<Date>>;
+const store = (null as unknown) as ChildStore<Array<Date>>;
 
-// $ExpectType StoreObject<Date>
+// $ExpectType ChildStore<Date>
 pushToStoreArray(store, new Date());

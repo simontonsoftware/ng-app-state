@@ -1,14 +1,14 @@
-import { AppStore } from './app-store';
+import { RootStore } from './root-store';
 
 describe('AppStore', () => {
   it('uses the given constructor arguments', () => {
-    const store = new AppStore({ initial: true });
+    const store = new RootStore({ initial: true });
     expect(store.state()).toEqual({ initial: true });
   });
 
   it('can have multiple instances', () => {
-    const store1 = new AppStore({ firstValue: 1 });
-    const store2 = new AppStore({ secondValue: 1 });
+    const store1 = new RootStore({ firstValue: 1 });
+    const store2 = new RootStore({ secondValue: 1 });
     expect(store1.state()).toEqual({ firstValue: 1 });
     expect(store2.state()).toEqual({ secondValue: 1 });
 
@@ -19,7 +19,7 @@ describe('AppStore', () => {
   });
 
   it('can be deleted', () => {
-    const store = new AppStore({ initial: true });
+    const store = new RootStore({ initial: true });
     store.delete();
     expect(store.state() as any).toEqual(undefined);
   });

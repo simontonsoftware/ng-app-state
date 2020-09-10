@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { AppStore } from '../lib/app-store';
+import { RootStore } from '../lib/root-store';
 import { DeepState, runDeep, subscribeDeep } from './deep-performance';
 import { runWide, subscribeWide, WideState } from './wide-performance';
 
@@ -17,7 +17,7 @@ const msPerWideUnsubscribe = 1;
 
 describe('performance', () => {
   it('is good with a deep state', () => {
-    const store = new AppStore(new DeepState(depth));
+    const store = new RootStore(new DeepState(depth));
 
     const { elapsed: timeToSubscribe, subscription } = subscribeDeep(store);
     const timeToChange = runDeep(store, deepIterations);
@@ -29,7 +29,7 @@ describe('performance', () => {
   });
 
   it('is good with a wide state', () => {
-    const store = new AppStore(new WideState(width));
+    const store = new RootStore(new WideState(width));
 
     const { elapsed: timeToSubscribe, subscription } = subscribeWide(store);
     const timeToChange = runWide(store, wideIterations);

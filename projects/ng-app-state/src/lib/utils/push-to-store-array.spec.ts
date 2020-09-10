@@ -1,12 +1,12 @@
-import { AppStore } from '../app-store';
-import { StoreObject } from '../store-object';
+import { RootStore } from '../root-store';
+import { Store } from '../store';
 import { pushToStoreArray } from './push-to-store-array';
 
 describe('pushToStoreArray', () => {
-  let store: StoreObject<number[]>;
+  let store: Store<number[]>;
 
   beforeEach(() => {
-    store = new AppStore([1, 2]);
+    store = new RootStore([1, 2]);
   });
 
   it('adds the specified item to the store', () => {
@@ -33,8 +33,8 @@ describe('pushToStoreArray', () => {
 
   it('works within a batch (production bug)', () => {
     store.set([]);
-    let so1: StoreObject<number>;
-    let so2: StoreObject<number>;
+    let so1: Store<number>;
+    let so2: Store<number>;
 
     store.batch(() => {
       so1 = pushToStoreArray(store, 1);

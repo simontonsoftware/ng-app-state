@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isSetEqual } from 's-js-utils';
 import { mapAndCacheObjectElements } from 's-rxjs-utils';
-import { StoreObject } from '../store-object';
+import { Store } from '../store';
 
 /**
  * Returns an observable that emits an array of store objects, one for each element in `source`'s state. The resulting arrays will have references to the exact store objects included in the previous emission when possible, making them performant to use in `*ngFor` expressions without the need to use `trackBy`.
@@ -22,8 +22,8 @@ import { StoreObject } from '../store-object';
  *   `,
  * })
  * class HeroListComponent {
- *   heroStores$: Observable<Array<StoreObject<Hero>>>;
- *   @Input() private heroesStore: StoreObject<HeroMap>;
+ *   heroStores$: Observable<Array<Store<Hero>>>;
+ *   @Input() private heroesStore: Store<HeroMap>;
  *
  *   ngOnChanges() {
  *     this.heroStores$ = spreadObjectStore(this.heroesStore);
@@ -32,8 +32,8 @@ import { StoreObject } from '../store-object';
  * ```
  */
 export function spreadObjectStore$<T extends object>(
-  source: StoreObject<T>,
-): Observable<Array<StoreObject<T[keyof T]>>> {
+  source: Store<T>,
+): Observable<Array<Store<T[keyof T]>>> {
   let lastKeySet: Set<string | keyof T> | undefined;
   return source.$.pipe(
     filter((value) => {

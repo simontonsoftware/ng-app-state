@@ -1,7 +1,7 @@
 import { cloneDeep, identity, noop, pick } from 'micro-dash';
 import { skip, take } from 'rxjs/operators';
 import { expectSingleCallAndReset } from 's-ng-dev-utils';
-import { AppStore } from './app-store';
+import { RootStore } from './root-store';
 
 class InnerState {
   left?: InnerState;
@@ -18,10 +18,10 @@ class State {
 }
 
 describe('StoreObject', () => {
-  let store: AppStore<State>;
+  let store: RootStore<State>;
 
   beforeEach(() => {
-    store = new AppStore(new State());
+    store = new RootStore(new State());
   });
 
   describe('()', () => {
@@ -238,7 +238,7 @@ describe('StoreObject', () => {
 
     it("doesn't have that infinite loop with 2 stores (production bug)", () => {
       // https://github.com/simontonsoftware/ng-app-state/issues/28
-      const store2 = new AppStore<{}>({});
+      const store2 = new RootStore<{}>({});
       store.$.subscribe(() => {
         store2.batch(noop);
       });
@@ -546,7 +546,7 @@ describe('StoreObject', () => {
     });
 
     it('works on a second store that subscribed later (production bug)', () => {
-      const store2 = new AppStore(new State());
+      const store2 = new RootStore(new State());
       let store2value = -1;
       store.$.subscribe(() => {
         store2value = store2.state().counter;
@@ -574,10 +574,10 @@ describe('StoreObject', () => {
       expect(
         store('nested')('left').refersToSameStateAs(store('nested')('right')),
       ).toBe(false);
-      expect(store.refersToSameStateAs(new AppStore(new State()))).toBe(false);
+      expect(store.refersToSameStateAs(new RootStore(new State()))).toBe(false);
       expect(
         store('counter').refersToSameStateAs(
-          new AppStore(new State())('counter'),
+          new RootStore(new State())('counter'),
         ),
       ).toBe(false);
     });

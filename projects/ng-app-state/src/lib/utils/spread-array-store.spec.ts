@@ -1,17 +1,17 @@
-import { AppStore } from '../app-store';
-import { StoreObject } from '../store-object';
+import { RootStore } from '../root-store';
+import { Store } from '../store';
 import { spreadArrayStore$ } from './spread-array-store';
 
 describe('spreadArrayStore$()', () => {
-  let store: StoreObject<number[]>;
+  let store: Store<number[]>;
 
   beforeEach(() => {
-    store = new AppStore([1, 2]);
+    store = new RootStore([1, 2]);
   });
 
   it('emits a separate store object for each element in the array', () => {
     store.set([1, 2]);
-    let emitted: Array<StoreObject<number>>;
+    let emitted: Array<Store<number>>;
     spreadArrayStore$(store).subscribe((stores) => {
       emitted = stores;
     });
@@ -49,8 +49,8 @@ describe('spreadArrayStore$()', () => {
   // this makes it nice for use in templates that use OnPush change detection
   it('emits the same object reference for indexes that remain', () => {
     store.set([1, 2]);
-    let lastEmit: Array<StoreObject<number>>;
-    let previousEmit: Array<StoreObject<number>>;
+    let lastEmit: Array<Store<number>>;
+    let previousEmit: Array<Store<number>>;
     spreadArrayStore$(store).subscribe((stores) => {
       previousEmit = lastEmit;
       lastEmit = stores;

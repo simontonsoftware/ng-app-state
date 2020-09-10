@@ -1,18 +1,18 @@
-import { AppStore } from '../app-store';
-import { StoreObject } from '../store-object';
+import { RootStore } from '../root-store';
+import { Store } from '../store';
 import { spreadObjectStore$ } from './spread-object-store';
 
 describe('spreadObjectStore$()', () => {
-  let store: StoreObject<Record<string, number>>;
+  let store: Store<Record<string, number>>;
 
   beforeEach(() => {
     const state: Record<string, number> = { a: 1, b: 2 };
-    store = new AppStore(state);
+    store = new RootStore(state);
   });
 
   it('emits a separate store object for each element in the object', () => {
     store.set({ a: 1, b: 2 });
-    let emitted: Array<StoreObject<number>>;
+    let emitted: Array<Store<number>>;
     spreadObjectStore$(store).subscribe((stores) => {
       emitted = stores;
     });
@@ -59,8 +59,8 @@ describe('spreadObjectStore$()', () => {
   // this makes it nice for use in templates that use OnPush change detection
   it('emits the same object reference for keys that remain', () => {
     store.set({ a: 1, b: 2 });
-    let lastEmit: Array<StoreObject<number>>;
-    let previousEmit: Array<StoreObject<number>>;
+    let lastEmit: Array<Store<number>>;
+    let previousEmit: Array<Store<number>>;
     spreadObjectStore$(store).subscribe((stores) => {
       previousEmit = lastEmit;
       lastEmit = stores;

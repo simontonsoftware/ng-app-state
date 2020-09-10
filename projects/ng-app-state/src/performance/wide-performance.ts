@@ -1,6 +1,6 @@
 import { times } from 'micro-dash';
 import { Subscription } from 'rxjs';
-import { StoreObject } from '../public-api';
+import { Store } from '../public-api';
 import { CounterState } from './counter-state';
 
 export class WideState {
@@ -12,7 +12,7 @@ export class WideState {
 }
 
 export function subscribeWide(
-  store: StoreObject<WideState>,
+  store: Store<WideState>,
 ): { elapsed: number; subscription: Subscription } {
   const arrayStore = store('array');
   const width = arrayStore.state().length;
@@ -29,10 +29,7 @@ export function subscribeWide(
   return { elapsed, subscription };
 }
 
-export function runWide(
-  store: StoreObject<WideState>,
-  iterations: number,
-): number {
+export function runWide(store: Store<WideState>, iterations: number): number {
   const counterStore = store('array')(0)('counter');
 
   const start = performance.now();

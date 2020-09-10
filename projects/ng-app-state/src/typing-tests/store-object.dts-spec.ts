@@ -1,4 +1,4 @@
-import { AppStore } from '../public-api';
+import { RootStore } from '../public-api';
 
 class State {
   a: number;
@@ -7,15 +7,15 @@ class State {
   ary: Array<boolean>;
 }
 
-const store = new AppStore<State>(new State());
+const store = new RootStore<State>(new State());
 
-// $ExpectType StoreObject<number>
+// $ExpectType ChildStore<number>
 store('a');
-// $ExpectType StoreObject<{ c: Date; }>
+// $ExpectType ChildStore<{ c: Date; }>
 store('obj');
-// $ExpectType StoreObject<Date>
+// $ExpectType ChildStore<Date>
 store('obj')('c');
-// $ExpectType StoreObject<boolean[]>
+// $ExpectType ChildStore<boolean[]>
 store('ary');
-// $ExpectType StoreObject<boolean>
+// $ExpectType ChildStore<boolean>
 store('ary')(1);
