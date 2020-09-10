@@ -1,6 +1,6 @@
-import { clone, every, forOwn, omit } from 'micro-dash';
+import { clone, every, forOwn, isEmpty, omit } from 'micro-dash';
 import { Observable, Subscriber } from 'rxjs';
-import { CallableObject } from 's-js-utils';
+import { assert, CallableObject } from 's-js-utils';
 
 /** @hidden */
 interface Client {
@@ -40,7 +40,6 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
     private key: string | number,
   ) {
     super(
-      // TODO: test auto-caching
       (childKey: any) =>
         this.activeChildren[childKey]?.values().next()?.value ||
         new StoreObject(client, this, childKey as string | number),
@@ -192,10 +191,11 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   }
 
   private maybeActivate(): void {
-    if (!this.parent || this.isActive()) {
+    if (this.isActive() || !this.shouldBeActive()) {
       return;
     }
 
+    assert(this.parent);
     let set = this.parent.activeChildren[this.key];
     if (!set) {
       set = this.parent.activeChildren[this.key] = new Set<StoreObject<any>>();
@@ -206,14 +206,16 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
   }
 
   private maybeDeactivate(): void {
-    if (!this.parent || !this.isActive()) {
+    if (!this.isActive() || this.shouldBeActive()) {
       return;
     }
 
+    assert(this.parent);
     const set = this.parent.activeChildren[this.key];
     set.delete(this);
     if (set.size === 0) {
       delete this.parent.activeChildren[this.key];
+      this.parent.maybeDeactivate();
     }
   }
 
@@ -229,6 +231,12 @@ export class StoreObject<T> extends CallableObject<GetSlice<T>> {
         child.updateState(value?.[key]);
       }
     });
+  }
+
+  private shouldBeActive(): boolean {
+    return (
+      !this.parent || this.subscribers.size > 0 || !isEmpty(this.activeChildren)
+    );
   }
 
   private isActive(): boolean {

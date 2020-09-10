@@ -37,6 +37,25 @@ describe('StoreObject', () => {
         store<'optional', InnerState>('optional')('state').set(2);
       }).toThrowError('cannot modify when parent state is missing');
     });
+
+    it('caches values (only) if they are active', () => {
+      const counter = store('counter');
+      expect(store('counter')).not.toBe(counter);
+      const counterSub1 = counter.$.subscribe();
+      expect(store('counter')).toBe(counter);
+      counterSub1.unsubscribe();
+      expect(store('counter')).not.toBe(counter);
+
+      const nested = store('nested');
+      expect(store('nested')).not.toBe(nested);
+      const leftSub = nested('left').$.subscribe();
+      const rightSub = nested('right').$.subscribe();
+      expect(store('nested')).toBe(nested);
+      leftSub.unsubscribe();
+      expect(store('nested')).toBe(nested);
+      rightSub.unsubscribe();
+      expect(store('nested')).not.toBe(nested);
+    });
   });
 
   describe('.$', () => {
