@@ -1,4 +1,4 @@
-import { Store } from '.';
+import { Store } from './index';
 
 export class RootStore<T extends object> extends Store<T> {
   private batchCount = 0;

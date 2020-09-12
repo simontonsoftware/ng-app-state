@@ -1,7 +1,7 @@
 import { clone, every, forOwn } from 'micro-dash';
 import { Observable, Subscriber } from 'rxjs';
 import { CallableObject } from 's-js-utils';
-import { ChildStore } from '.';
+import { ChildStore } from './index';
 
 /** @hidden */
 export interface Client {

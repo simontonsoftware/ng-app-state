@@ -8,11 +8,11 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ChildStore } from '../child-store';
+import { Store } from '../index';
 
 @Directive({ selector: '[nasModel]' })
 export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
-  private store!: ChildStore<T>;
+  private store!: Store<T>;
   private subscription!: Subscription;
   private valueAccessor: ControlValueAccessor;
 
@@ -25,7 +25,7 @@ export class NasModelDirective<T> implements AfterViewInit, OnDestroy {
   }
 
   @Input()
-  set nasModel(store: ChildStore<T>) {
+  set nasModel(store: Store<T>) {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

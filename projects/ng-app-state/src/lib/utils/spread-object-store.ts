@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { isSetEqual } from 's-js-utils';
 import { mapAndCacheObjectElements } from 's-rxjs-utils';
-import { Store } from '../store';
+import { Store } from '../index';
 
 /**
  * Returns an observable that emits an array of store objects, one for each element in `source`'s state. The resulting arrays will have references to the exact store objects included in the previous emission when possible, making them performant to use in `*ngFor` expressions without the need to use `trackBy`.

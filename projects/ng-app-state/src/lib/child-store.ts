@@ -1,5 +1,5 @@
 import { clone, isEmpty, omit } from 'micro-dash';
-import { Client, Store } from '.';
+import { Client, Store } from './index';
 
 /** @hidden */
 export class ChildStore<T> extends Store<T> {

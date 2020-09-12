@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AppStore } from 'ng-app-state';
+import { RootStore } from 'ng-app-state';
 import {
   DeepState,
   runDeep,
@@ -16,7 +16,7 @@ export class DeepPerformanceComponent {
   iterations = 1000;
 
   run(): void {
-    const store: any = new AppStore(new DeepState(this.depth));
+    const store: any = new RootStore(new DeepState(this.depth));
     subscribeDeep(store);
     runDeep(store, this.iterations);
   }

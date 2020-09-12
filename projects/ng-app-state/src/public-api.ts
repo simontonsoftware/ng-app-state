@@ -2,7 +2,6 @@
  * Public API Surface of ng-app-state
  */
 
-export { Store } from './lib/store';
-export { RootStore } from './lib/root-store';
+export { Store, RootStore } from './lib/index';
 export { NasModelModule } from './lib/nas-model/nas-model.module';
 export * from './lib/utils';

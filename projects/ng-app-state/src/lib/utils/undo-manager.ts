@@ -1,7 +1,7 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Debouncer } from 's-js-utils';
-import { Store } from '../store';
+import { Store } from '../index';
 
 /** @hidden */
 export type UndoOrRedo = 'undo' | 'redo';
