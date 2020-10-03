@@ -20,12 +20,10 @@ export interface Store<T> extends GetSlice<T> {
 }
 
 export abstract class Store<T> extends CallableObject<GetSlice<T>> {
-  protected subscribers = new Map<Subscriber<T>, T | undefined>();
-  protected activeChildren: Record<string, Set<ChildStore<any>>> = {};
-  protected lastKnownState?: T;
-
-  private lastKnownStateChanged = false;
-  private observable = new Observable<T>((subscriber) => {
+  /**
+   * An `Observable` of the state of this store object.
+   */
+  readonly $ = new Observable<T>((subscriber) => {
     const value = this.state();
     this.subscribers.set(subscriber, value);
     this.maybeActivate();
@@ -36,19 +34,18 @@ export abstract class Store<T> extends CallableObject<GetSlice<T>> {
     };
   });
 
+  protected subscribers = new Map<Subscriber<T>, T | undefined>();
+  protected activeChildren: Record<string, Set<Store<any>>> = {};
+  protected lastKnownState?: T;
+
+  private lastKnownStateChanged = false;
+
   constructor(private client: Client) {
     super(
       (childKey: any) =>
         this.activeChildren[childKey]?.values().next()?.value ||
         new ChildStore(client, this, childKey),
     );
-  }
-
-  /**
-   * An `Observable` of the state of this store object.
-   */
-  get $(): Observable<T> {
-    return this.observable;
   }
 
   /**

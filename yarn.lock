@@ -1103,20 +1103,6 @@
     merge-source-map "^1.1.0"
     schema-utils "^2.6.4"
 
-"@ngrx/store-devtools@~10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-10.0.0.tgz#018716afd3df89bd2fa1f603966878f82e80d727"
-  integrity sha512-+7SSPW9H+IdGX04QYmfgqYOeFM++PLD6CxGRUkIIc+6jFovanMS6CVKw6V+WeerPwoZaRn43cMIDj9FChMQ4oA==
-  dependencies:
-    tslib "^2.0.0"
-
-"@ngrx/store@~10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-10.0.0.tgz#a355f0fdf6129b78b82fb57cacdb277bde0de066"
-  integrity sha512-+mhTGJXjc+55KI1pWV5SSuP+JBAr35U1AbnBYJqqXuwJVXnJ8+n6gAr06qpPN+YMf+zRQDFwAIrqyFOfMqeJHg==
-  dependencies:
-    tslib "^2.0.0"
-
 "@ngtools/webpack@10.0.5":
   version "10.0.5"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-10.0.5.tgz#8123647aa73463e586ac5792d16751a36d5caaaa"
@@ -7206,11 +7192,6 @@ ng-packagr@^10.0.0:
     stylus "^0.54.7"
     terser "^4.3.8"
     update-notifier "^4.0.0"
-
-ngrx-store-logger@^0.2.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/ngrx-store-logger/-/ngrx-store-logger-0.2.4.tgz#c5e266e78d1775f645548c362030e68260d2e6ba"
-  integrity sha512-caF0xmjCBApn3u6LWLcXJ3Bsfl106C84cdUsK2+aIJ/s5qg0Gk4Wlq8hKBK5vJafTqJMu9Q1t77WfSHFoNZe7Q==
 
 nice-try@^1.0.4:
   version "1.0.5"

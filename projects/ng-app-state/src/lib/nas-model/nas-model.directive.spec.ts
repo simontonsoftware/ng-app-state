@@ -24,7 +24,7 @@ import {
   NameStore,
   SingleValueComponent,
   SingleValueStore,
-} from '../../test-helpers';
+} from '../../test-helpers/helper-components';
 import { NasModelModule } from './nas-model.module';
 
 let fixture: ComponentFixture<any>;
